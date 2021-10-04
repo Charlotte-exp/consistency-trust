@@ -1,12 +1,23 @@
 {{ block title }}Results{{ endblock }}
 {{ block content }}
     <p>
-
         {{ if player.id_in_group == 1 }}
-            You decided to keep <strong>{{ group.kept }}</strong> for yourself.
-        {{ else }}
-            Participant 1 decided to keep <strong>{{ group.kept }}</strong>, so
-            you got <strong>{{ offer }}</strong>.
+            {{ if group.decision == 0 }}
+                You decided to take the {{ Constants.endowment_p2 }} tokens of Participant 2.
+                Your payoff in this round is <strong>{{ p1_payoff }}</strong> tokens.
+            {{ else }}
+                You decided to leave the {{ Constants.endowment_p2 }} tokens of Participant 2.
+                Your payoff in this round is <strong>{{ p1_payoff }}</strong> tokens.
+            {{ endif }}
+        {{ endif }}
+        {{ if player.id_in_group == 2 }}
+            {{ if group.decision == 0 }}
+                Participant 1 decided to take your {{ Constants.endowment_p2 }} tokens.
+                Your payoff in this round is <strong>{{ p2_payoff }}</strong> tokens.
+            {{ else }}
+                Participant 1 decided to leave your {{ Constants.endowment_p2 }} tokens.
+                Your payoff in this round is <strong>{{ p2_payoff }}</strong> tokens.
+            {{ endif }}
         {{ endif }}
 
         {{ next_button }}

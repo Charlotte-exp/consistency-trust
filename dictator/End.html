@@ -1,0 +1,36 @@
+{{ block title }}Th End{{ endblock }}
+
+{{ block content }}
+<p>
+    The task is now over. Here are your final results:
+
+    In total across all rounds, you got
+
+    {{ if player.id_in_group == 1 }}
+    <strong>{{ p1_total_payoff }}</strong>
+    {{ else }}
+    <strong>{{ p2_total_payoff }}</strong>
+    {{ endif }}
+
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>My outcome</th>
+
+        </tr>
+        {{ for p in player_in_all_rounds }}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>{{ p.payoff }} pts</td>
+            </tr>
+        {{ endfor }}
+    </table>
+
+
+{{ next_button }}
+
+    {{ include Constants.instructions_template }}
+
+{{ endblock }}

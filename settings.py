@@ -6,7 +6,13 @@ SESSION_CONFIGS = [
         name='trust',
         display_name="otree5 Trust game",
         app_sequence=['trust', 'payment_info'],
-        num_demo_participants=3,
+        num_demo_participants=4,
+    ),
+    dict(
+        name='dictator',
+        display_name="otree5 dictator game",
+        app_sequence=['dictator', 'payment_info'],
+        num_demo_participants=4,
     ),
     dict(
         name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
