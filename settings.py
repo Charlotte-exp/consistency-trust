@@ -3,9 +3,9 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
-        name='guess_two_thirds',
-        display_name="Guess 2/3 of the Average",
-        app_sequence=['guess_two_thirds', 'payment_info'],
+        name='trust',
+        display_name="otree5 Trust game",
+        app_sequence=['trust', 'payment_info'],
         num_demo_participants=3,
     ),
     dict(
@@ -30,7 +30,7 @@ SESSION_FIELDS = []
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'USD'
+REAL_WORLD_CURRENCY_CODE = 'GBP'
 USE_POINTS = True
 
 ROOMS = [
@@ -42,7 +42,7 @@ ROOMS = [
     dict(name='live_demo', display_name='Room for live demo (no participant labels)'),
 ]
 
-ADMIN_USERNAME = 'admin'
+ADMIN_USERNAME = 'charlotte'
 # for security, best to set admin password in an environment variable
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 
