@@ -33,6 +33,8 @@ def creating_session(subsession: Subsession):
     """
     session = subsession.session
     session.past_groups = []
+    # for p in subsession.get_players():
+    #     p.participant.vars['title'] = p.set_title()
 
 
 def group_by_arrival_time_method(subsession: Subsession, waiting_players):
@@ -53,8 +55,10 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
             session.past_groups.append(pair_ids)
             return possible_group
 
-    dictators = [p for p in waiting_players if p.title == 'dictator']
-    receivers = [p for p in waiting_players if p.title == 'receiver']
+    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    # dictators = [p for p in waiting_players if p.title == 'dictator']
+    # receivers = [p for p in waiting_players if p.title == 'receiver']
     print(subsession.player.role)
     if len(dictators) >= 1 and len(receivers) >= 1:
         players = [dictators[0], receivers[0]]

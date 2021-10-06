@@ -11,7 +11,7 @@ SESSION_CONFIGS = [
     dict(
         name='dictator',
         display_name="otree5 dictator game",
-        app_sequence=['dictator', 'payment_info'],
+        app_sequence=['introduction', 'dictator', 'payment_info'],
         num_demo_participants=4,
     ),
     dict(
