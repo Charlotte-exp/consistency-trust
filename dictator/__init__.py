@@ -17,8 +17,6 @@ class Constants(BaseConstants):
     num_rounds = 3
     instructions_template = 'dictator/instructions.html'
 
-    dictator_role = 'dictator'
-
     pot_money = cu(100)
     endowment_p2 = pot_money/2
     endowment_p1 = pot_money/2
@@ -44,6 +42,7 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
         # use a set, so that we can easily compare even if order is different
         # e.g. {1, 2} == {2, 1}
         pair_ids = set(p.id_in_subsession for p in possible_group)
+        print(pair_ids)
         if pair_ids not in session.past_groups:
             # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
@@ -101,13 +100,6 @@ class Offer(Page):
         return dict(partner=player.get_others_in_group()[0])
 
 
-class DictatorPage(Page):
-
-    @staticmethod
-    def is_displayed(player):
-        return player.role == Constants.dictator_role
-
-
 class Receiver(Page):
 
     def is_displayed(player: Player):
@@ -149,9 +141,9 @@ class End(Page):
         }
 
 
-page_sequence = [Introduction,
+page_sequence = [PairingWaitPage,
+                 Introduction,
                  Offer,
-                 DictatorPage,
                  Receiver,
                  ResultsWaitPage,
                  Results,
