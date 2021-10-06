@@ -1,13 +1,12 @@
 from otree.api import *
 
-
+import itertools
 
 doc = """
-One player decides how to divide a certain amount between himself and the other
-player.
-See: Kahneman, Daniel, Jack L. Knetsch, and Richard H. Thaler. "Fairness
-and the assumptions of economics." Journal of business (1986):
-S285-S300.
+Dictator game for the consistency project. 
+perfect random matching
+random token value
+assymetric token value
 """
 
 
@@ -29,15 +28,21 @@ class Subsession(BaseSubsession):
 
 
 def creating_session(subsession: Subsession):
+    """
+    past_groups must be initialised in the settings.py.
+    """
     session = subsession.session
     session.past_groups = []
 
 
 def group_by_arrival_time_method(subsession: Subsession, waiting_players):
+    """
+    First, the gbat_new_partners code for random matching. this block perfect randomisation
+    (one player never plays the same opponent twice).
+    Then must make sure that there is always one dictator and one receiver per pair.
+    I just used Nik's code from Multichannel.
+    """
     session = subsession.session
-
-    import itertools
-
     for possible_group in itertools.combinations(waiting_players, 2):
         # use a set, so that we can easily compare even if order is different
         # e.g. {1, 2} == {2, 1}
@@ -47,6 +52,13 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
             # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
             return possible_group
+
+    dictators = [p for p in waiting_players if p.title == 'dictator']
+    receivers = [p for p in waiting_players if p.title == 'receiver']
+    print(subsession.player.role)
+    if len(dictators) >= 1 and len(receivers) >= 1:
+        players = [dictators[0], receivers[0]]
+        return players
 
 
 class Group(BaseGroup):
@@ -68,7 +80,8 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+
+    title = models.StringField()
 
 
 # FUNCTIONS
@@ -81,6 +94,13 @@ def set_payoffs(group: Group):
     else:
         p1.payoff = Constants.endowment_p1
         p2.payoff = Constants.endowment_p2
+
+
+def set_title(player: Player):
+    if player.id_in_subsesion % 2 == 0:
+        return player.title == 'dictator'
+    else:
+        return player.title == 'receiver'
 
 
 # PAGES
