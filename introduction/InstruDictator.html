@@ -1,12 +1,8 @@
-{{ block title }}Introduction{{ endblock }}
+{{ block title }}Instructions{{ endblock }}
+
 {{ block content }}
 
-<div class="card bg-light m-3">
 <div class="card-body">
-    <h3>
-        Instructions
-    </h3>
-
     <p>
         You will be paired randomly and anonymously with another participant.
         In this study, one of you will be Participant 1 and the other
@@ -18,6 +14,21 @@
         can decide to take the tokens of Participants 2. Participant 2 will be left with nothing.
     </p>
 </div>
+
+<div class="card bg-light instructions"> <!-- Makes the para a box -->
+    <div class="card-body">
+        <p>
+            <h4>Your decision:</h4>
+        </p>
+        <ul>
+            <li>
+                <b>Take</b> the {{Constants.endowment_p2}} tokens from Participant 2..
+            </li>
+            <li>
+                <b>Leave</b> the {{Constants.endowment_p2}} tokens from Participant 2..
+            </li>
+        </ul>
+    </div>
 </div>
 
     <p>

@@ -45,24 +45,24 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
     I just used Nik's code from Multichannel.
     """
     session = subsession.session
+    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
     for possible_group in itertools.combinations(waiting_players, 2):
         # use a set, so that we can easily compare even if order is different
         # e.g. {1, 2} == {2, 1}
         pair_ids = set(p.id_in_subsession for p in possible_group)
         print(pair_ids)
-        if pair_ids not in session.past_groups:
+        if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
             # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
-            return possible_group
+            players = [dictators[0], receivers[0]]
+            return possible_group and players
 
-    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
-    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+
     # dictators = [p for p in waiting_players if p.title == 'dictator']
     # receivers = [p for p in waiting_players if p.title == 'receiver']
-    print(subsession.player.role)
-    if len(dictators) >= 1 and len(receivers) >= 1:
-        players = [dictators[0], receivers[0]]
-        return players
+    # print(subsession.participant.vars['title'])
+
 
 
 class Group(BaseGroup):
@@ -118,7 +118,7 @@ class Offer(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 1
+        return player.participant.vars['title'] == 'dictator'
 
     def vars_for_template(player: Player):
         return dict(partner=player.get_others_in_group()[0])
@@ -126,8 +126,9 @@ class Offer(Page):
 
 class Receiver(Page):
 
+    @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 2
+        return player.participant.vars['title'] == 'receiver'
 
 
 class ResultsWaitPage(WaitPage):
