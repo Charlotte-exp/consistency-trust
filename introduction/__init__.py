@@ -60,7 +60,15 @@ class Welcome(Page):
     pass
 
 
-class Instructions(Page):
+class Introduction(Page):
+    pass
+
+
+class InstruDictator(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.vars['title'] == 'dictator'
 
     def vars_for_template(player: Player):
         return {
@@ -68,9 +76,19 @@ class Instructions(Page):
         }
 
 
-class Introduction(Page):
-    pass
+class InstruReceiver(Page):
 
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.participant.vars['title'] == 'receiver'
+
+    def vars_for_template(player: Player):
+        return {
+            'my_title': player.participant.vars['title'],
+        }
 
 page_sequence = [Welcome,
-                 Instructions]
+                 Introduction,
+                 InstruDictator,
+                 InstruReceiver]

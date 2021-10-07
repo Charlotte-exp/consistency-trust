@@ -167,7 +167,6 @@ class End(Page):
 
 
 page_sequence = [PairingWaitPage,
-                 Introduction,
                  Offer,
                  Receiver,
                  ResultsWaitPage,
