@@ -1,0 +1,37 @@
+{{ block title }}Instructions{{ endblock }}
+
+{{ block content }}
+
+<div class="card-body">
+    <p>
+        You are Participant 1. This means that you have a decision to take.
+        You will be paired randomly with a different participant 2 in each round of the task.
+    </p>
+    <p>
+        Below you can see what your options in each round are.
+    </p>
+</div>
+
+<div class="card bg-light instructions"> <!-- Makes the para a box -->
+    <div class="card-body">
+        <p>
+            <h4>Your decision:</h4>
+        </p>
+        <ul>
+            <li>
+                <b>Take</b> the {{Constants.endowment_p2}} tokens from Participant 2..
+            </li>
+            <li>
+                <b>Leave</b> the {{Constants.endowment_p2}} tokens from Participant 2..
+            </li>
+        </ul>
+    </div>
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
+{{ endblock }}

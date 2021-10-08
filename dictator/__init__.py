@@ -1,19 +1,18 @@
 from otree.api import *
 
-
+import itertools
 
 doc = """
-One player decides how to divide a certain amount between himself and the other
-player.
-See: Kahneman, Daniel, Jack L. Knetsch, and Richard H. Thaler. "Fairness
-and the assumptions of economics." Journal of business (1986):
-S285-S300.
+Dictator game for the consistency project. 
+perfect random matching
+random token value
+assymetric token value
 """
 
 
 class Constants(BaseConstants):
     name_in_url = 'dictator'
-    players_per_group = 2
+    players_per_group = None
     num_rounds = 3
     instructions_template = 'dictator/instructions.html'
 
@@ -26,6 +25,57 @@ class Constants(BaseConstants):
 
 class Subsession(BaseSubsession):
     pass
+
+
+def creating_session(subsession: Subsession):
+    """
+    past_groups must be initialised in the settings.py.
+    """
+    session = subsession.session
+    session.past_groups = []
+    # for p in subsession.get_players():
+    #     p.participant.vars['title'] = p.set_title()
+
+
+def group_by_arrival_time_method(subsession: Subsession, waiting_players):
+    """
+    First, the gbat_new_partners code for random matching. this block perfect randomisation
+    (one player never plays the same opponent twice).
+    Then must make sure that there is always one dictator and one receiver per pair.
+    I just used Nik's code from Multichannel.
+    """
+    session = subsession.session
+    for possible_group in itertools.combinations(waiting_players, 2):
+        # use a set, so that we can easily compare even if order is different
+        # e.g. {1, 2} == {2, 1}
+        pair_ids = set(p.id_in_subsession for p in possible_group)
+        print(pair_ids)
+        if pair_ids not in session.past_groups:
+            # mark this group as used, so we don't repeat it in the next round.
+            session.past_groups.append(pair_ids)
+            return possible_group
+
+    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    if len(dictators) >= 1 and len(receivers) >= 1:
+        players = [dictators[0], receivers[0]]
+        return players
+
+
+## this code breaks on the second round. nobody gets paired anymore at all
+    # session = subsession.session
+    # dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    # receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    # for possible_group in itertools.combinations(waiting_players, 2):
+    #     # use a set, so that we can easily compare even if order is different
+    #     # e.g. {1, 2} == {2, 1}
+    #     pair_ids = set(p.id_in_subsession for p in possible_group)
+    #     print(pair_ids)
+    #     if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
+    #         # mark this group as used, so we don't repeat it in the next round.
+    #         session.past_groups.append(pair_ids)
+    #         players = [dictators[0], receivers[0]]
+    #         return possible_group and players
 
 
 class Group(BaseGroup):
@@ -47,7 +97,8 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    pass
+
+    title = models.StringField()
 
 
 # FUNCTIONS
@@ -62,6 +113,13 @@ def set_payoffs(group: Group):
         p2.payoff = Constants.endowment_p2
 
 
+def set_title(player: Player):
+    if player.id_in_subsesion % 2 == 0:
+        return player.title == 'dictator'
+    else:
+        return player.title == 'receiver'
+
+
 # PAGES
 class Introduction(Page):
     pass
@@ -73,7 +131,7 @@ class Offer(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 1
+        return player.participant.vars['title'] == 'dictator'
 
     def vars_for_template(player: Player):
         return dict(partner=player.get_others_in_group()[0])
@@ -81,8 +139,9 @@ class Offer(Page):
 
 class Receiver(Page):
 
+    @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 2
+        return player.participant.vars['title'] == 'receiver'
 
 
 class ResultsWaitPage(WaitPage):
@@ -102,6 +161,11 @@ class Results(Page):
         )
 
 
+class PairingWaitPage(WaitPage):
+    group_by_arrival_time = True
+    body_text = "Waiting to pair you with someone you haven't already played with"
+
+
 class End(Page):
     def is_displayed(player: Player):
         if player.round_number == 3:
@@ -115,7 +179,7 @@ class End(Page):
         }
 
 
-page_sequence = [Introduction,
+page_sequence = [PairingWaitPage,
                  Offer,
                  Receiver,
                  ResultsWaitPage,

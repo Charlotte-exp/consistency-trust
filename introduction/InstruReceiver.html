@@ -1,0 +1,22 @@
+{{ block title }}Instructions{{ endblock }}
+
+{{ block content }}
+
+<div class="card-body">
+    <p>
+        You are Participant 2. This means that you have <b>no</b> decision to take.
+        You will be paired randomly with a different participant 1 in each round of the task.
+    </p>
+    <p>
+        You and the other player are each given {{ Constants.endowment_p1 }} tokens. In each round, Participant 1, but not participant 2,
+        can decide to take the tokens of Participants 2. Participant 2 will be left with nothing.
+    </p>
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
+{{ endblock }}
