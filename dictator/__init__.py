@@ -45,24 +45,37 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
     I just used Nik's code from Multichannel.
     """
     session = subsession.session
-    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
-    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
     for possible_group in itertools.combinations(waiting_players, 2):
         # use a set, so that we can easily compare even if order is different
         # e.g. {1, 2} == {2, 1}
         pair_ids = set(p.id_in_subsession for p in possible_group)
         print(pair_ids)
-        if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
+        if pair_ids not in session.past_groups:
             # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
-            players = [dictators[0], receivers[0]]
-            return possible_group and players
+            return possible_group
+
+    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    if len(dictators) >= 1 and len(receivers) >= 1:
+        players = [dictators[0], receivers[0]]
+        return players
 
 
-    # dictators = [p for p in waiting_players if p.title == 'dictator']
-    # receivers = [p for p in waiting_players if p.title == 'receiver']
-    # print(subsession.participant.vars['title'])
-
+## this code breaks on the second round. nobody gets paired anymore at all
+    # session = subsession.session
+    # dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    # receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    # for possible_group in itertools.combinations(waiting_players, 2):
+    #     # use a set, so that we can easily compare even if order is different
+    #     # e.g. {1, 2} == {2, 1}
+    #     pair_ids = set(p.id_in_subsession for p in possible_group)
+    #     print(pair_ids)
+    #     if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
+    #         # mark this group as used, so we don't repeat it in the next round.
+    #         session.past_groups.append(pair_ids)
+    #         players = [dictators[0], receivers[0]]
+    #         return possible_group and players
 
 
 class Group(BaseGroup):
