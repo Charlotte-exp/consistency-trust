@@ -89,6 +89,16 @@ class InstruReceiver(Page):
         }
 
 
+class PlayerBot(Bot):
+    def play_round(self):
+        yield pages.Welcome
+        if self.participant.title == 'dictator':
+            yield pages.InstruDictator, dict(decision_high=1)
+        else:
+            if self.participant.title == 'receiver':
+                yield pages.InstruReceiver
+
+
 page_sequence = [Welcome,
                  # Introduction,
                  InstruDictator,

@@ -12,7 +12,8 @@ SESSION_CONFIGS = [
         name='dictator',
         display_name="otree5 dictator game",
         app_sequence=['introduction', 'dictator', 'payment_info'],
-        num_demo_participants=6,
+        num_demo_participants=12,
+        use_browser_bots=True,
     ),
     dict(
         name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
