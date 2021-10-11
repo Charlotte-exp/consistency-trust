@@ -6,7 +6,7 @@ class PlayerBot(Bot):
     def play_round(self):
         yield Welcome
         if self.participant.title == 'dictator':
-            yield InstruDictator, dict(decision_high=1)
+            yield InstruDictator
         else:
             if self.participant.title == 'receiver':
                 yield InstruReceiver
