@@ -19,8 +19,12 @@
                 Your payoff in this round is <strong>{{ p2_payoff }}</strong> tokens.
             {{ endif }}
         {{ endif }}
-
-        {{ next_button }}
     </p>
-    {{ include Constants.instructions_template }}
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
 {{ endblock }}

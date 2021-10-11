@@ -88,7 +88,8 @@ class InstruReceiver(Page):
             'my_title': player.participant.vars['title'],
         }
 
+
 page_sequence = [Welcome,
-                 Introduction,
+                 # Introduction,
                  InstruDictator,
                  InstruReceiver]

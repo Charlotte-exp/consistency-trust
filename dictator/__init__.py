@@ -50,32 +50,32 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
         # e.g. {1, 2} == {2, 1}
         pair_ids = set(p.id_in_subsession for p in possible_group)
         print(pair_ids)
-        if pair_ids not in session.past_groups:
+        if pair_ids not in session.past_groups and possible_group[0].participant.vars['title'] != possible_group[1].participant.vars['title']:
             # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
             return possible_group
 
-    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
-    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
-    if len(dictators) >= 1 and len(receivers) >= 1:
-        players = [dictators[0], receivers[0]]
-        return players
-
-
-## this code breaks on the second round. nobody gets paired anymore at all
-    # session = subsession.session
     # dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
     # receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
-    # for possible_group in itertools.combinations(waiting_players, 2):
-    #     # use a set, so that we can easily compare even if order is different
-    #     # e.g. {1, 2} == {2, 1}
-    #     pair_ids = set(p.id_in_subsession for p in possible_group)
-    #     print(pair_ids)
-    #     if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
-    #         # mark this group as used, so we don't repeat it in the next round.
-    #         session.past_groups.append(pair_ids)
-    #         players = [dictators[0], receivers[0]]
-    #         return possible_group and players
+    # if len(dictators) >= 1 and len(receivers) >= 1:
+    #     players = [dictators[0], receivers[0]]
+    #     return players
+
+
+# this code breaks on the second round. nobody gets paired anymore at all
+    session = subsession.session
+    dictators = [p for p in waiting_players if p.participant.vars['title'] == 'dictator']
+    receivers = [p for p in waiting_players if p.participant.vars['title'] == 'receiver']
+    for possible_group in itertools.combinations(waiting_players, 2):
+        # use a set, so that we can easily compare even if order is different
+        # e.g. {1, 2} == {2, 1}
+        pair_ids = set(p.id_in_subsession for p in possible_group)
+        print(pair_ids)
+        if pair_ids not in session.past_groups and len(dictators) >= 1 and len(receivers) >= 1:
+            # mark this group as used, so we don't repeat it in the next round.
+            session.past_groups.append(pair_ids)
+            players = [dictators[0], receivers[0]]
+            return possible_group and players
 
 
 class Group(BaseGroup):
@@ -113,16 +113,21 @@ def set_payoffs(group: Group):
         p2.payoff = Constants.endowment_p2
 
 
-def set_title(player: Player):
-    if player.id_in_subsesion % 2 == 0:
-        return player.title == 'dictator'
-    else:
-        return player.title == 'receiver'
+# def set_title(player: Player):
+#     if player.id_in_subsesion % 2 == 0:
+#         return player.title == 'dictator'
+#     else:
+#         return player.title == 'receiver'
 
 
 # PAGES
 class Introduction(Page):
     pass
+
+
+class PairingWaitPage(WaitPage):
+    group_by_arrival_time = True
+    body_text = "Waiting to pair you with someone you haven't already played with"
 
 
 class Offer(Page):
@@ -131,17 +136,30 @@ class Offer(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.participant.vars['title'] == 'dictator'
+        return player.participant.title == 'dictator'
 
     def vars_for_template(player: Player):
-        return dict(partner=player.get_others_in_group()[0])
+        opponent = player.get_others_in_group()[0]
+        return dict(
+            partner=opponent,
+            my_player_id=player.id_in_subsession,
+            opponent_id=opponent.id_in_subsession,
+        )
 
 
 class Receiver(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.participant.vars['title'] == 'receiver'
+        return player.participant.title == 'receiver'
+
+    def vars_for_template(player: Player):
+        opponent = player.get_others_in_group()[0]
+        return dict(
+            partner=opponent,
+            my_player_id=player.id_in_subsession,
+            opponent_id=opponent.id_in_subsession,
+        )
 
 
 class ResultsWaitPage(WaitPage):
@@ -149,34 +167,52 @@ class ResultsWaitPage(WaitPage):
 
 
 class Results(Page):
-    @staticmethod
+
     def vars_for_template(player: Player):
+        opponent = player.get_others_in_group()[0]
         p1 = player.group.get_player_by_id(1)
         p2 = player.group.get_player_by_id(2)
         return dict(
             left=Constants.endowment_p2 - Constants.endowment_p2,
             p1_payoff=p1.payoff,
             p2_payoff=p2.payoff,
-
+            partner=opponent,
+            my_player_id=player.id_in_subsession,
+            opponent_id=opponent.id_in_subsession,
         )
 
 
-class PairingWaitPage(WaitPage):
-    group_by_arrival_time = True
-    body_text = "Waiting to pair you with someone you haven't already played with"
-
-
 class End(Page):
+
+    @staticmethod
     def is_displayed(player: Player):
         if player.round_number == 3:
             return True
 
     def vars_for_template(player: Player):
-        return {
-            'player_in_all_rounds': player.in_all_rounds(),
-            'p1_total_payoff': sum([p.payoff for p in player.in_all_rounds()]),
-            'p2_total_payoff': sum([p.payoff for p in player.in_all_rounds()])
-        }
+        opponent = player.get_others_in_group()[0]
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            p1_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+            p2_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+            partner=opponent,
+            my_player_id=player.id_in_subsession,
+            opponent_id=opponent.id_in_subsession,
+        )
+
+
+class PlayerBot(Bot):
+    def play_round(self):
+        if self.participant.title == 'dictator':
+            yield pages.Offer, dict(decision_high=1)
+        else:
+            if self.participant.title == 'receiver':
+                yield pages.Receiver
+
+        yield pages.Results
+
+        if self.round_number == 3:
+            yield pages.End
 
 
 page_sequence = [PairingWaitPage,
