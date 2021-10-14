@@ -5,7 +5,7 @@ from . import *
 class PlayerBot(Bot):
     def play_round(self):
         if self.participant.title == 'dictator':
-            yield Offer, dict(decision=1)
+            yield Offer, dict(decision=0)
         else:
             if self.participant.title == 'receiver':
                 yield Receiver

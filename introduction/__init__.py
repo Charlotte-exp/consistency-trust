@@ -29,14 +29,13 @@ def creating_session(subsession: Subsession):
     roles = itertools.cycle(['dictator', 'receiver'])
     for p in subsession.get_players():
         p.title = next(roles)
-        p.participant.vars['title'] = p.title
+        p.participant.title = p.title
 
     # for p in subsession.get_players():
-    #     if p.player.id_in_subsession % 2 == 0:
+    #     if p.id_in_subsession % 2 == 0:
     #         return p.player.title == 'dictator'
     #     else:
     #         return p.player.title == 'receiver'
-        # p.participant.vars['title'] = p.title
 
 
 class Group(BaseGroup):
@@ -87,16 +86,6 @@ class InstruReceiver(Page):
         return {
             'my_title': player.participant.vars['title'],
         }
-
-
-class PlayerBot(Bot):
-    def play_round(self):
-        yield pages.Welcome
-        if self.participant.title == 'dictator':
-            yield pages.InstruDictator, dict(decision_high=1)
-        else:
-            if self.participant.title == 'receiver':
-                yield pages.InstruReceiver
 
 
 page_sequence = [Welcome,
