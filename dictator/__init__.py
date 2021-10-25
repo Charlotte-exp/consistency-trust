@@ -33,25 +33,21 @@ def creating_session(subsession: Subsession):
     """
     session = subsession.session
     session.past_groups = []
-    # for p in subsession.get_players():
-    #     p.participant.vars['title'] = p.set_title()
+    print()
 
 
 def group_by_arrival_time_method(subsession: Subsession, waiting_players):
     """
     First, the gbat_new_partners code for random matching. this block perfect randomisation
-    (one player never plays the same opponent twice).
-    Then must make sure that there is always one dictator and one receiver per pair.
-    I just used Nik's code from Multichannel.
+    (one player never plays the same opponent twice). First check all the possible combinations.
+    The function uses a set so we can check for the order (e.g. {1, 2} == {2, 1}).
+    Then if the pair is not part of the past_group list and there is one receiver and one dictator, the new group is formed.
+    Finally make sure to add this new group to the past_group list.
     """
     session = subsession.session
     for possible_group in itertools.combinations(waiting_players, 2):
-        # use a set, so that we can easily compare even if order is different
-        # e.g. {1, 2} == {2, 1}
         pair_ids = set(p.id_in_subsession for p in possible_group)
-        # print(pair_ids)
         if pair_ids not in session.past_groups and possible_group[0].participant.title != possible_group[1].participant.title:
-            # mark this group as used, so we don't repeat it in the next round.
             session.past_groups.append(pair_ids)
             return possible_group
 
