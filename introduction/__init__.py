@@ -11,6 +11,7 @@ class Constants(BaseConstants):
     name_in_url = 'introduction'
     players_per_group = None
     num_rounds = 1
+    n_of_rounds = 3
     instructions_template = 'introduction/instructions.html'
 
     pot_money = cu(100)
@@ -68,31 +69,31 @@ class Player(BasePlayer):
 
     q3 = models.IntegerField(
         choices=[
-            [1, 'Participant 1 (You).'],
-            [2, f'Participant 2.'],
-            [3, f'Both Participant 1 and Participant 2.']
+            [1, 'You, the decider.'],
+            [2, f'The receiver.'],
+            [3, f'Both the decider and the receiver.']
         ],
-        verbose_name=f'Who takes a decision in each round?',
+        verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect
     )
 
     q4 = models.IntegerField(
         choices=[
             [1, '0 tokens.'],
-            [2, f'{Constants.endowment_p1} tokens.'],
-            [3, f'{Constants.pot_money} tokens.']
+            [2, f'{Constants.endowment_p1}.'],
+            [3, f'{Constants.pot_money}.']
         ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_p1} tokens?',
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_p1}?',
         widget=widgets.RadioSelect
     )
 
     q5 = models.IntegerField(
         choices=[
-            [1, 'Participant 1 (You).'],
-            [2, f'Participant 2.'],
-            [3, f'Both Participant 1 and Participant 2.']
+            [1, 'The decider.'],
+            [2, f'You, the receiver.'],
+            [3, f'Both the decider and the receiver.']
         ],
-        verbose_name=f'Who makes a decision in each round?',
+        verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect
     )
 
@@ -151,7 +152,7 @@ class InstruReceiver(Page):
 
     @staticmethod
     def error_message(player, values):
-        if values['q5'] != 2:
+        if values['q5'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
 
     def vars_for_template(player: Player):

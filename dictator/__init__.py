@@ -62,10 +62,11 @@ class Group(BaseGroup):
 
     decision = models.CurrencyField(
         choices=[
-            [0, f'Take the {Constants.endowment_p2} token from Participant 2.'],  # cooperate
-            [1, f'Leave the {Constants.endowment_p2} token of Participant 2'],  # defect
+            [0, f'Take the {Constants.endowment_p2} from the receiver.'],  # cooperate
+            [1, f'Leave the {Constants.endowment_p2} of the receiver'],  # defect
         ],
         doc="""This player's decision""",
+        verbose_name='Your decision:',
         widget=widgets.RadioSelect
     )
 

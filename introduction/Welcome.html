@@ -7,19 +7,29 @@
         <p><b>Thank you for taking part in this study!</b></p>
 
     <p>
-        In this study, you are about to engage in <b>a task with multiple participants</b> who are also taking part in the same session as you.
+        In this study, you are about to engage in {{ Constants.n_of_rounds}} interactions with
+        <b>multiple participants</b> who are also taking part in the same session as you.
         You will be interacting in real time with these participants.
-        The task consists of many interactive rounds; in each round you will be playing with a new participant.
-        Your bonus payment will depend on the decisions made by either you or the participants in this task.
     </p>
     <p>
-        During this study, you will accumulate tokens. In each rounds, your tokens will be worth different amounts in GBP.
+        Every participant in the study will be given the role of either <b>decider</b> or <b>receiver</b>.
+        This role is fixed throughout he whole study. You will keep the same in every interaction.
+        In each interaction, one decider and one receiver are paired up. Only the decider, not the receiver, will have a decision to make.
+        Both your bonuses depend on that decision.
+        Once an interaction is finished, you will be paired up with a new participant of the opposite role.
+        Your role will stay the same.
+    </p>
+    <p>
+        During this study, you will accumulate tokens. For each interaction, your tokens will be worth different amounts in GBP.
         At the end of the study, all the tokens you have earned will be converted to GBP using the different rates
         you received for each round and paid as a bonus after completing the study.
         You must stay on task at all times. Otherwise you will automatically be disconnected and lose your bonus.
     </p>
 
+<div class="card-body">
+    <h4>Please answer the following questions to continue:</h4>
     {{ formfields }}
+</div>
 
     <p>
         <div style="display: flex; justify-content: flex-end">
