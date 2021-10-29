@@ -4,11 +4,19 @@
 
 <div>
     <p>
-        You are Participant 1. This means that you have a decision to take.
-        You will be paired randomly with a different participant 2 in each round of the task.
+        You are the <b>Decider</b>. This means that in every interaction you have a decision to make.
+        In each interaction, both you and the receiver are allocated with {{Constants.endowment_p1}} each.
+        You have to decide if you want to take the tokens of the receiver or leave them. If you take them,
+        you will earn {{Constants.pot_money}} in that interaction where you made that choice and the receiver gets nothing.
+        If you decide to leave it, you keep your allocated {{Constants.endowment_p1}} and so does the receiver.
+        The receiver will know his final amount, but not who decided.
     </p>
     <p>
-        Below you can see what your options in each round will be.
+        Remember, in each interaction you are paired up with someone different.
+        What happened previously is in the past and you are allocated {{Constants.endowment_p1}} again.
+    </p>
+    <p>
+        Below you can see what your choices in each interaction will be.
     </p>
 </div>
 
@@ -19,10 +27,10 @@
         </p>
         <ul>
             <li>
-                <b>Take</b> the {{Constants.endowment_p2}} tokens from Participant 2.
+                <b>Take</b> the {{Constants.endowment_p2}} from Participant 2.
             </li>
             <li>
-                <b>Leave</b> the {{Constants.endowment_p2}} tokens from Participant 2.
+                <b>Leave</b> the {{Constants.endowment_p2}} from Participant 2.
             </li>
         </ul>
     </div>
@@ -32,12 +40,14 @@
 
 <div>
     <p>
-        If you decide to take the 50 tokens, you will receive 100 tokens for this round.
-        If you decide to leave the 50 tokens, you will receive 50 tokens for this round.
+        If you decide to take the {{Constants.endowment_p2}}, you will receive {{Constants.pot_money}} for this round.
+        If you decide to leave the {{Constants.endowment_p2}}, you will receive {{Constants.endowment_p1}} for this round.
     </p>
-    <p>
-        Press the "Next" button to start the study.
-    </p>
+</div>
+
+<div class="card-body">
+    <h4>Please answer the following questions to continue:</h4>
+    {{ formfields }}
 </div>
 
     <p>
