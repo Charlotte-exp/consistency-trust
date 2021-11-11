@@ -4,9 +4,10 @@ from . import *
 
 class PlayerBot(Bot):
     def play_round(self):
-        yield Welcome
-        if self.participant.title == 'dictator':
-            yield InstruDictator
-        else:
-            if self.participant.title == 'receiver':
-                yield InstruReceiver
+        # yield Welcome
+        # if self.participant.title == 'dictator':
+        #     yield InstruDictator
+        # else:
+        #     if self.participant.title == 'receiver':
+        #         yield InstruReceiver
+        yield Introduction

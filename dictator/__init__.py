@@ -61,8 +61,6 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
             new_conversion = new_conversion_value()
             for p in possible_group:
                 p.conversion = new_conversion
-                print(p.conversion)
-                # p.new_value = p.participant.new_conversion
             return possible_group
 
 
@@ -96,11 +94,11 @@ def set_payoffs(group: Group):
     p1 = group.get_player_by_id(1)
     p2 = group.get_player_by_id(2)
     if group.decision == 0:
-        p1.payoff = Constants.pot_money
+        p1.payoff = Constants.pot_money * p1.conversion
         p2.payoff = 0
     else:
-        p1.payoff = Constants.endowment_p1
-        p2.payoff = Constants.endowment_p2
+        p1.payoff = Constants.endowment_p1 * p1.conversion
+        p2.payoff = Constants.endowment_p2 * p2.conversion
     print('Dictator', p1.payoff)
     print('Receiver', p2.payoff)
 
@@ -211,6 +209,29 @@ class End(Page):
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
         )
+
+
+class Payment(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 3:
+            return True
+
+    def vars_for_template(player: Player):
+        participant = player.participant
+        session = player.session
+        return dict(
+            bonus=participant.payoff.to_real_world_currency(session),
+            participation_fee=session.config['participation_fee'],
+            final_payment=participant.payoff_plus_participation_fee(),
+        )
+
+    # 'total_payoff': self.participant.payoff,
+    # 'points_per_currency': 1 / self.session.config['real_world_currency_per_point'],
+    # 'participation_fee': self.session.config['participation_fee'],
+    # 'bonus': self.participant.payoff.to_real_world_currency(self.session),
+    # 'final_payment': self.participant.payoff_plus_participation_fee()
 
 
 page_sequence = [PairingWaitPage,

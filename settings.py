@@ -13,7 +13,7 @@ SESSION_CONFIGS = [
         display_name="otree5 dictator game",
         app_sequence=['introduction', 'dictator', 'payment_info'],
         num_demo_participants=12,
-        use_browser_bots=False,
+        use_browser_bots=True,
     ),
     dict(
         name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
@@ -26,7 +26,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=2.00, doc=""
 )
 
 SESSION_FIELDS = ['past_groups', ]
