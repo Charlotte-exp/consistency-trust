@@ -1,6 +1,7 @@
 from otree.api import *
 
 import itertools
+import random
 
 doc = """
 Dictator game for the consistency project. 
@@ -20,7 +21,8 @@ class Constants(BaseConstants):
     endowment_p2 = pot_money/2
     endowment_p1 = pot_money/2
 
-    value = pot_money * 0.5
+    likelihood = 0.5
+    values = [1, 3]
 
 
 class Subsession(BaseSubsession):
@@ -33,7 +35,13 @@ def creating_session(subsession: Subsession):
     """
     session = subsession.session
     session.past_groups = []
-    print()
+
+    # ok this assigns one of the values from the seq in constant for each player for each round.
+    # issue is it's per player, not group. one cannot do groups as they are not created yet.
+    # also, it is not printing to the data... why? The field is there but empty
+    for p in subsession.get_players():
+        p.participant.conversion = random.choice(Constants.values)
+        print(p.participant.conversion)
 
 
 def group_by_arrival_time_method(subsession: Subsession, waiting_players):
@@ -49,6 +57,11 @@ def group_by_arrival_time_method(subsession: Subsession, waiting_players):
         pair_ids = set(p.id_in_subsession for p in possible_group)
         if pair_ids not in session.past_groups and possible_group[0].participant.title != possible_group[1].participant.title:
             session.past_groups.append(pair_ids)
+            new_conversion = new_conversion_value()
+            for p in possible_group:
+                p.conversion = new_conversion
+                print(p.conversion)
+                # p.new_value = p.participant.new_conversion
             return possible_group
 
 
@@ -74,6 +87,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     title = models.StringField()
+    conversion = models.IntegerField()
 
 
 # FUNCTIONS
@@ -90,6 +104,14 @@ def set_payoffs(group: Group):
     print('Receiver', p2.payoff)
 
 
+def new_conversion_value():
+    """
+    random assignment of the two conversion values from the constant list.
+    """
+    new_value = random.choice(Constants.values)
+    return new_value
+
+
 # def set_title(player: Player):
 #     if player.id_in_subsesion % 2 == 0:
 #         return player.title == 'dictator'
@@ -104,6 +126,7 @@ class Introduction(Page):
 
 class PairingWaitPage(WaitPage):
     group_by_arrival_time = True
+
     body_text = "Waiting to pair you with someone you haven't already played with"
 
 
@@ -141,6 +164,7 @@ class Receiver(Page):
 
 class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
+    # after_all_players_arrive = set_payoffs and new_conversion_value
 
 
 class Results(Page):
