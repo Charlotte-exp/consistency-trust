@@ -3,6 +3,7 @@ from otree.api import *
 import itertools
 import random
 
+
 doc = """
 Dictator game for the consistency project. 
 perfect random matching
@@ -22,7 +23,7 @@ class Constants(BaseConstants):
     endowment_p1 = pot_money/2
 
     likelihood = 0.5
-    values = [1, 3]
+    values = [0.1, 0.5]
 
 
 class Subsession(BaseSubsession):
@@ -87,7 +88,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     title = models.StringField()
-    conversion = models.IntegerField()
+    conversion = models.FloatField()
 
 
 # FUNCTIONS
@@ -144,6 +145,8 @@ class Offer(Page):
             partner=opponent,
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
+            new_conversion=f'{player.conversion:.2f}',
+            currency_total=player.conversion * Constants.endowment_p1,
         )
 
 
@@ -159,6 +162,8 @@ class Receiver(Page):
             partner=opponent,
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
+            new_conversion=f'{player.conversion:.2f}',
+            currency_total=player.conversion * Constants.endowment_p2,
         )
 
 
