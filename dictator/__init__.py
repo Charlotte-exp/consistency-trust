@@ -227,11 +227,17 @@ class Payment(Page):
             final_payment=participant.payoff_plus_participation_fee(),
         )
 
-    # 'total_payoff': self.participant.payoff,
-    # 'points_per_currency': 1 / self.session.config['real_world_currency_per_point'],
-    # 'participation_fee': self.session.config['participation_fee'],
-    # 'bonus': self.participant.payoff.to_real_world_currency(self.session),
-    # 'final_payment': self.participant.payoff_plus_participation_fee()
+
+class ProlificLink(Page):
+    """
+    This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
+    There is a short text and the link in case it is not automatic.
+    """
+
+    @staticmethod
+    def is_displayed(player: Player):
+        """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
+        return player.round_number == 3
 
 
 page_sequence = [PairingWaitPage,
@@ -239,4 +245,6 @@ page_sequence = [PairingWaitPage,
                  Receiver,
                  ResultsWaitPage,
                  Results,
-                 End]
+                 End,
+                 Payment,
+                 ProlificLink]
