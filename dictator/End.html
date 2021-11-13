@@ -7,9 +7,9 @@
     In total across all rounds, you got
 
     {{ if player.id_in_group == 1 }}
-    <strong>{{ p1_total_payoff }}</strong>
+    <strong>{{ p1_total_payoff }}</strong>.
     {{ else }}
-    <strong>{{ p2_total_payoff }}</strong>
+    <strong>{{ p2_total_payoff }}</strong>.
     {{ endif }}
 
 </p>
@@ -23,14 +23,14 @@
         {{ for p in player_in_all_rounds }}
             <tr>
                 <td>{{ p.round_number }}</td>
-                <td>{{ p.payoff }} pts</td>
+                <td>{{ p.payoff }}</td>
             </tr>
         {{ endfor }}
     </table>
 
 
-{{ next_button }}
-
-    {{ include Constants.instructions_template }}
+<div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
 
 {{ endblock }}

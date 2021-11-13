@@ -87,6 +87,8 @@ class Player(BasePlayer):
 
     title = models.StringField()
     conversion = models.FloatField()
+    opponent = models.StringField()
+    token_number = models.CurrencyField()
 
 
 # FUNCTIONS
@@ -95,12 +97,18 @@ def set_payoffs(group: Group):
     p2 = group.get_player_by_id(2)
     if group.decision == 0:
         p1.payoff = Constants.pot_money * p1.conversion
-        p2.payoff = 0
+        p2.payoff = 0 * p1.conversion
+        p1.token_number = Constants.pot_money
+        p2.token_number = 0
     else:
         p1.payoff = Constants.endowment_p1 * p1.conversion
         p2.payoff = Constants.endowment_p2 * p2.conversion
-    print('Dictator', p1.payoff)
-    print('Receiver', p2.payoff)
+        p1.token_number = Constants.endowment_p1
+        p2.token_number = Constants.endowment_p2
+    print('Dictator payoff:', p1.payoff)
+    print('Receiver payoff:', p2.payoff)
+    print('Dictator tokens:', p1.token_number)
+    print('Receiver tokens:', p2.token_number)
 
 
 def new_conversion_value():
@@ -110,6 +118,9 @@ def new_conversion_value():
     new_value = random.choice(Constants.values)
     return new_value
 
+
+def other_player(player: Player):
+    return player.get_others_in_group()[0]
 
 # def set_title(player: Player):
 #     if player.id_in_subsesion % 2 == 0:
@@ -167,7 +178,12 @@ class Receiver(Page):
 
 class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
-    # after_all_players_arrive = set_payoffs and new_conversion_value
+
+    @staticmethod
+    def before_next_page(player, timeout_happened):
+        for p in player.get_others_in_group():
+            p.opponent = p.get_others_in_group()[0]
+            print('opponent', p.opponent)
 
 
 class Results(Page):
