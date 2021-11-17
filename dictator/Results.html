@@ -3,20 +3,20 @@
     <p>
         {{ if player.id_in_group == 1 }}
             {{ if group.decision == 0 }}
-                You decided to take the {{ Constants.endowment_p2 }} tokens of Participant 2.
-                Your payoff in this round is <strong>{{ p1_payoff }}</strong>.
+                You decided to take the {{ Constants.endowment_p2 }} of the receiver.
+                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
             {{ else }}
-                You decided to leave the {{ Constants.endowment_p2 }} tokens of Participant 2.
-                Your payoff in this round is <strong>{{ p1_payoff }}</strong>.
+                You decided to leave the {{ Constants.endowment_p2 }} of the receiver.
+                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
             {{ endif }}
         {{ endif }}
         {{ if player.id_in_group == 2 }}
             {{ if group.decision == 0 }}
-                Participant 1 decided to take your {{ Constants.endowment_p2 }} tokens.
-                Your payoff in this round is <strong>{{ p2_payoff }}</strong>.
+                The decider chose to take your {{ Constants.endowment_p2 }}.
+                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
             {{ else }}
-                Participant 1 decided to leave your {{ Constants.endowment_p2 }} tokens.
-                Your payoff in this round is <strong>{{ p2_payoff }}</strong>.
+                The decider chose to leave your {{ Constants.endowment_p2 }}.
+                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
             {{ endif }}
         {{ endif }}
     </p>

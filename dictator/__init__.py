@@ -155,7 +155,7 @@ class Offer(Page):
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
             new_conversion=f'{player.conversion:.2f}',
-            currency_total=player.conversion * Constants.endowment_p1,
+            currency_total=f'{player.conversion * Constants.endowment_p2:.0f}',
         )
 
 
@@ -172,7 +172,7 @@ class Receiver(Page):
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
             new_conversion=f'{player.conversion:.2f}',
-            currency_total=player.conversion * Constants.endowment_p2,
+            currency_total=f'{player.conversion * Constants.endowment_p2:.0f}',
         )
 
 
@@ -196,6 +196,8 @@ class Results(Page):
             left=Constants.endowment_p2 - Constants.endowment_p2,
             p1_payoff=p1.payoff,
             p2_payoff=p2.payoff,
+            p1_tokens=p1.token_number,
+            p2_tokens=p1.token_number,
             partner=opponent,
             my_player_id=player.id_in_subsession,
             opponent_id=opponent.id_in_subsession,
@@ -210,21 +212,27 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
-        opponent = player.get_others_in_group()[0]
-        print(sum([p.payoff for p in player.in_all_rounds()]))
-        print(sum([p.payoff for p in opponent.in_all_rounds()]))
-        p1 = player.group.get_player_by_id(1)
-        p2 = player.group.get_player_by_id(2)
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
-            p1_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-            p2_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-            my_total_payoff=sum([p.payoff for p in p1.in_all_rounds()]),
-            opponent_total_payoff=sum([p.payoff for p in p2.in_all_rounds()]),
-            partner=opponent,
-            my_player_id=player.id_in_subsession,
-            opponent_id=opponent.id_in_subsession,
+            total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
         )
+
+    # def vars_for_template(player: Player):
+    #     opponent = player.get_others_in_group()[0]
+    #     print(sum([p.payoff for p in player.in_all_rounds()]))
+    #     print(sum([p.payoff for p in opponent.in_all_rounds()]))
+    #     p1 = player.group.get_player_by_id(1)
+    #     p2 = player.group.get_player_by_id(2)
+    #     return dict(
+    #         player_in_all_rounds=player.in_all_rounds(),
+    #         p1_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+    #         p2_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+    #         my_total_payoff=sum([p.payoff for p in p1.in_all_rounds()]),
+    #         opponent_total_payoff=sum([p.payoff for p in p2.in_all_rounds()]),
+    #         partner=opponent,
+    #         my_player_id=player.id_in_subsession,
+    #         opponent_id=opponent.id_in_subsession,
+    #     )
 
 
 class Payment(Page):
