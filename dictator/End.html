@@ -4,33 +4,29 @@
 <p>
     The task is now over. Here are your final results:
 
-    In total across all rounds, you got
-
-    {{ if player.id_in_group == 1 }}
-    <strong>{{ p1_total_payoff }}</strong>
-    {{ else }}
-    <strong>{{ p2_total_payoff }}</strong>
-    {{ endif }}
-
+    In total across all rounds, you got <b>{{total_payoff}}</b>.
 </p>
 
     <table class="table">
         <tr>
             <th>Round</th>
-            <th>My outcome</th>
-
+            <th>Number of tokens</th>
+            <th>Value</th>
+            <th>Total in GBP</th>
         </tr>
         {{ for p in player_in_all_rounds }}
-            <tr>
-                <td>{{ p.round_number }}</td>
-                <td>{{ p.payoff }} pts</td>
-            </tr>
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.token_number }}</td>
+            <td>£{{ p.conversion }}</td>
+            <td>£{{ p.payoff }}</td>
+        </tr>
         {{ endfor }}
     </table>
 
 
-{{ next_button }}
-
-    {{ include Constants.instructions_template }}
+<div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
 
 {{ endblock }}

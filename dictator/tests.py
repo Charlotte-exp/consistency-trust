@@ -14,6 +14,8 @@ class PlayerBot(Bot):
 
         if self.round_number == 3:
             yield End
+            yield Payment
+            yield ProlificLink
 
 # from otree github
 # class PlayerBot(Bot):

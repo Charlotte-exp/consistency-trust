@@ -161,7 +161,8 @@ class InstruReceiver(Page):
         }
 
 
-page_sequence = [Welcome,
-                 # Introduction,
-                 InstruDictator,
-                 InstruReceiver]
+page_sequence = [# Welcome,
+                 Introduction,
+                 # InstruDictator,
+                 # InstruReceiver
+]

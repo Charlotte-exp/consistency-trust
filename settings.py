@@ -26,11 +26,11 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=2.00, doc=""
 )
 
 SESSION_FIELDS = ['past_groups', ]
-PARTICIPANT_FIELDS = ['title', ]
+PARTICIPANT_FIELDS = ['title', 'conversion', 'new_conversion']
 
 
 # ISO-639 code
