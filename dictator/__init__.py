@@ -8,7 +8,7 @@ doc = """
 Dictator game for the consistency project. 
 perfect random matching
 random token value
-assymetric token value
+asymmetric token value
 """
 
 
