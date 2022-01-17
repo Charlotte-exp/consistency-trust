@@ -105,10 +105,10 @@ def set_payoffs(group: Group):
         p2.payoff = Constants.endowment_p2 * p2.conversion
         p1.token_number = Constants.endowment_p1
         p2.token_number = Constants.endowment_p2
-    print('Dictator payoff:', p1.payoff)
-    print('Receiver payoff:', p2.payoff)
-    print('Dictator tokens:', p1.token_number)
-    print('Receiver tokens:', p2.token_number)
+    # print('Dictator payoff:', p1.payoff)
+    # print('Receiver payoff:', p2.payoff)
+    # print('Dictator tokens:', p1.token_number)
+    # print('Receiver tokens:', p2.token_number)
 
 
 def new_conversion_value():
