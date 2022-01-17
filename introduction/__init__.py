@@ -11,7 +11,7 @@ class Constants(BaseConstants):
     name_in_url = 'introduction'
     players_per_group = None
     num_rounds = 1
-    n_of_rounds = 3
+    n_of_rounds = 2
     instructions_template = 'introduction/instructions.html'
 
     pot_money = cu(100)
@@ -26,26 +26,11 @@ class Subsession(BaseSubsession):
     pass
 
 
-def creating_session(subsession: Subsession):
-    roles = itertools.cycle(['dictator', 'receiver'])
-    for p in subsession.get_players():
-        p.title = next(roles)
-        p.participant.title = p.title
-
-    # for p in subsession.get_players():
-    #     if p.id_in_subsession % 2 == 0:
-    #         return p.player.title == 'dictator'
-    #     else:
-    #         return p.player.title == 'receiver'
-
-
 class Group(BaseGroup):
     pass
 
 
 class Player(BasePlayer):
-
-    title = models.StringField()
 
     q1 = models.IntegerField(
             choices=[
@@ -60,7 +45,7 @@ class Player(BasePlayer):
     q2 = models.IntegerField(
         choices=[
             [1, 'There is no bonus possible in this study.'],
-            [2, 'My bonus payment depends on the conversion rates in each round.'],
+            [2, 'My bonus payment depends on luck only.'],
             [3, 'My bonus payment depends on a decision taken by one of the participants.']
         ],
         verbose_name='What will your bonus payment depend on?',
@@ -98,14 +83,7 @@ class Player(BasePlayer):
     )
 
 
-# def set_title(player: Player):
-#     if player.id_in_subsesion % 2 == 0:
-#         return player.title == 'dictator'
-#     else:
-#         return player.title == 'receiver'
-
-
-# PAGES
+#######   PAGES   #######
 class Welcome(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2']
@@ -113,7 +91,7 @@ class Welcome(Page):
     def error_message(player, values):
         if values['q1'] != 3:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q2'] != 2:
+        if values['q2'] != 3:
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
 
@@ -126,43 +104,14 @@ class InstruDictator(Page):
     form_fields = ['q3', 'q4']
 
     @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.title == 'dictator'
-
-    @staticmethod
     def error_message(player, values):  # it works but the message is wrong...
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
         if values['q4'] != 3:
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
-    def vars_for_template(player: Player):
-        return {
-            'my_title': player.participant.title,
-        }
-
-
-class InstruReceiver(Page):
-    form_model = 'player'
-    form_fields = ['q5']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.title == 'receiver'
-
-    @staticmethod
-    def error_message(player, values):
-        if values['q5'] != 1:
-            return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-
-    def vars_for_template(player: Player):
-        return {
-            'my_title': player.participant.title,
-        }
-
 
 page_sequence = [Welcome,
                  # Introduction,
                  InstruDictator,
-                 InstruReceiver
 ]

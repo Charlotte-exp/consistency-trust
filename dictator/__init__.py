@@ -14,13 +14,13 @@ asymmetric token value
 
 class Constants(BaseConstants):
     name_in_url = 'dictator'
-    players_per_group = 1
+    players_per_group = None
     num_rounds = 2
     instructions_template = 'dictator/instructions.html'
 
     pot_money = cu(10)
-    endowment_p2 = pot_money/2
-    endowment_p1 = pot_money/2
+    endowment_dictator = pot_money/2
+    endowment_receiver = pot_money/2
 
     likelihood = 0.5
     values = [0.1, 0.5]
@@ -32,39 +32,35 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession: Subsession):
 
-    # ok this assigns one of the values from the seq in constant for each player for each round.
-    # issue is it's per player, not group. one cannot do groups as they are not created yet.
-    # also, it is not printing to the data... why? The field is there but empty
-    for p in subsession.get_players():
-        p.participant.conversion = random.choice(Constants.values)
-        print(p.participant.conversion)
+    values = itertools.cycle(['high-high', 'low-low'])
+    for player in subsession.get_players():
+        player.conversion = next(values)
+        print('treatment', player.conversion)
+
+    # for p in subsession.get_players():
+    #     p.participant.conversion = random.choice(Constants.values)
+    #     print(p.participant.conversion)
 
 
 class Group(BaseGroup):
-    # kept = models.CurrencyField(
-    #     doc="""Amount dictator decided to keep for himself""",
-    #     min=0,
-    #     max=Constants.endowment,
-    #     label="I will keep",
-    # )
-
-    receiver_payoff = models.CurrencyField()
-
-    decision = models.CurrencyField(
-        choices=[
-            [0, f'Take the {Constants.endowment_p2} from the receiver.'],  # cooperate
-            [1, f'Leave the {Constants.endowment_p2} of the receiver'],  # defect
-        ],
-        doc="""This player's decision""",
-        verbose_name='Your decision:',
-        widget=widgets.RadioSelect
-    )
+    pass
 
 
 class Player(BasePlayer):
 
     title = models.StringField()
     conversion = models.FloatField()
+    receiver_payoff = models.CurrencyField()
+
+    decision = models.CurrencyField(
+        choices=[
+            [0, f'Take the {Constants.endowment_receiver} from the receiver.'],  # cooperate
+            [1, f'Leave the {Constants.endowment_receiver} of the receiver'],  # defect
+        ],
+        doc="""This player's decision""",
+        verbose_name='Your decision:',
+        widget=widgets.RadioSelect
+    )
 
     being_receiver = models.StringField(
         choices=['Yes', 'No'],
@@ -104,25 +100,29 @@ class Player(BasePlayer):
 
 
 #######   FUNCTIONS   #######
-def set_payoffs(group: Group):
-    p1 = group.get_player_by_id(1)
-    p2 = group.receiver_payoff
-    if group.decision == 0:
-        p1.payoff = Constants.pot_money * p1.conversion
-        p2.payoff = 0 * p1.conversion
-    else:
-        p1.payoff = Constants.endowment_p1 * p1.conversion
-        p2.payoff = Constants.endowment_p2 * p2.conversion
-    print('Dictator payoff:', p1.payoff)
-    print('Receiver payoff:', p2.payoff)
-
-
-def new_conversion_value():
-    """
-    random assignment of the two conversion values from the constant list.
-    """
-    new_value = random.choice(Constants.values)
-    return new_value
+def set_payoffs(player: Player):
+    """  """
+    if player.participant.conversion == 'high-high':
+        receiver = player.receiver_payoff
+        if player.decision == 0:
+            player.payoff = Constants.pot_money * Constants.value[1]
+            receiver.payoff = 0 * Constants.value[1]
+        else:
+            player.payoff = Constants.endowment_dictator * Constants.value[1]
+            receiver.payoff = Constants.endowment_receiver * Constants.value[1]
+        print('Dictator payoff:', player.payoff)
+        print('Receiver payoff:', receiver.payoff)
+    if player.participant.conversion == 'high-high':
+        if player.participant.conversion == 'high-high':
+            receiver = player.receiver_payoff
+            if player.decision == 0:
+                player.payoff = Constants.pot_money * Constants.value[0]
+                receiver.payoff = 0 * Constants.value[0]
+            else:
+                player.payoff = Constants.endowment_dictator * Constants.value[0]
+                receiver.payoff = Constants.endowment_receiver * Constants.value[0]
+            print('Dictator payoff:', player.payoff)
+            print('Receiver payoff:', receiver.payoff)
 
 
 #######    PAGES   #########
@@ -137,8 +137,7 @@ class Offer(Page):
     def vars_for_template(player: Player):
         return dict(
             my_player_id=player.id_in_subsession,
-            new_conversion=f'{player.conversion:.2f}',
-            currency_total=f'{player.conversion * Constants.endowment_p2:.0f}',
+            currency_total=f'{Constants.value[0] * Constants.endowment_receiver:.0f}',
         )
 
 
@@ -151,7 +150,7 @@ class Results(Page):
     def vars_for_template(player: Player):
         dictator = player.group.get_player_by_id(1)
         return dict(
-            left=Constants.endowment_p2 - Constants.endowment_p2,
+            left=Constants.endowment_receiver - Constants.endowment_receiver,
             p1_payoff=dictator.payoff,
             my_player_id=player.id_in_subsession,
         )
