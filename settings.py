@@ -39,8 +39,8 @@ LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'GBP'
-USE_POINTS = True
-POINTS_CUSTOM_NAME = 'tokens'
+USE_POINTS = False
+# POINTS_CUSTOM_NAME = 'tokens'
 
 ROOMS = [
     dict(

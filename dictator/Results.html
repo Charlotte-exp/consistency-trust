@@ -1,28 +1,17 @@
 {{ block title }}Results{{ endblock }}
 {{ block content }}
     <p>
-        {{ if player.id_in_group == 1 }}
-            {{ if group.decision == 0 }}
-                You decided to take the {{ Constants.endowment_p2 }} of the receiver.
-                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
-            {{ else }}
-                You decided to leave the {{ Constants.endowment_p2 }} of the receiver.
-                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
-            {{ endif }}
-        {{ endif }}
-        {{ if player.id_in_group == 2 }}
-            {{ if group.decision == 0 }}
-                The decider chose to take your {{ Constants.endowment_p2 }}.
-                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
-            {{ else }}
-                The decider chose to leave your {{ Constants.endowment_p2 }}.
-                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
-            {{ endif }}
+        {{ if player.decision == 0 }}
+            You decided to take the {{ Constants.endowment_receiver }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
+        {{ else }}
+            You decided to leave the {{ Constants.endowment_receiver }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
 
     <p>
-        <div style="display: flex; justify-content: flex-end">
+        <div style="display: fle x; justify-content: flex-end">
         {{ next_button }}
         </div>
     </p>

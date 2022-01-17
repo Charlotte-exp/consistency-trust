@@ -32,10 +32,10 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession: Subsession):
 
-    values = itertools.cycle(['high-high', 'low-low'])
+    treatments = itertools.cycle(['high-high', 'low-low'])
     for player in subsession.get_players():
-        player.conversion = next(values)
-        print('treatment', player.conversion)
+        player.condition = next(treatments)
+        print('treatment', player.condition)
 
     # for p in subsession.get_players():
     #     p.participant.conversion = random.choice(Constants.values)
@@ -49,7 +49,8 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     title = models.StringField()
-    conversion = models.FloatField()
+    condition = models.StringField()
+    # conversion = models.FloatField()
     receiver_payoff = models.CurrencyField()
 
     decision = models.CurrencyField(
@@ -102,25 +103,25 @@ class Player(BasePlayer):
 #######   FUNCTIONS   #######
 def set_payoffs(player: Player):
     """  """
-    if player.participant.conversion == 'high-high':
+    if player.participant.condition == 'high-high':
         receiver = player.receiver_payoff
         if player.decision == 0:
-            player.payoff = Constants.pot_money * Constants.value[1]
-            receiver.payoff = 0 * Constants.value[1]
+            player.payoff = Constants.pot_money * Constants.values[1]
+            receiver.payoff = 0 * Constants.values[1]
         else:
-            player.payoff = Constants.endowment_dictator * Constants.value[1]
-            receiver.payoff = Constants.endowment_receiver * Constants.value[1]
+            player.payoff = Constants.endowment_dictator * Constants.values[1]
+            receiver.payoff = Constants.endowment_receiver * Constants.values[1]
         print('Dictator payoff:', player.payoff)
         print('Receiver payoff:', receiver.payoff)
-    if player.participant.conversion == 'high-high':
-        if player.participant.conversion == 'high-high':
+    if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high-high':
             receiver = player.receiver_payoff
             if player.decision == 0:
-                player.payoff = Constants.pot_money * Constants.value[0]
-                receiver.payoff = 0 * Constants.value[0]
+                player.payoff = Constants.pot_money * Constants.values[0]
+                receiver.payoff = 0 * Constants.values[0]
             else:
-                player.payoff = Constants.endowment_dictator * Constants.value[0]
-                receiver.payoff = Constants.endowment_receiver * Constants.value[0]
+                player.payoff = Constants.endowment_dictator * Constants.values[0]
+                receiver.payoff = Constants.endowment_receiver * Constants.values[0]
             print('Dictator payoff:', player.payoff)
             print('Receiver payoff:', receiver.payoff)
 
@@ -131,13 +132,13 @@ class Introduction(Page):
 
 
 class Offer(Page):
-    form_model = 'group'
+    form_model = 'player'
     form_fields = ['decision']
 
     def vars_for_template(player: Player):
         return dict(
             my_player_id=player.id_in_subsession,
-            currency_total=f'{Constants.value[0] * Constants.endowment_receiver:.0f}',
+            currency_total=f'{Constants.values[0] * Constants.endowment_receiver:.0f}',
         )
 
 
@@ -151,7 +152,7 @@ class Results(Page):
         dictator = player.group.get_player_by_id(1)
         return dict(
             left=Constants.endowment_receiver - Constants.endowment_receiver,
-            p1_payoff=dictator.payoff,
+            payoff=player.payoff,
             my_player_id=player.id_in_subsession,
         )
 
@@ -248,7 +249,7 @@ class ProlificLink(Page):
 
 
 page_sequence = [Offer,
-                 ResultsWaitPage,
+                 # ResultsWaitPage,
                  Results,
                  End,
                  Demographics,
