@@ -6,11 +6,17 @@
 <div class="card-body">
     We appreciate feedback.
     If you have any comments on the implementation of this study, or on the user interface, please write it down below.
+
+    {% formfield player.comment_box label='' %}
 </div>
 
 <div class="card-body">
-    {% formfield player.comment_box label='' %}
+    Would you accept to be matched with another participant in order to receive the bonus for the other player from their decision?
+    It would be at no cost to you, the payment would be directly made in Prolific at a later time.
+
+    {% formfield player.being_receiver label='' %}
 </div>
+
 
     <p>
         <div style="display: flex; justify-content: flex-end">

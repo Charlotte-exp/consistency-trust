@@ -63,11 +63,6 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    being_receiver = models.StringField(
-        choices=['Yes', 'No'],
-        verbose_name='Would you like to be the receiver for another dictator?:',
-        widget=widgets.RadioSelect)
-
     age = models.IntegerField(
         verbose_name='What is your age?',
         min=18, max=100)
@@ -98,6 +93,11 @@ class Player(BasePlayer):
     comment_box = models.LongStringField(
         verbose_name=''
     )
+
+    being_receiver = models.StringField(
+        choices=['Yes', 'No'],
+        verbose_name='Would you like to be the receiver for another dictator?',
+        widget=widgets.RadioSelect)
 
 
 #######   FUNCTIONS   #######
@@ -188,14 +188,14 @@ class End(Page):
     #     )
 
 
-class BeingReceiver(Page):
-    form_model = 'player'
-    form_fields = ['being_receiver']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == Constants.num_rounds:
-            return True
+# class BeingReceiver(Page):
+#     form_model = 'player'
+#     form_fields = ['being_receiver']
+#
+#     @staticmethod
+#     def is_displayed(player: Player):
+#         if player.round_number == Constants.num_rounds:
+#             return True
 
 
 class Demographics(Page):
@@ -211,7 +211,7 @@ class Demographics(Page):
 
 class CommentBox(Page):
     form_model = 'player'
-    form_fields = ['comment_box']
+    form_fields = ['comment_box', 'being_receiver']
 
     @staticmethod
     def is_displayed(player: Player):
