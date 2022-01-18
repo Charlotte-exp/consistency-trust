@@ -14,9 +14,9 @@ class Constants(BaseConstants):
     n_of_rounds = 2
     instructions_template = 'introduction/instructions.html'
 
-    pot_money = cu(100)
-    endowment_p2 = pot_money/2
-    endowment_p1 = pot_money/2
+    pot_money = cu(10)
+    endowment_decider = pot_money/2
+    endowment_receiver = pot_money/2
 
     value = pot_money * 0.5
     conversion = '10 tokens = £0.20'
@@ -36,16 +36,16 @@ class Player(BasePlayer):
             choices=[
                 [1, '0 other participants'],
                 [2, '1 other participant'],
-                [3, 'multiple other participants']
+                [3, 'different participants']
             ],
-            verbose_name='With how many participants will you be playing in this task?',
+            verbose_name='With how many participants will you be playing in this study?',
             widget=widgets.RadioSelect
         )
 
     q2 = models.IntegerField(
         choices=[
             [1, 'There is no bonus possible in this study.'],
-            [2, 'My bonus payment depends on luck only.'],
+            [2, 'My bonus payment depends on luck.'],
             [3, 'My bonus payment depends on a decision taken by one of the participants.']
         ],
         verbose_name='What will your bonus payment depend on?',
@@ -64,11 +64,11 @@ class Player(BasePlayer):
 
     q4 = models.IntegerField(
         choices=[
-            [1, '0 tokens.'],
-            [2, f'{Constants.endowment_p1}.'],
+            [1, '£0.'],
+            [2, f'{Constants.endowment_decider}.'],
             [3, f'{Constants.pot_money}.']
         ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_p1}?',
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_decider}?',
         widget=widgets.RadioSelect
     )
 
