@@ -16,14 +16,13 @@ class Constants(BaseConstants):
     name_in_url = 'dictator'
     players_per_group = None
     num_rounds = 2
-    instructions_template = 'dictator/instructions.html'
 
     pot_money = cu(10)
     endowment_dictator = pot_money/2
     endowment_receiver = pot_money/2
 
     likelihood = 0.5
-    values = [0.1, 0.5]
+    values = [1, 2]
 
 
 class Subsession(BaseSubsession):
@@ -101,29 +100,27 @@ class Player(BasePlayer):
 
 
 #######   FUNCTIONS   #######
-def set_payoffs(player: Player):
-    """  """
-    if player.participant.condition == 'high-high':
-        receiver = player.receiver_payoff
-        if player.decision == 0:
-            player.payoff = Constants.pot_money * Constants.values[1]
-            receiver.payoff = 0 * Constants.values[1]
-        else:
-            player.payoff = Constants.endowment_dictator * Constants.values[1]
-            receiver.payoff = Constants.endowment_receiver * Constants.values[1]
+    def set_payoffs(player):
+        """  """
+        # receiver = player.receiver_payoff
+        if player.condition == 'high-high':
+            if player.decision == 0:
+                player.payoff = Constants.pot_money * Constants.values[1]
+                player.receiver_payoff = 0 * Constants.values[1]
+            else:
+                player.payoff = Constants.endowment_dictator * Constants.values[1]
+                player.receiver_payoff = Constants.endowment_receiver * Constants.values[1]
         print('Dictator payoff:', player.payoff)
-        print('Receiver payoff:', receiver.payoff)
-    if player.participant.condition == 'high-high':
-        if player.participant.condition == 'high-high':
-            receiver = player.receiver_payoff
+        print('Receiver payoff:', player.receiver_payoff)
+        if player.condition == 'low-low':
             if player.decision == 0:
                 player.payoff = Constants.pot_money * Constants.values[0]
-                receiver.payoff = 0 * Constants.values[0]
+                player.receiver_payoff = 0 * Constants.values[0]
             else:
                 player.payoff = Constants.endowment_dictator * Constants.values[0]
-                receiver.payoff = Constants.endowment_receiver * Constants.values[0]
+                player.receiver_payoff = Constants.endowment_receiver * Constants.values[0]
             print('Dictator payoff:', player.payoff)
-            print('Receiver payoff:', receiver.payoff)
+            print('Receiver payoff:', player.receiver_payoff)
 
 
 #######    PAGES   #########
@@ -142,16 +139,18 @@ class Offer(Page):
         )
 
 
-class ResultsWaitPage(WaitPage):
-    after_all_players_arrive = set_payoffs
-
+# class ResultsWaitPage(WaitPage):
+#     player.set_payoffs()
+## why is it so fucking hard to call a function?? al the examples online use self! why did they fucking change it!!
 
 class Results(Page):
-
+    """
+    This is the only way I found to call this fucking function... ask Nik how these work and how it should be done
+    """
     def vars_for_template(player: Player):
         dictator = player.group.get_player_by_id(1)
         return dict(
-            left=Constants.endowment_receiver - Constants.endowment_receiver,
+            call=player.set_payoffs(),
             payoff=player.payoff,
             my_player_id=player.id_in_subsession,
         )

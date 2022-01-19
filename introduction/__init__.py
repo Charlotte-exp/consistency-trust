@@ -111,7 +111,7 @@ class InstruDictator(Page):
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
 
-page_sequence = [Welcome,
+page_sequence = [# Welcome,
                  # Introduction,
-                 InstruDictator,
+                 # InstruDictator,
 ]
