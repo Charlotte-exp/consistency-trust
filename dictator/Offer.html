@@ -1,11 +1,25 @@
 {{ block title }}Your Decision{{ endblock }}
 {{ block content }}
-<p>
-    You are <strong>the decider</strong>.
-    Please decide if you want to take the other participant's tokens or not
-</p>
 
-    {{ formfields }}
+<h5>
+    Round {{ subsession.round_number }}
+</h5>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Do you take the money or leave it?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="decision" value="1" class="btn btn-primary btn-large">Leave</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="decision" value="0" class="btn btn-primary btn-large">Take</button>
+            </div>
+        </div>
+    </div>
+</div>
 
     <p>
         <div style="display: flex; justify-content: flex-end">

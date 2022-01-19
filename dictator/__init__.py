@@ -17,9 +17,11 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 2
 
-    pot_money = cu(10)
-    endowment_dictator = pot_money/2
-    endowment_receiver = pot_money/2
+    high_pot_money = cu(6)
+    high_half_pot = high_pot_money / 2
+
+    low_pot_money = cu(2)
+    low_half_pot = low_pot_money / 2
 
     likelihood = 0.5
     values = [1, 2]
@@ -54,8 +56,8 @@ class Player(BasePlayer):
 
     decision = models.CurrencyField(
         choices=[
-            [0, f'Take the {Constants.endowment_receiver} from the receiver.'],  # cooperate
-            [1, f'Leave the {Constants.endowment_receiver} of the receiver'],  # defect
+            [0, f'Take'],  # defect
+            [1, f'Leave'],  # cooperate
         ],
         doc="""This player's decision""",
         verbose_name='Your decision:',
@@ -105,20 +107,20 @@ class Player(BasePlayer):
         # receiver = player.receiver_payoff
         if player.condition == 'high-high':
             if player.decision == 0:
-                player.payoff = Constants.pot_money * Constants.values[1]
-                player.receiver_payoff = 0 * Constants.values[1]
+                player.payoff = Constants.high_pot_money
+                player.receiver_payoff = 0
             else:
-                player.payoff = Constants.endowment_dictator * Constants.values[1]
-                player.receiver_payoff = Constants.endowment_receiver * Constants.values[1]
-        print('Dictator payoff:', player.payoff)
-        print('Receiver payoff:', player.receiver_payoff)
-        if player.condition == 'low-low':
+                player.payoff = Constants.high_half_pot
+                player.receiver_payoff = Constants.high_half_pot
+            print('Dictator payoff:', player.payoff)
+            print('Receiver payoff:', player.receiver_payoff)
+        else:
             if player.decision == 0:
-                player.payoff = Constants.pot_money * Constants.values[0]
-                player.receiver_payoff = 0 * Constants.values[0]
+                player.payoff = Constants.low_pot_money
+                player.receiver_payoff = 0
             else:
-                player.payoff = Constants.endowment_dictator * Constants.values[0]
-                player.receiver_payoff = Constants.endowment_receiver * Constants.values[0]
+                player.payoff = Constants.low_half_pot
+                player.receiver_payoff = Constants.low_half_pot
             print('Dictator payoff:', player.payoff)
             print('Receiver payoff:', player.receiver_payoff)
 
@@ -135,7 +137,10 @@ class Offer(Page):
     def vars_for_template(player: Player):
         return dict(
             my_player_id=player.id_in_subsession,
-            currency_total=f'{Constants.values[0] * Constants.endowment_receiver:.0f}',
+            high_pot=Constants.high_pot_money,
+            low_pot=Constants.low_pot_money,
+            high_half_pot=Constants.low_pot_money/2,
+            low_half_pot=Constants.low_pot_money/2,
         )
 
 
