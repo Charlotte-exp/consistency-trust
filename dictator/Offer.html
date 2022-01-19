@@ -2,13 +2,42 @@
 {{ block content }}
 
 <h5>
-    Round {{ subsession.round_number }}
+    Interaction {{ subsession.round_number }}
 </h5>
+<p>
+    {{ if player.condition == 'high-high' }}
+    Both you and the receiver have been endowed with <b>{{ Constants.high_half_pot }}</b> each.
+    You have the opportunity to take the money from the receiver, or to leave it.
+    <ul>
+        <li>
+            If you take it, your total payoff for this interaction will be <b>{{ Constants.high_pot_money }}</b>.
+        </li>
+        <li>
+            If you leave it, your total payoff for this interaction will be <b>{{ Constants.high_half_pot }}</b>.
+        </li>
+    </ul>
+    {{ else }}
+    Both you and the receiver have been endowed with <b>{{ Constants.low_half_pot }}</b> each.
+    You have the opportunity to take the money from the receiver, or to leave it.
+    <ul>
+        <li>
+            If you take it, your total payoff for this interaction will be <b>{{ Constants.low_pot_money }}</b>.
+        </li>
+        <li>
+            If you leave it, your total payoff for this interaction will be <b>{{ Constants.low_half_pot }}</b>.
+        </li>
+    </ul>
+    {{ endif }}
+</p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
-            Do you take the money or leave it?
+            {{ if player.condition == 'high-high' }}
+            Do you want to take the {{ Constants.high_half_pot }} or leave it?
+            {{ else }}
+            Do you want to take the {{ Constants.low_half_pot }} or leave it?
+            {{ endif }}
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
@@ -20,11 +49,5 @@
         </div>
     </div>
 </div>
-
-    <p>
-        <div style="display: flex; justify-content: flex-end">
-        {{ next_button }}
-        </div>
-    </p>
 
 {{ endblock }}
