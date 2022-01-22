@@ -139,7 +139,7 @@ class Offer(Page):
             my_player_id=player.id_in_subsession,
             high_pot=Constants.high_pot_money,
             low_pot=Constants.low_pot_money,
-            high_half_pot=Constants.low_pot_money/2,
+            high_half_pot=Constants.high_pot_money/2,
             low_half_pot=Constants.low_pot_money/2,
         )
 

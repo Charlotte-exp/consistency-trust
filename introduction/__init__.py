@@ -11,19 +11,29 @@ class Constants(BaseConstants):
     name_in_url = 'introduction'
     players_per_group = None
     num_rounds = 1
-    n_of_rounds = 2
-    instructions_template = 'introduction/instructions.html'
+    num_interactions = 2
 
-    pot_money = cu(10)
-    endowment_decider = pot_money/2
-    endowment_receiver = pot_money/2
+    high_pot_money = cu(6)
+    high_half_pot = high_pot_money / 2
 
-    value = pot_money * 0.5
-    conversion = '10 tokens = £0.20'
+    low_pot_money = cu(2)
+    low_half_pot = low_pot_money / 2
+
+    likelihood = 0.5
+    values = [1, 2]
 
 
 class Subsession(BaseSubsession):
     pass
+
+
+def creating_session(subsession: Subsession):
+
+    treatments = itertools.cycle(['high-high', 'low-low'])
+    for player in subsession.get_players():
+        player.condition = next(treatments)
+        player.participant.condition = player.condition
+        print('treatment', player.condition, player.participant.condition)
 
 
 class Group(BaseGroup):
@@ -32,11 +42,13 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
+    condition = models.StringField()
+
     q1 = models.IntegerField(
             choices=[
                 [1, '0 other participants'],
                 [2, '1 other participant'],
-                [3, 'different participants']
+                [3, 'Different participants']
             ],
             verbose_name='With how many participants will you be playing in this study?',
             widget=widgets.RadioSelect
@@ -62,13 +74,23 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    q4 = models.IntegerField(
+    q4h = models.IntegerField(
         choices=[
             [1, '£0.'],
-            [2, f'{Constants.endowment_decider}.'],
-            [3, f'{Constants.pot_money}.']
+            [2, f'{Constants.high_half_pot}.'],
+            [3, f'{Constants.high_pot_money}.']
         ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_decider}?',
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.high_half_pot}?',
+        widget=widgets.RadioSelect
+    )
+
+    q4l = models.IntegerField(
+        choices=[
+            [1, '£0.'],
+            [2, f'{Constants.low_half_pot}.'],
+            [3, f'{Constants.low_pot_money}.']
+        ],
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.low_half_pot}?',
         widget=widgets.RadioSelect
     )
 
@@ -101,17 +123,38 @@ class Introduction(Page):
 
 class InstruDictator(Page):
     form_model = 'player'
-    form_fields = ['q3', 'q4']
+
+    def get_form_fields(player: Player):
+        """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
+        if player.condition == 'high-high':
+            return ['q3', 'q4h',]
+        else:
+            return ['q3', 'q4l']
 
     @staticmethod
     def error_message(player, values):  # it works but the message is wrong...
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q4'] != 3:
-            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+        if player.condition == 'high-high':
+            if values['q4h'] != 3:
+                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+        else:
+            if values['q4l'] != 3:
+                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
+    def vars_for_template(player: Player):
+        if player.condition == 'high-high':
+            return dict(
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_phalf_pot,
+            )
 
-page_sequence = [# Welcome,
+page_sequence = [Welcome,
                  # Introduction,
-                 # InstruDictator,
+                 InstruDictator,
 ]

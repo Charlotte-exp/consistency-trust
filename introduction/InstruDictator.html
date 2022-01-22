@@ -5,49 +5,53 @@
 <div>
     <p>
         You are the <b>Decider</b>. This means that in every interaction you have a decision to make.
-        In each interaction, both you and the receiver are allocated with {{Constants.endowment_decider}} each.
+        In each interaction, both you and the receiver are allocated with <b>{{half_pot}}</b> each.
         You have the opportunity to take the money of the receiver or leave it. If you decide to take it,
-        you will earn {{Constants.pot_money}} in that interaction and the receiver gets nothing.
-        If you decide to leave it, you keep your allocated {{Constants.endowment_decider}} and so does the receiver.
+        you will earn <b>{{pot_money}}</b> in that interaction and the receiver gets nothing.
+        If you decide to leave it, you keep your allocated <b>{{half_pot}}</b> and so does the receiver.
         The receiver will know his final amount, but not who decided.
     </p>
     <p>
         Remember, in each interaction you are paired up with someone different and make a new decision.
-        What happened previously is in the past and you are allocated {{Constants.endowment_decider}} again.
+        What happened previously is in the past and you are allocated {{half_pot}} again.
     </p>
     <p>
         Below you can see what your choices in each interaction will be.
     </p>
 </div>
 
-<div class="card bg-light instructions"> <!-- Makes the para a box -->
-    <div class="card-body">
-        <p>
-            <h4>Your decision:</h4>
-        </p>
-        <ul>
-            <li>
-                <b>Take</b> the {{Constants.endowment_receiver}} from Participant 2.
-            </li>
-            <li>
-                <b>Leave</b> the {{Constants.endowment_receiver}} from Participant 2.
-            </li>
-        </ul>
-    </div>
-</div>
+<h5>
+    Interaction {{ subsession.round_number }}
+</h5>
+<p>
+    Both you and the receiver have been endowed with <b>{{ half_pot }}</b> each.
+    You have the opportunity to take the money from the receiver, or to leave it.
+    <ul>
+        <li>
+            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+        </li>
+        <li>
+            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+        </li>
+    </ul>
+</p>
 
 <p></p>
 
-<div>
-    <p>
-        If you decide to take the {{Constants.endowment_receiver}}, you will receive {{Constants.pot_money}} for this round.
-        If you decide to leave the {{Constants.endowment_receiver}}, you will receive {{Constants.endowment_decider}} for this round.
-    </p>
-</div>
-
-<div class="card-body">
-    <h4>Please answer the following questions to continue:</h4>
-    {{ formfields }}
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Do you want to take the {{ half_pot }} or leave it?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                Leave
+            </div>
+            <div class="col" style="text-align:center">
+                Take
+            </div>
+        </div>
+    </div>
 </div>
 
     <p>
