@@ -1,5 +1,32 @@
 {{ block title }}Instructions{{ endblock }}
 
+{{ block style }}
+
+<style>
+    /* (A) SHARED CLASS */
+    .blue_box {
+    padding: 10px;
+    border: 2px solid dodgerblue;
+    height: 40px;
+    width: 70px;
+    border-radius: 5px;
+    background: dodgerblue;
+    color: white;
+    }
+
+    div.centered {
+    width: 500px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-top: -200px;
+    margin-left: -250px;
+}
+</style>
+
+{{ endblock }}
+
 {{ block content }}
 
 <div>
@@ -16,42 +43,55 @@
         What happened previously is in the past and you are allocated {{half_pot}} again.
     </p>
     <p>
-        Below you can see what your choices in each interaction will be.
+        Below you can see what your choices in each interaction will look like.
+    </p>
+    <hr size="6" width="100%" align="center" color="black">
+</div>
+
+<div  class="card-body">
+    <h5>
+        Interaction {{ subsession.round_number }}
+    </h5>
+    <p>
+        Both you and the receiver have been endowed with <b>{{ half_pot }}</b> each.
+        You have the opportunity to take the money from the receiver, or to leave it.
+        <ul>
+            <li>
+                If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+            </li>
+            <li>
+                If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+            </li>
+        </ul>
     </p>
 </div>
 
-<h5>
-    Interaction {{ subsession.round_number }}
-</h5>
-<p>
-    Both you and the receiver have been endowed with <b>{{ half_pot }}</b> each.
-    You have the opportunity to take the money from the receiver, or to leave it.
-    <ul>
-        <li>
-            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
-        </li>
-        <li>
-            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
-        </li>
-    </ul>
-</p>
+    <p></p>
 
-<p></p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
             Do you want to take the {{ half_pot }} or leave it?
         </p>
-        <div class="row">
-            <div class="col" style="text-align:center">
-                Leave
+        <div class="row" style="text-align:center">
+            <div class="col">
+                <div class="blue_box">Leave</div>
             </div>
-            <div class="col" style="text-align:center">
-                Take
+            <div class="col" >
+                <div class="blue_box">Take</div>
             </div>
         </div>
     </div>
+</div>
+
+    <p></p>
+
+
+
+<div>
+    <h4>Please answer the following questions to continue:</h4>
+    {{ formfields }}
 </div>
 
     <p>

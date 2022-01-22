@@ -127,12 +127,12 @@ class InstruDictator(Page):
     def get_form_fields(player: Player):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
         if player.condition == 'high-high':
-            return ['q3', 'q4h',]
+            return ['q3', 'q4h']
         else:
             return ['q3', 'q4l']
 
     @staticmethod
-    def error_message(player, values):  # it works but the message is wrong...
+    def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
         if player.condition == 'high-high':
@@ -151,7 +151,7 @@ class InstruDictator(Page):
         else:
             return dict(
                 pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_phalf_pot,
+                half_pot=Constants.low_half_pot,
             )
 
 page_sequence = [Welcome,
