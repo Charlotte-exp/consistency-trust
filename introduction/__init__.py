@@ -58,7 +58,7 @@ class Player(BasePlayer):
         choices=[
             [1, 'There is no bonus possible in this study.'],
             [2, 'My bonus payment depends on luck.'],
-            [3, 'my bonus payment depends on a decision taken by '
+            [3, 'My bonus payment depends on a decision taken by '
                 'whichever participant is randomly selected to be the decider.']
         ],
         verbose_name='What will your bonus payment depend on?',
