@@ -30,10 +30,10 @@ class Subsession(BaseSubsession):
 def creating_session(subsession: Subsession):
 
     treatments = itertools.cycle(['high-high', 'low-low'])
-    for player in subsession.get_players():
-        player.condition = next(treatments)
-        player.participant.condition = player.condition
-        print('treatment', player.condition, player.participant.condition)
+    for p in subsession.get_players():
+        p.condition = next(treatments)
+        p.participant.condition = p.condition
+        print('treatment', p.condition, p.participant.condition)
 
 
 class Group(BaseGroup):

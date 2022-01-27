@@ -30,7 +30,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 SESSION_FIELDS = ['past_groups', ]
-PARTICIPANT_FIELDS = ['title', 'conversion', 'new_conversion']
+PARTICIPANT_FIELDS = ['title', 'conversion', 'new_conversion', 'condition']
 
 
 # ISO-639 code

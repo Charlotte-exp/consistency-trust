@@ -31,16 +31,16 @@ class Subsession(BaseSubsession):
     pass
 
 
-def creating_session(subsession: Subsession):
-
-    treatments = itertools.cycle(['high-high', 'low-low'])
-    for player in subsession.get_players():
-        player.condition = next(treatments)
-        print('treatment', player.condition)
-
-    # for p in subsession.get_players():
-    #     p.participant.conversion = random.choice(Constants.values)
-    #     print(p.participant.conversion)
+# def creating_session(subsession: Subsession):
+#
+#     treatments = itertools.cycle(['high-high', 'low-low'])
+#     for player in subsession.get_players():
+#         player.condition = next(treatments)
+#         print('treatment', player.condition)
+#
+#     # for p in subsession.get_players():
+#     #     p.participant.conversion = random.choice(Constants.values)
+#     #     print(p.participant.conversion)
 
 
 class Group(BaseGroup):
@@ -50,7 +50,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     title = models.StringField()
-    condition = models.StringField()
+    # condition = models.StringField()
     # conversion = models.FloatField()
     receiver_payoff = models.CurrencyField()
 
@@ -105,7 +105,7 @@ class Player(BasePlayer):
     def set_payoffs(player):
         """  """
         # receiver = player.receiver_payoff
-        if player.condition == 'high-high':
+        if player.participant.condition == 'high-high':
             if player.decision == 0:
                 player.payoff = Constants.high_pot_money
                 player.receiver_payoff = 0
@@ -134,14 +134,26 @@ class Offer(Page):
     form_model = 'player'
     form_fields = ['decision']
 
+    # def vars_for_template(player: Player):
+    #     return dict(
+    #         condition_sa_mere=player.participant.condition,
+    #         high_pot=Constants.high_pot_money,
+    #         low_pot=Constants.low_pot_money,
+    #         high_half_pot=Constants.high_pot_money/2,
+    #         low_half_pot=Constants.low_pot_money/2,
+    #     )
+
     def vars_for_template(player: Player):
-        return dict(
-            my_player_id=player.id_in_subsession,
-            high_pot=Constants.high_pot_money,
-            low_pot=Constants.low_pot_money,
-            high_half_pot=Constants.high_pot_money/2,
-            low_half_pot=Constants.low_pot_money/2,
-        )
+        if player.participant.condition == 'high-high':
+            return dict(
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_half_pot,
+            )
 
 
 # class ResultsWaitPage(WaitPage):
@@ -152,13 +164,29 @@ class Results(Page):
     """
     This is the only way I found to call this fucking function... ask Nik how these work and how it should be done
     """
+    # def vars_for_template(player: Player):
+    #     dictator = player.group.get_player_by_id(1)
+    #     return dict(
+    #         call=player.set_payoffs(),
+    #         payoff=player.payoff,
+    #         my_player_id=player.id_in_subsession,
+    #     )
+
     def vars_for_template(player: Player):
-        dictator = player.group.get_player_by_id(1)
-        return dict(
-            call=player.set_payoffs(),
-            payoff=player.payoff,
-            my_player_id=player.id_in_subsession,
-        )
+        if player.participant.condition == 'high-high':
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_half_pot,
+            )
 
 
 class End(Page):

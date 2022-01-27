@@ -5,39 +5,22 @@
     Interaction {{ subsession.round_number }}
 </h5>
 <p>
-    {{ if player.condition == 'high-high' }}
-    Both you and the partner have been endowed with <b>{{ Constants.high_half_pot }}</b> each.
+    Both you and the partner have been endowed with <b>{{ half_pot }}</b> each.
     You have the opportunity to take the money from the partner, or to leave it.
     <ul>
         <li>
-            If you take it, your total payoff for this interaction will be <b>{{ Constants.high_pot_money }}</b>.
+            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
         </li>
         <li>
-            If you leave it, your total payoff for this interaction will be <b>{{ Constants.high_half_pot }}</b>.
+            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
         </li>
     </ul>
-    {{ else }}
-    Both you and the partner have been endowed with <b>{{ Constants.low_half_pot }}</b> each.
-    You have the opportunity to take the money from the partner, or to leave it.
-    <ul>
-        <li>
-            If you take it, your total payoff for this interaction will be <b>{{ Constants.low_pot_money }}</b>.
-        </li>
-        <li>
-            If you leave it, your total payoff for this interaction will be <b>{{ Constants.low_half_pot }}</b>.
-        </li>
-    </ul>
-    {{ endif }}
 </p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
-            {{ if player.condition == 'high-high' }}
-            Do you want to take the {{ Constants.high_half_pot }} or leave it?
-            {{ else }}
-            Do you want to take the {{ Constants.low_half_pot }} or leave it?
-            {{ endif }}
+            Do you want to take the {{ half_pot }} or leave it?
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
