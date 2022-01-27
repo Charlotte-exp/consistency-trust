@@ -48,7 +48,7 @@ class Player(BasePlayer):
             choices=[
                 [1, '0 other participants'],
                 [2, '1 other participant'],
-                [3, 'Different participants']
+                [3, f'{Constants.num_interactions} different participants']
             ],
             verbose_name='With how many participants will you be playing in this study?',
             widget=widgets.RadioSelect
@@ -58,7 +58,8 @@ class Player(BasePlayer):
         choices=[
             [1, 'There is no bonus possible in this study.'],
             [2, 'My bonus payment depends on luck.'],
-            [3, 'My bonus payment depends on a decision taken by one of the participants.']
+            [3, 'my bonus payment depends on a decision taken by '
+                'whichever participant is randomly selected to be the decider.']
         ],
         verbose_name='What will your bonus payment depend on?',
         widget=widgets.RadioSelect
@@ -67,8 +68,8 @@ class Player(BasePlayer):
     q3 = models.IntegerField(
         choices=[
             [1, 'You, the decider.'],
-            [2, f'The receiver.'],
-            [3, f'Both the decider and the receiver.']
+            [2, f'The partner.'],
+            [3, f'Both the decider and the partner.']
         ],
         verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect
@@ -97,8 +98,8 @@ class Player(BasePlayer):
     q5 = models.IntegerField(
         choices=[
             [1, 'The decider.'],
-            [2, f'You, the receiver.'],
-            [3, f'Both the decider and the receiver.']
+            [2, f'You, the partner.'],
+            [3, f'Both the decider and the partner.']
         ],
         verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect

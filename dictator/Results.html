@@ -4,20 +4,20 @@
 {{ if player.condition == 'high-high' }}
     <p>
         {{ if player.decision == 0 }}
-            You decided to take the {{ Constants.high_half_pot }} of the receiver.
+            You decided to take the {{ Constants.high_half_pot }} of your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ else }}
-            You decided to leave the {{ Constants.high_half_pot }} of the receiver.
+            You decided to leave the {{ Constants.high_half_pot }} your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
 {{ else }}
     <p>
         {{ if player.decision == 0 }}
-            You decided to take the {{ Constants.low_half_pot }} of the receiver.
+            You decided to take the {{ Constants.low_half_pot }} your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ else }}
-            You decided to leave the {{ Constants.low_half_pot }} of the receiver.
+            You decided to leave the {{ Constants.low_half_pot }} your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
