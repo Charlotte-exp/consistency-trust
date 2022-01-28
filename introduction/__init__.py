@@ -68,8 +68,8 @@ class Player(BasePlayer):
     q3 = models.IntegerField(
         choices=[
             [1, 'You, the decider.'],
-            [2, f'The partner.'],
-            [3, f'Both the decider and the partner.']
+            [2, f'The recipient.'],
+            [3, f'Both the decider and the recipient.']
         ],
         verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect
@@ -98,8 +98,8 @@ class Player(BasePlayer):
     q5 = models.IntegerField(
         choices=[
             [1, 'The decider.'],
-            [2, f'You, the partner.'],
-            [3, f'Both the decider and the partner.']
+            [2, f'You, the recipient.'],
+            [3, f'Both the decider and the recipient.']
         ],
         verbose_name=f'Who makes the decision in each interaction?',
         widget=widgets.RadioSelect
