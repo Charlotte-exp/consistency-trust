@@ -11,15 +11,16 @@ class Constants(BaseConstants):
     name_in_url = 'introduction'
     players_per_group = None
     num_rounds = 1
-    n_of_rounds = 3
-    instructions_template = 'introduction/instructions.html'
+    num_interactions = 2
 
-    pot_money = cu(100)
-    endowment_p2 = pot_money/2
-    endowment_p1 = pot_money/2
+    high_pot_money = cu(6)
+    high_half_pot = high_pot_money / 2
 
-    value = pot_money * 0.5
-    conversion = '10 tokens = £0.20'
+    low_pot_money = cu(2)
+    low_half_pot = low_pot_money / 2
+
+    likelihood = 0.5
+    values = [1, 2]
 
 
 class Subsession(BaseSubsession):
@@ -27,16 +28,12 @@ class Subsession(BaseSubsession):
 
 
 def creating_session(subsession: Subsession):
-    roles = itertools.cycle(['dictator', 'receiver'])
-    for p in subsession.get_players():
-        p.title = next(roles)
-        p.participant.title = p.title
 
-    # for p in subsession.get_players():
-    #     if p.id_in_subsession % 2 == 0:
-    #         return p.player.title == 'dictator'
-    #     else:
-    #         return p.player.title == 'receiver'
+    treatments = itertools.cycle(['high-high', 'low-low'])
+    for player in subsession.get_players():
+        player.condition = next(treatments)
+        player.participant.condition = player.condition
+        print('treatment', player.condition, player.participant.condition)
 
 
 class Group(BaseGroup):
@@ -45,22 +42,22 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    title = models.StringField()
+    condition = models.StringField()
 
     q1 = models.IntegerField(
             choices=[
                 [1, '0 other participants'],
                 [2, '1 other participant'],
-                [3, 'multiple other participants']
+                [3, 'Different participants']
             ],
-            verbose_name='With how many participants will you be playing in this task?',
+            verbose_name='With how many participants will you be playing in this study?',
             widget=widgets.RadioSelect
         )
 
     q2 = models.IntegerField(
         choices=[
             [1, 'There is no bonus possible in this study.'],
-            [2, 'My bonus payment depends on the conversion rates in each round.'],
+            [2, 'My bonus payment depends on luck.'],
             [3, 'My bonus payment depends on a decision taken by one of the participants.']
         ],
         verbose_name='What will your bonus payment depend on?',
@@ -77,13 +74,23 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    q4 = models.IntegerField(
+    q4h = models.IntegerField(
         choices=[
-            [1, '0 tokens.'],
-            [2, f'{Constants.endowment_p1}.'],
-            [3, f'{Constants.pot_money}.']
+            [1, '£0.'],
+            [2, f'{Constants.high_half_pot}.'],
+            [3, f'{Constants.high_pot_money}.']
         ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.endowment_p1}?',
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.high_half_pot}?',
+        widget=widgets.RadioSelect
+    )
+
+    q4l = models.IntegerField(
+        choices=[
+            [1, '£0.'],
+            [2, f'{Constants.low_half_pot}.'],
+            [3, f'{Constants.low_pot_money}.']
+        ],
+        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.low_half_pot}?',
         widget=widgets.RadioSelect
     )
 
@@ -98,14 +105,7 @@ class Player(BasePlayer):
     )
 
 
-# def set_title(player: Player):
-#     if player.id_in_subsesion % 2 == 0:
-#         return player.title == 'dictator'
-#     else:
-#         return player.title == 'receiver'
-
-
-# PAGES
+#######   PAGES   #######
 class Welcome(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2']
@@ -113,7 +113,7 @@ class Welcome(Page):
     def error_message(player, values):
         if values['q1'] != 3:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q2'] != 2:
+        if values['q2'] != 3:
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
 
@@ -123,46 +123,38 @@ class Introduction(Page):
 
 class InstruDictator(Page):
     form_model = 'player'
-    form_fields = ['q3', 'q4']
+
+    def get_form_fields(player: Player):
+        """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
+        if player.condition == 'high-high':
+            return ['q3', 'q4h']
+        else:
+            return ['q3', 'q4l']
 
     @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.title == 'dictator'
-
-    @staticmethod
-    def error_message(player, values):  # it works but the message is wrong...
+    def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q4'] != 3:
-            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+        if player.condition == 'high-high':
+            if values['q4h'] != 3:
+                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+        else:
+            if values['q4l'] != 3:
+                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
     def vars_for_template(player: Player):
-        return {
-            'my_title': player.participant.title,
-        }
-
-
-class InstruReceiver(Page):
-    form_model = 'player'
-    form_fields = ['q5']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.participant.title == 'receiver'
-
-    @staticmethod
-    def error_message(player, values):
-        if values['q5'] != 1:
-            return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-
-    def vars_for_template(player: Player):
-        return {
-            'my_title': player.participant.title,
-        }
-
+        if player.condition == 'high-high':
+            return dict(
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_half_pot,
+            )
 
 page_sequence = [Welcome,
                  # Introduction,
                  InstruDictator,
-                 InstruReceiver
 ]

@@ -1,51 +1,95 @@
 {{ block title }}Instructions{{ endblock }}
 
+{{ block style }}
+
+<style>
+    /* (A) SHARED CLASS */
+    .blue_box {
+    padding: 10px;
+    border: 2px solid dodgerblue;
+    height: 40px;
+    width: 70px;
+    border-radius: 5px;
+    background: dodgerblue;
+    color: white;
+    }
+
+    div.centered {
+    width: 500px;
+    height: 400px;
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-top: -200px;
+    margin-left: -250px;
+}
+</style>
+
+{{ endblock }}
+
 {{ block content }}
 
 <div>
     <p>
         You are the <b>Decider</b>. This means that in every interaction you have a decision to make.
-        In each interaction, both you and the receiver are allocated with {{Constants.endowment_p1}} each.
-        You have to decide if you want to take the tokens of the receiver or leave them. If you take them,
-        you will earn {{Constants.pot_money}} in that interaction where you made that choice and the receiver gets nothing.
-        If you decide to leave it, you keep your allocated {{Constants.endowment_p1}} and so does the receiver.
+        In each interaction, both you and the receiver are allocated with <b>{{half_pot}}</b> each.
+        You have the opportunity to take the money of the receiver or leave it. If you decide to take it,
+        you will earn <b>{{pot_money}}</b> in that interaction and the receiver gets nothing.
+        If you decide to leave it, you keep your allocated <b>{{half_pot}}</b> and so does the receiver.
         The receiver will know his final amount, but not who decided.
     </p>
     <p>
-        Remember, in each interaction you are paired up with someone different.
-        What happened previously is in the past and you are allocated {{Constants.endowment_p1}} again.
+        Remember, in each interaction you are paired up with someone different and make a new decision.
+        What happened previously is in the past and you are allocated {{half_pot}} again.
     </p>
     <p>
-        Below you can see what your choices in each interaction will be.
+        Below you can see what your choices in each interaction will look like.
+    </p>
+    <hr size="6" width="100%" align="center" color="black">
+</div>
+
+<div  class="card-body">
+    <h5>
+        Interaction {{ subsession.round_number }}
+    </h5>
+    <p>
+        Both you and the receiver have been endowed with <b>{{ half_pot }}</b> each.
+        You have the opportunity to take the money from the receiver, or to leave it.
+        <ul>
+            <li>
+                If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+            </li>
+            <li>
+                If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+            </li>
+        </ul>
     </p>
 </div>
 
-<div class="card bg-light instructions"> <!-- Makes the para a box -->
+    <p></p>
+
+
+<div class="card bg-light instructions">
     <div class="card-body">
-        <p>
-            <h4>Your decision:</h4>
+        <p style="text-align:center">
+            Do you want to take the {{ half_pot }} or leave it?
         </p>
-        <ul>
-            <li>
-                <b>Take</b> the {{Constants.endowment_p2}} from Participant 2.
-            </li>
-            <li>
-                <b>Leave</b> the {{Constants.endowment_p2}} from Participant 2.
-            </li>
-        </ul>
+        <div class="row" style="text-align:center">
+            <div class="col">
+                <div class="blue_box">Leave</div>
+            </div>
+            <div class="col" >
+                <div class="blue_box">Take</div>
+            </div>
+        </div>
     </div>
 </div>
 
-<p></p>
+    <p></p>
+
+
 
 <div>
-    <p>
-        If you decide to take the {{Constants.endowment_p2}}, you will receive {{Constants.pot_money}} for this round.
-        If you decide to leave the {{Constants.endowment_p2}}, you will receive {{Constants.endowment_p1}} for this round.
-    </p>
-</div>
-
-<div class="card-body">
     <h4>Please answer the following questions to continue:</h4>
     {{ formfields }}
 </div>

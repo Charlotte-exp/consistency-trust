@@ -10,18 +10,16 @@
     <table class="table">
         <tr>
             <th>Round</th>
-            <th>Number of tokens</th>
-            <th>Value</th>
-            <th>Total in GBP</th>
+            <th>Bonus</th>
+            <th>Total</th>
         </tr>
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
-            <td>{{ p.token_number }}</td>
-            <td>£{{ p.conversion }}</td>
-            <td>£{{ p.payoff }}</td>
-        </tr>
+            <td>{{ p.payoff }}</td>
         {{ endfor }}
+            <td>{{ total_payoff }}</td>
+        </tr>
     </table>
 
 

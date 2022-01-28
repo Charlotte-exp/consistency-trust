@@ -1,20 +1,53 @@
 {{ block title }}Your Decision{{ endblock }}
 {{ block content }}
+
+<h5>
+    Interaction {{ subsession.round_number }}
+</h5>
 <p>
-    You are <strong>the decider</strong>.
-    Please decide if you want to take the other participant's tokens or not
+    {{ if player.condition == 'high-high' }}
+    Both you and the receiver have been endowed with <b>{{ Constants.high_half_pot }}</b> each.
+    You have the opportunity to take the money from the receiver, or to leave it.
+    <ul>
+        <li>
+            If you take it, your total payoff for this interaction will be <b>{{ Constants.high_pot_money }}</b>.
+        </li>
+        <li>
+            If you leave it, your total payoff for this interaction will be <b>{{ Constants.high_half_pot }}</b>.
+        </li>
+    </ul>
+    {{ else }}
+    Both you and the receiver have been endowed with <b>{{ Constants.low_half_pot }}</b> each.
+    You have the opportunity to take the money from the receiver, or to leave it.
+    <ul>
+        <li>
+            If you take it, your total payoff for this interaction will be <b>{{ Constants.low_pot_money }}</b>.
+        </li>
+        <li>
+            If you leave it, your total payoff for this interaction will be <b>{{ Constants.low_half_pot }}</b>.
+        </li>
+    </ul>
+    {{ endif }}
 </p>
 
-<p>
-    In this round, each token is worth £{{ new_conversion }}. This means that {{ Constants.endowment_p2 }} are worth £{{ currency_total }}.
-</p>
-
-    {{ formfields }}
-
-    <p>
-        <div style="display: flex; justify-content: flex-end">
-        {{ next_button }}
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            {{ if player.condition == 'high-high' }}
+            Do you want to take the {{ Constants.high_half_pot }} or leave it?
+            {{ else }}
+            Do you want to take the {{ Constants.low_half_pot }} or leave it?
+            {{ endif }}
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="decision" value="1" class="btn btn-primary btn-large">Leave</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="decision" value="0" class="btn btn-primary btn-large">Take</button>
+            </div>
         </div>
-    </p>
+    </div>
+</div>
 
 {{ endblock }}

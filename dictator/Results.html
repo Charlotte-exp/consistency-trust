@@ -1,28 +1,31 @@
 {{ block title }}Results{{ endblock }}
 {{ block content }}
+
+{{ if player.condition == 'high-high' }}
     <p>
-        {{ if player.id_in_group == 1 }}
-            {{ if group.decision == 0 }}
-                You decided to take the {{ Constants.endowment_p2 }} of the receiver.
-                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
-            {{ else }}
-                You decided to leave the {{ Constants.endowment_p2 }} of the receiver.
-                Your payoff in this round is of <strong>{{ p1_tokens }}</strong>.
-            {{ endif }}
-        {{ endif }}
-        {{ if player.id_in_group == 2 }}
-            {{ if group.decision == 0 }}
-                The decider chose to take your {{ Constants.endowment_p2 }}.
-                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
-            {{ else }}
-                The decider chose to leave your {{ Constants.endowment_p2 }}.
-                Your payoff in this round is of <strong>{{ p2_tokens }}</strong>.
-            {{ endif }}
+        {{ if player.decision == 0 }}
+            You decided to take the {{ Constants.high_half_pot }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
+        {{ else }}
+            You decided to leave the {{ Constants.high_half_pot }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
-
+{{ else }}
     <p>
-        <div style="display: flex; justify-content: flex-end">
+        {{ if player.decision == 0 }}
+            You decided to take the {{ Constants.low_half_pot }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
+        {{ else }}
+            You decided to leave the {{ Constants.low_half_pot }} of the receiver.
+            Your payoff in this round is of <strong>{{ payoff }}</strong>.
+        {{ endif }}
+    </p>
+{{ endif }}
+
+<p style="color:white;">{{ call }}</p>
+
+        <div style="display: fle x; justify-content: flex-end">
         {{ next_button }}
         </div>
     </p>
