@@ -1,4 +1,5 @@
 from os import environ
+from os import popen
 
 
 SESSION_CONFIGS = [
@@ -14,6 +15,7 @@ SESSION_CONFIGS = [
         app_sequence=['introduction', 'dictator', 'payment_info'],
         num_demo_participants=12,
         use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
         name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
