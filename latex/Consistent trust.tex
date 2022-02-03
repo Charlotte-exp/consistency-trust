@@ -61,79 +61,16 @@
 \maketitle
 \onehalfspacing
 
-\section{Progress}
-
-\subsection{Model}
-
-\begin{multicols} {2}
-
-We have:
-\begin{itemize}
-    \item a 2-rounds signalling model
-    \item a 3-rounds signalling model
-    \item 2 equilibrium of interest
-    \item licensing equilibrium
-\end{itemize}
-.\\
-
-Next:
-\begin{itemize}
-    \item it's enough what we have
-    \item nice to check other equilibria
-    \item nice to try to generalise (how though?)
-    \item nice to check other equilibria
-    \item possible add-ons
-\end{itemize}
-
-\end{multicols}
-
-
-\subsection{Experiment}
-
-\begin{multicols} {2}
-
-We have:
-\begin{itemize}
-    \item A one-player DG (Behtany's trick) 
-    \item 2 rounds
-    \item 2 treatments
-\end{itemize}s
-
-Next:
-\begin{itemize}
-    \item review instructions
-    \item test it, test it, test it
-    \item pilot with 20ppl
-\end{itemize}
-
-\end{multicols}
-
-
-
-\newpage
 \section{Predictions}
 
-\subsection{Actor}
+\paragraph{Actor}
 
 \begin{enumerate}
     \item The more consistent in his cooperative actions the actor is, the more consistent he will be in future action.
-    \begin{enumerate}
-        \item Change the cost on the first round.
-        \item Have a same definite cost on an early round vs a later round. 
-    \end{enumerate}
     \item After a betrayal/cheating, the actor has no incentives to be consistent in his cooperative behaviour again and will not be. 
 \end{enumerate}
 
-\subsubsection{Design}
-
-\begin{itemize}
-    \item at least three rounds to show that Actor is less likely to cooperate ever after a defection irrespective of how much they cooperated before that defection.
-    \item show consistency by varying cost to cooperate in each round
-    \item framed as stealing/cheating to make it an obviously morally undesirable action.
-\end{itemize}
-
-
-\subsection{Observer}
+\paragraph{Observer}
 
 \begin{enumerate}
     \item As the actor keeps behaving consistently, the observer's trust increases.
@@ -143,8 +80,50 @@ Next:
 \end{enumerate}
 
 
-\subsubsection{Design}
+\section{Design}
 
+\subsection{Potential games}
+In order to test the predictions above, we need a two-player game that induces a high amount of cheating/defection. There are three candidates:
+
+\paragraph{Dictator Game}
+We use a multi round DG reframed as a take rather give scenario to highlight the non desirability of the action. 
+On every round, by default the two players have a half-spilt of the total pot. 
+The dictator can choose to either leave it like that or steal the endowment of the recipient. It is important that a high enough amount of participant do steal in this design to be able to detect an effect.\\
+In addition, the value of the endowment must change across rounds in order to test consistency. 
+For that purpose we have two different endowment, one high and one low. 
+It's possible to have these endowments be randomly assigned, but we would end up with combinations of high and low endowment that do not serve any predictions. As such we prefer to have fixed treatments so that we do not lose money and data point. 
+This means that we must be careful about what we tell our participants about the distribution of these endowments. 
+There is a tradeoff between what is convenient/cheaper and the level of deception we are willing to tolerate.\\
+
+\paragraph{Cheating task}
+
+If the dictator game does not induce enough cheating/defecting, we could use a task specifically designed to test cheating behaviour. 
+There exists are few different ones, we would have to discuss which ones fit best. See Mazar and Gneezy papers for examples. \\
+\begin{itemize}
+    \item either a task in pairs where one has the opportunity to directly lie to the other
+    \item or one does a task where he can cheat, and the other player may or may not be able to observe that
+\end{itemize}
+Advantage: we add principle (Lying/cheating is universally considered bad)\\
+
+\paragraph{Trust Game}
+
+Finally a trust game might be game we ultimately use. Just as with the dictator game we have different endowments to test consistency. 
+The advantage of the Trust game is that the recipient is now an active player and that trust can be measured directly (by the money sent back). 
+
+\subsection{Design considerations for later}
+
+\paragraph{Actor}
+\begin{itemize}
+    \item at least three rounds to show that Actor is less likely to cooperate ever after a defection irrespective of how much they cooperated before that defection.
+    \item show consistency by varying cost to cooperate in each round. How low cost in 1st round affects cooperation in 2nd round, mediated by whether cooperate in 1st round or how a high temptation sooner differs from a high temptation laterTwo options:
+    \begin{enumerate}
+        \item Change the cost on the first round.
+        \item Have a same definite cost on an early round vs a later round. 
+    \end{enumerate}
+    \item framed as stealing/cheating to make it an obviously morally undesirable action.
+\end{itemize}
+
+\paragraph{Observer}
 \begin{itemize}
     \item The observer may or may not know the level of temptation of the actor (= cost on each round)
     \item The observer can be a third party who learns the history of play or the interaction partner who would have to know previous actions. 
@@ -163,36 +142,6 @@ Next:
     	\end{itemize}
 \end{itemize}
 
-\section{Design}
-
-\paragraph{Dictator Game}
-We use a multi round DG reframed as a take rather give scenario to highlight the non desirability of the action.
-We can vary the costs or use an asymmetric token value.\\
-Currently we have:
-\begin{itemize}
-    \item dichotomous choice
-    \item 3 rounds
-    \item framed as taking/stealing
-    \item value of the tokens are stochastic each round
-    \item Perfect stranger random matching on each round
-    \item Reciever/Observer knows doesn't know what happened in the past
-\end{itemize}
-
-\paragraph{Cheating task}
-
-See Mazar and Gneezy papers\
-
-\begin{itemize}
-    \item either a task in pairs where one has the opportunity to directly lie to the other
-    \item or one does a task where he can cheat, and the other player may or may not be able to observe that
-\end{itemize}
-Advantage: we add principle (Lying/cheating is universally considered bad)\\
-
-\paragraph{Trust Game}
-
-We manipulate costs and measure trust directly from money sent back\\
-how low cost in 1st round affects cooperation in 2nd round, mediated by whether cooperate in 1st round
-or how a high temptation sooner differs from a high temptation later
 
 
 
@@ -267,6 +216,7 @@ The zero tolerance profile is a perfect Bayesian Nash equilibrium if and only if
 \noindent
 All proof are provided in the {\bf Appendix.} Here, we give the interpretation of these conditions. The first condition states that the receiver finds it worthwhile to accept if they observe their co-player sent the signal in both rounds. The second condition states that superior senders are willing to pay the high cost even if it occurs in the first round. The last condition states that the inferior sender would be willing to pay the low cost but not the high cost.\\
 
+\noindent
 We are also interested in the following profile:
 \begin{equation}
 \sigma_S(i,k,c) = \left\{
