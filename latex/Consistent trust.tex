@@ -79,6 +79,44 @@
     \item Conditional trust: how does one cooperative action increase trust vs how does one betrayal/cheating action decrease trust (difference of a difference)
 \end{enumerate}
 
+\section{Experimental test}
+
+setting:\\
+\begin{enumerate}
+    \item k rounds (2 suffice)
+    \item stochastic cost levels (2 suffice)
+    \item cooperative choices with different partners (random matching)
+    \item assume "zero-tolerance" - verify have some sense when zero-tolerance to manipulate (manipulate how tolerant ppl are)
+\end{enumerate}
+
+we manipulate the number of rounds, but we could manipulate other things:\\
+plausible deniability\\
+observability\\
+
+atm cost and benefit ratio is same (like they change together, not just one of the other)\\
+
+we need to be able to rule out the confound that some ppl just cooperate more - individual \\
+
+to check:\\
+\begin{enumerate}
+    \item after defect - "never" coop
+    \item more rounds where coop - more likely to coop
+    \item monotonicity - costs higher = less coop
+\end{enumerate}
+
+in rounds k (k=2), more likely to coop for given cost level) if in all prior rounds (round 1) faced low cost- moreover, fully mediated by whether defected in prior rounds. 
+
+
+Sender behaviour:\\
+\begin{enumerate}
+    \item cooperate more when cost is high
+    \item more likely to coop in round 2 when round 1 was low cost AND they cooperated
+    \item 
+\end{enumerate}
+
+l-l vs h-l (compare round 2 together)\\
+we expect a difference in coop rate on round two between these two treatments based on what they faced in the first round and if they coop or not (coop if low and defect if high)
+l-h vs h-n (compare the two h)
 
 \section{Design}
 
@@ -117,8 +155,8 @@ The advantage of the Trust game is that the recipient is now an active player an
     \item at least three rounds to show that Actor is less likely to cooperate ever after a defection irrespective of how much they cooperated before that defection.
     \item show consistency by varying cost to cooperate in each round. How low cost in 1st round affects cooperation in 2nd round, mediated by whether cooperate in 1st round or how a high temptation sooner differs from a high temptation laterTwo options:
     \begin{enumerate}
-        \item Change the cost on the first round.
-        \item Have a same definite cost on an early round vs a later round. 
+        \item Change the cost on the first round - lose motivation after defect
+        \item Have a same definite cost on an early round vs a later round - build social capital
     \end{enumerate}
     \item framed as stealing/cheating to make it an obviously morally undesirable action.
 \end{itemize}
