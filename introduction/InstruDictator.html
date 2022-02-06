@@ -67,7 +67,14 @@
             </li>
         </ul>
     </p>
+
+    why not work?
+    {{ if player.condition == "high-high" }}
     <img src="{{ static 'introduction/decision_high.png' }}"/>
+    {{ else }}
+    <img src="{{ static 'introduction/decision_low.png' }}"/>
+    {{ endif }}
+
 </div>
 
 <p></p>
