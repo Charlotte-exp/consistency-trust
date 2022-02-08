@@ -79,59 +79,71 @@
     \item Conditional trust: how does one cooperative action increase trust vs how does one betrayal/cheating action decrease trust (difference of a difference)
 \end{enumerate}
 
-\section{Experimental test}
+\section{Current experimental design}
 
-setting:\\
+\noindent
+At this stage, we are only interested in testing the predictions of the actor/sender. Specifically we want to check that:
 \begin{enumerate}
-    \item k rounds (2 suffice)
-    \item stochastic cost levels (2 suffice)
-    \item cooperative choices with different partners (random matching)
-    \item assume "zero-tolerance" - verify have some sense when zero-tolerance to manipulate (manipulate how tolerant ppl are)
+    \item The more the sender cooperated in previous rounds, the more likely to cooperate now.
+    \item After just one defection, the sender "never" cooperate again.
+    \item monotonicity - when are costs higher, the sender cooperates less. 
 \end{enumerate}
 
-we manipulate the number of rounds, but we could manipulate other things:\\
-plausible deniability\\
-observability\\
-
-atm cost and benefit ratio is same (like they change together, not just one of the other)\\
-
-we need to be able to rule out the confound that some ppl just cooperate more - individual \\
-
-to check:\\
-\begin{enumerate}
-    \item after defect - "never" coop
-    \item more rounds where coop - more likely to coop
-    \item monotonicity - costs higher = less coop
-\end{enumerate}
-
-in rounds k (k=2), more likely to coop for given cost level) if in all prior rounds (round 1) faced low cost- moreover, fully mediated by whether defected in prior rounds. 
-
-
-Sender behaviour:\\
-\begin{enumerate}
-    \item cooperate more when cost is high
-    \item more likely to coop in round 2 when round 1 was low cost AND they cooperated
-    \item 
-\end{enumerate}
-
-l-l vs h-l (compare round 2 together)\\
-we expect a difference in coop rate on round two between these two treatments based on what they faced in the first round and if they coop or not (coop if low and defect if high)
-l-h vs h-n (compare the two h)
-
-\section{Design}
-
-\subsection{Potential games}
-In order to test the predictions above, we need a two-player game that induces a high amount of cheating/defection. There are three candidates:
+\subsection{Key elements}
 
 \paragraph{Dictator Game}
 We use a multi round DG reframed as a take rather give scenario to highlight the non desirability of the action. 
 On every round, by default the two players have a half-spilt of the total pot. 
-The dictator can choose to either leave it like that or steal the endowment of the recipient. It is important that a high enough amount of participant do steal in this design to be able to detect an effect.\\
-In addition, the value of the endowment must change across rounds in order to test consistency. 
-For that purpose we have two different endowment, one high and one low. 
-It's possible to have these endowments be randomly assigned, but we would end up with combinations of high and low endowment that do not serve any predictions. As such we prefer to have fixed treatments so that we do not lose money and data point. 
-This means that we must be careful about what we tell our participants about the distribution of these endowments. 
+The dictator can choose to either leave it like that or steal the money of the recipient. It is important that a high enough amount of participant do steal in this design to be able to detect an effect.
+
+\paragraph{k rounds}
+For now 2 suffice to test consistency. 
+we manipulate the number of rounds, but we could manipulate other things such as plausible deniability (to test intention) 
+and observability (by a third party or someone who will interact with the sender later).\
+
+\paragraph{stochastic cost levels}
+2 suffice: low vs high. \\
+The value of the cost must change across rounds in order to test consistency. 
+At the moment the cost and benefit ratios are the same for both the high and low cost. \\
+It's possible to have these costs be randomly assigned, but we would end up with combinations of high and low cost that do not serve any predictions. 
+To avoid that, we can fix the combinations of costs that we need into treatments. This way we do not lose money and data points. 
+However, the issue now is that which cost one encounters in a given round is not random. Only treatment assignment is. 
+This means that we must be careful about what we tell our participants about the distribution of these costs. 
 There is a tradeoff between what is convenient/cheaper and the level of deception we are willing to tolerate.\\
+We also need to make sure that when the costs are higher, there is less cooperation (monotonicity).
+Players must be more likely to cooperate when the costs are lower than when they are higher. 
+
+\paragraph{cooperative choices with different partners}
+We have a perfect random matching design. 
+
+\paragraph{assume "zero-tolerance" }
+Something we need to check and be able to rule out is that some people might just cooperate more. 
+We must be able to manipulate the degree of "zero-tolerance" to show that is doesn't merely reflect individual difference and rule that out as a possible confound. \\
+we must show that there is no licensing as well. 
+
+\subsection{Testing}
+
+In practice it looks like that:
+
+\noindent
+\textbf{Sender cooperate more when facing a high low cost.} \\
+We compare cooperation rates in the first round between treatments that faced a low or a high cost first. \\
+
+\noindent
+\textbf{Sender more likely to cooperate in round 2 when round one had a low cost AND they cooperated.} \\
+Two different comparisons:
+\begin{enumerate}
+    \item \textbf{low-low vs high-low} (compare round 2 cooperation across the two treatments)\\ 
+    		We expect to find a difference in cooperation rates on round 2 between these two treatments based on what they faced in the first round and if they cooperated or not (coop if low 			and defect if high)
+    \item \textbf{low-high vs high-any} (compare the cooperation rate in the two high cost rounds across treatments)
+    		Moreover, fully mediated by whether defected in prior rounds. 
+\end{enumerate}
+
+
+\section{Design considerations for later}
+
+\subsection{Potential games}
+In order to test the predictions above, we need a two-player game that induces a high amount of cheating/defection. There are three candidates:
 
 \paragraph{Cheating task}
 
@@ -145,10 +157,10 @@ Advantage: we add principle (Lying/cheating is universally considered bad)\\
 
 \paragraph{Trust Game}
 
-Finally a trust game might be game we ultimately use. Just as with the dictator game we have different endowments to test consistency. 
+Finally a trust game might be game we ultimately use. Just as with the dictator game we have different costs to test consistency. 
 The advantage of the Trust game is that the recipient is now an active player and that trust can be measured directly (by the money sent back). 
 
-\subsection{Design considerations for later}
+\subsection{other considerations}
 
 \paragraph{Actor}
 \begin{itemize}

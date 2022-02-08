@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  3 FEB 2022 15:41
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  8 FEB 2022 11:25
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -480,128 +480,44 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 61.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \hbox (badness 10000) in paragraph at lines 84--86
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 92--95
-
- []
-
-[1
+) [1
 
 {/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 96--97
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 98--99
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 100--102
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 116--124
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 127--130
+Underfull \hbox (badness 10000) in paragraph at lines 128--131
 
  []
 
 [2]
+Underfull \hbox (badness 10000) in paragraph at lines 150--153
+
+ []
+
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-30.
- (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+53.
+(/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 133--134
+Underfull \hbox (badness 10000) in paragraph at lines 156--157
 
  []
 
-[3] [4]
-Underfull \hbox (badness 10000) in paragraph at lines 243--245
-
- []
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 285--287
+[3] [4] [5]
+Underfull \hbox (badness 10000) in paragraph at lines 266--268
 
  []
 
 
-LaTeX Warning: `h' float specifier changed to `ht'.
+Underfull \hbox (badness 10000) in paragraph at lines 308--310
+
+ []
 
 [6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 393--394
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 404--405
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 405--406
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 409--410
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 410--411
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 411--412
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 412--413
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 416--417
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 417--418
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 418--419
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 419--420
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 423--424
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 424--425
+[8]
+Underfull \hbox (badness 10000) in paragraph at lines 427--428
 
  []
 
@@ -611,12 +527,52 @@ Underfull \hbox (badness 10000) in paragraph at lines 428--429
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 429--430
+Underfull \hbox (badness 10000) in paragraph at lines 432--433
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 433--434
 
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 434--435
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 435--436
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 439--440
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 440--441
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 441--442
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--443
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 446--447
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 447--448
 
  []
 
@@ -631,42 +587,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 452--453
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 456--457
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 457--458
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 458--459
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 459--460
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 463--464
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 464--465
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 468--469
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 469--470
+Underfull \hbox (badness 10000) in paragraph at lines 474--475
 
  []
 
@@ -675,13 +601,13 @@ Underfull \hbox (badness 10000) in paragraph at lines 475--476
 
  []
 
-[10]
-Underfull \hbox (badness 10000) in paragraph at lines 476--477
+
+Underfull \hbox (badness 10000) in paragraph at lines 479--480
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
+Underfull \hbox (badness 10000) in paragraph at lines 480--481
 
  []
 
@@ -696,17 +622,17 @@ Underfull \hbox (badness 10000) in paragraph at lines 482--483
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 483--484
+Underfull \hbox (badness 10000) in paragraph at lines 486--487
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 484--485
+Underfull \hbox (badness 10000) in paragraph at lines 487--488
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 488--489
+[10]
+Underfull \hbox (badness 10000) in paragraph at lines 491--492
 
  []
 
@@ -716,140 +642,182 @@ Underfull \hbox (badness 10000) in paragraph at lines 492--493
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 493--494
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 497--498
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 498--499
 
  []
 
-<welcome.png, id=45, 1009.7725pt x 788.9475pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 499--500
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 500--501
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 504--505
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 505--506
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 506--507
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 507--508
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 511--512
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 515--516
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 516--517
+
+ []
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 520--521
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 521--522
+
+ []
+
+<welcome.png, id=48, 1009.7725pt x 788.9475pt>
 File: welcome.png Graphic file (type png)
 <use welcome.png>
-Package pdftex.def Info: welcome.png  used on input line 510.
+Package pdftex.def Info: welcome.png  used on input line 533.
 (pdftex.def)             Requested size: 504.88501pt x 394.47278pt.
 
-Overfull \hbox (38.54466pt too wide) in paragraph at lines 510--511
+Overfull \hbox (38.54466pt too wide) in paragraph at lines 533--534
  [][] 
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-<instructions.png, id=47, 1008.76875pt x 1011.78pt>
+<instructions.png, id=50, 1008.76875pt x 1011.78pt>
 File: instructions.png Graphic file (type png)
 <use instructions.png>
-Package pdftex.def Info: instructions.png  used on input line 515.
+Package pdftex.def Info: instructions.png  used on input line 538.
 (pdftex.def)             Requested size: 504.38315pt x 505.88876pt.
 
-Overfull \hbox (38.0428pt too wide) in paragraph at lines 515--516
+Overfull \hbox (38.0428pt too wide) in paragraph at lines 538--539
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<decision_high.png, id=48, 1008.76875pt x 397.485pt>
+<decision_high.png, id=51, 1008.76875pt x 397.485pt>
 File: decision_high.png Graphic file (type png)
 <use decision_high.png>
-Package pdftex.def Info: decision_high.png  used on input line 520.
+Package pdftex.def Info: decision_high.png  used on input line 543.
 (pdftex.def)             Requested size: 504.38315pt x 198.742pt.
 
-Overfull \hbox (38.0428pt too wide) in paragraph at lines 520--521
+Overfull \hbox (38.0428pt too wide) in paragraph at lines 543--544
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<decision_low.png, id=49, 991.705pt x 375.4025pt>
+<decision_low.png, id=52, 991.705pt x 375.4025pt>
 File: decision_low.png Graphic file (type png)
 <use decision_low.png>
-Package pdftex.def Info: decision_low.png  used on input line 525.
+Package pdftex.def Info: decision_low.png  used on input line 548.
 (pdftex.def)             Requested size: 495.85129pt x 187.70079pt.
 
-Overfull \hbox (29.51094pt too wide) in paragraph at lines 525--526
+Overfull \hbox (29.51094pt too wide) in paragraph at lines 548--549
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<results_high_take.png, id=50, 986.68625pt x 314.17375pt>
+<results_high_take.png, id=53, 986.68625pt x 314.17375pt>
 File: results_high_take.png Graphic file (type png)
 <use results_high_take.png>
-Package pdftex.def Info: results_high_take.png  used on input line 530.
+Package pdftex.def Info: results_high_take.png  used on input line 553.
 (pdftex.def)             Requested size: 493.34192pt x 157.08649pt.
 
-Overfull \hbox (27.00157pt too wide) in paragraph at lines 530--531
+Overfull \hbox (27.00157pt too wide) in paragraph at lines 553--554
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<results_high_leave.png, id=51, 999.735pt x 240.9pt>
+<results_high_leave.png, id=54, 999.735pt x 240.9pt>
 File: results_high_leave.png Graphic file (type png)
 <use results_high_leave.png>
-Package pdftex.def Info: results_high_leave.png  used on input line 535.
+Package pdftex.def Info: results_high_leave.png  used on input line 558.
 (pdftex.def)             Requested size: 499.86627pt x 120.44969pt.
 
-Overfull \hbox (33.52592pt too wide) in paragraph at lines 535--536
+Overfull \hbox (33.52592pt too wide) in paragraph at lines 558--559
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<end.png, id=52, 997.7275pt x 313.17pt>
+<end.png, id=55, 997.7275pt x 313.17pt>
 File: end.png Graphic file (type png)
 <use end.png>
-Package pdftex.def Info: end.png  used on input line 540.
+Package pdftex.def Info: end.png  used on input line 563.
 (pdftex.def)             Requested size: 498.86252pt x 156.58461pt.
 
-Overfull \hbox (32.52217pt too wide) in paragraph at lines 540--541
+Overfull \hbox (32.52217pt too wide) in paragraph at lines 563--564
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<commentbox.png, id=53, 994.71625pt x 523.9575pt>
+<commentbox.png, id=56, 994.71625pt x 523.9575pt>
 File: commentbox.png Graphic file (type png)
 <use commentbox.png>
-Package pdftex.def Info: commentbox.png  used on input line 545.
+Package pdftex.def Info: commentbox.png  used on input line 568.
 (pdftex.def)             Requested size: 497.3569pt x 261.9781pt.
 
-Overfull \hbox (31.01656pt too wide) in paragraph at lines 545--546
+Overfull \hbox (31.01656pt too wide) in paragraph at lines 568--569
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<payment.png, id=54, 992.70876pt x 394.47375pt>
+<payment.png, id=57, 992.70876pt x 394.47375pt>
 File: payment.png Graphic file (type png)
 <use payment.png>
-Package pdftex.def Info: payment.png  used on input line 550.
+Package pdftex.def Info: payment.png  used on input line 573.
 (pdftex.def)             Requested size: 496.35316pt x 197.23639pt.
 
-Overfull \hbox (30.01282pt too wide) in paragraph at lines 550--551
+Overfull \hbox (30.01282pt too wide) in paragraph at lines 573--574
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11] [12 <./welcome.png>] [13 <./instructions.png>] [14 <./decision_high.png> <
-./decision_low.png> <./results_high_take.png>] [15 <./results_high_leave.png> <
-./end.png> <./commentbox.png>] [16 <./payment.png>] (./Consistent trust.aux)
+[12 <./welcome.png>] [13 <./instructions.png>] [14 <./decision_high.png> <./dec
+ision_low.png> <./results_high_take.png>] [15 <./results_high_leave.png> <./end
+.png> <./commentbox.png>] [16 <./payment.png>] (./Consistent trust.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
@@ -857,7 +825,7 @@ LaTeX Warning: There were multiply-defined labels.
 Here is how much of TeX's memory you used:
  6579 strings out of 480608
  97791 string characters out of 5903629
- 352659 words of memory out of 5000000
+ 352660 words of memory out of 5000000
  22355 multiletter control sequences out of 15000+600000
  552612 words of font info for 69 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -874,7 +842,7 @@ texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2020/te
 xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2020/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1
 /urw/times/utmri8a.pfb>
-Output written on "Consistent trust.pdf" (16 pages, 463209 bytes).
+Output written on "Consistent trust.pdf" (16 pages, 464991 bytes).
 PDF statistics:
  120 PDF objects out of 1000 (max. 8388607)
  72 compressed objects within 1 object stream
