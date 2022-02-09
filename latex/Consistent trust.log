@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  8 FEB 2022 11:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.21 (TeX Live 2020) (preloaded format=pdflatex 2020.12.17)  9 FEB 2022 12:04
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -374,6 +374,27 @@ Package: multicol 2019/12/09 v1.8y multicolumn formatting (FMi)
 \colbreak@box=\box98
 \mc@col@check@num=\count275
 )
+(/usr/local/texlive/2020/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 225.
+LaTeX Info: Redefining \color on input line 709.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1348.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1352.
+Package xcolor Info: Model `RGB' extended on input line 1364.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1366.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1367.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
+
+(/usr/local/texlive/2020/texmf-dist/tex/latex/graphics/dvipsnam.def
+File: dvipsnam.def 2016/06/17 v3.0m Driver-dependent file (DPC,SPQR)
+))
 \c@Claim=\count276
 \c@Thm=\count277
 \c@Prop=\count278
@@ -392,22 +413,22 @@ LaTeX Warning: Label `strategies' multiply defined.
 )
 \openout1 = `"Consistent trust.aux"'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 60.
-LaTeX Font Info:    ... okay on input line 60.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 61.
+LaTeX Font Info:    ... okay on input line 61.
 LaTeX Font Info:    Trying to load font information for OT1+ptm on input line 6
-0.
+1.
  (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ot1ptm.fd
 File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 )
@@ -426,8 +447,37 @@ File: ot1ptm.fd 2001/06/04 font definitions for OT1/ptm.
 \everyMPtoPDFconversion=\toks37
 ) (/usr/local/texlive/2020/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+
+(/usr/local/texlive/2020/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+(/usr/local/texlive/2020/texmf-dist/tex/latex/grfext/grfext.sty
+Package: grfext 2019/12/03 v1.3 Manage graphics extensions (HO)
+
+(/usr/local/texlive/2020/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)) (/usr/local/texlive/2020/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2019/11/29 v3.13 Key value format for package options (HO)
+
+(/usr/local/texlive/2020/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2019/12/15 v1.24 LaTeX kernel commands for general use (HO)
+)
+(/usr/local/texlive/2020/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+))
+(/usr/local/texlive/2020/texmf-dist/tex/latex/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2019/11/24 v0.31 Utility functions of pdfTeX for LuaTeX (HO
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 85.
+Package grfext Info: Graphics extension search list:
+(grfext)             [.pdf,.png,.jpg,.mps,.jpeg,.jbig2,.jb2,.PDF,.PNG,.JPG,.JPE
+G,.JBIG2,.JB2,.eps]
+(grfext)             \AppendGraphicsExtensions on input line 504.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
@@ -470,12 +520,12 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 61.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 62.
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 61.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 62.
 
 
 (/usr/local/texlive/2020/texmf-dist/tex/latex/amsfonts/umsb.fd
@@ -483,111 +533,57 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/usr/local/texlive/2020/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 128--131
+Underfull \hbox (badness 10000) in paragraph at lines 128--130
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 132--135
 
  []
 
 [2]
+Underfull \hbox (badness 10000) in paragraph at lines 143--149
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 153--154
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 155--156
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 163--165
+
+ []
+
+[3]
+Underfull \hbox (badness 10000) in paragraph at lines 166--170
+
+ []
+
 LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 1
-53.
- (/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
+82.
+(/usr/local/texlive/2020/texmf-dist/tex/latex/psnfss/ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
-) [3]
-[4]
-Underfull \hbox (badness 10000) in paragraph at lines 252--254
+) [4] [5]
+[6]
+Underfull \hbox (badness 10000) in paragraph at lines 300--302
 
  []
 
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 294--296
+[7]
+Underfull \hbox (badness 10000) in paragraph at lines 342--344
 
  []
 
-
-LaTeX Warning: `h' float specifier changed to `ht'.
-
-[6] [7]
-Underfull \hbox (badness 10000) in paragraph at lines 402--403
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 413--414
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 414--415
-
- []
-
-[8]
-Underfull \hbox (badness 10000) in paragraph at lines 418--419
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 419--420
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 420--421
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 421--422
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 425--426
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 426--427
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 427--428
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 428--429
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 432--433
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 433--434
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 437--438
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 438--439
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 443--444
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 460--461
+[8] [9]
+Underfull \hbox (badness 10000) in paragraph at lines 450--451
 
  []
 
@@ -597,7 +593,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 461--462
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 465--466
+Underfull \hbox (badness 10000) in paragraph at lines 462--463
 
  []
 
@@ -617,7 +613,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 468--469
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 472--473
+Underfull \hbox (badness 10000) in paragraph at lines 469--470
 
  []
 
@@ -627,21 +623,31 @@ Underfull \hbox (badness 10000) in paragraph at lines 473--474
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 477--478
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 478--479
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 484--485
+Underfull \hbox (badness 10000) in paragraph at lines 474--475
 
  []
 
 [10]
+Underfull \hbox (badness 10000) in paragraph at lines 475--476
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 476--477
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 480--481
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 481--482
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 485--486
 
  []
@@ -652,182 +658,252 @@ Underfull \hbox (badness 10000) in paragraph at lines 486--487
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 490--491
-
- []
-
-
 Underfull \hbox (badness 10000) in paragraph at lines 491--492
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 492--493
+Underfull \hbox (badness 10000) in paragraph at lines 508--509
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 493--494
+Underfull \hbox (badness 10000) in paragraph at lines 509--510
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 497--498
+Underfull \hbox (badness 10000) in paragraph at lines 513--514
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 501--502
+Underfull \hbox (badness 10000) in paragraph at lines 514--515
+
+ []
+
+[11]
+Underfull \hbox (badness 10000) in paragraph at lines 515--516
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 502--503
+Underfull \hbox (badness 10000) in paragraph at lines 516--517
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 506--507
+Underfull \hbox (badness 10000) in paragraph at lines 520--521
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 507--508
+Underfull \hbox (badness 10000) in paragraph at lines 521--522
 
  []
 
-<welcome.png, id=45, 1009.7725pt x 788.9475pt>
+
+Underfull \hbox (badness 10000) in paragraph at lines 525--526
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 526--527
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 532--533
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 533--534
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 534--535
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 538--539
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 539--540
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 540--541
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 541--542
+
+ []
+
+[12]
+Underfull \hbox (badness 10000) in paragraph at lines 545--546
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 549--550
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 550--551
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 554--555
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 555--556
+
+ []
+
+<welcome.png, id=52, 1009.7725pt x 788.9475pt>
 File: welcome.png Graphic file (type png)
 <use welcome.png>
-Package pdftex.def Info: welcome.png  used on input line 519.
+Package pdftex.def Info: welcome.png  used on input line 567.
 (pdftex.def)             Requested size: 504.88501pt x 394.47278pt.
 
-Overfull \hbox (38.54466pt too wide) in paragraph at lines 519--520
+Overfull \hbox (38.54466pt too wide) in paragraph at lines 567--568
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<instructions.png, id=47, 1008.76875pt x 1011.78pt>
+<instructions.png, id=54, 1008.76875pt x 1011.78pt>
 File: instructions.png Graphic file (type png)
 <use instructions.png>
-Package pdftex.def Info: instructions.png  used on input line 524.
+Package pdftex.def Info: instructions.png  used on input line 572.
 (pdftex.def)             Requested size: 504.38315pt x 505.88876pt.
 
-Overfull \hbox (38.0428pt too wide) in paragraph at lines 524--525
+Overfull \hbox (38.0428pt too wide) in paragraph at lines 572--573
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<decision_high.png, id=48, 1008.76875pt x 397.485pt>
+<decision_high.png, id=55, 1008.76875pt x 397.485pt>
 File: decision_high.png Graphic file (type png)
 <use decision_high.png>
-Package pdftex.def Info: decision_high.png  used on input line 529.
+Package pdftex.def Info: decision_high.png  used on input line 577.
 (pdftex.def)             Requested size: 504.38315pt x 198.742pt.
 
-Overfull \hbox (38.0428pt too wide) in paragraph at lines 529--530
+Overfull \hbox (38.0428pt too wide) in paragraph at lines 577--578
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<decision_low.png, id=49, 991.705pt x 375.4025pt>
+<decision_low.png, id=56, 991.705pt x 375.4025pt>
 File: decision_low.png Graphic file (type png)
 <use decision_low.png>
-Package pdftex.def Info: decision_low.png  used on input line 534.
+Package pdftex.def Info: decision_low.png  used on input line 582.
 (pdftex.def)             Requested size: 495.85129pt x 187.70079pt.
 
-Overfull \hbox (29.51094pt too wide) in paragraph at lines 534--535
+Overfull \hbox (29.51094pt too wide) in paragraph at lines 582--583
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<results_high_take.png, id=50, 986.68625pt x 314.17375pt>
+<results_high_take.png, id=57, 986.68625pt x 314.17375pt>
 File: results_high_take.png Graphic file (type png)
 <use results_high_take.png>
-Package pdftex.def Info: results_high_take.png  used on input line 539.
+Package pdftex.def Info: results_high_take.png  used on input line 587.
 (pdftex.def)             Requested size: 493.34192pt x 157.08649pt.
 
-Overfull \hbox (27.00157pt too wide) in paragraph at lines 539--540
+Overfull \hbox (27.00157pt too wide) in paragraph at lines 587--588
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<results_high_leave.png, id=51, 999.735pt x 240.9pt>
+<results_high_leave.png, id=58, 999.735pt x 240.9pt>
 File: results_high_leave.png Graphic file (type png)
 <use results_high_leave.png>
-Package pdftex.def Info: results_high_leave.png  used on input line 544.
+Package pdftex.def Info: results_high_leave.png  used on input line 592.
 (pdftex.def)             Requested size: 499.86627pt x 120.44969pt.
 
-Overfull \hbox (33.52592pt too wide) in paragraph at lines 544--545
+Overfull \hbox (33.52592pt too wide) in paragraph at lines 592--593
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<end.png, id=52, 997.7275pt x 313.17pt>
+<end.png, id=59, 997.7275pt x 313.17pt>
 File: end.png Graphic file (type png)
 <use end.png>
-Package pdftex.def Info: end.png  used on input line 549.
+Package pdftex.def Info: end.png  used on input line 597.
 (pdftex.def)             Requested size: 498.86252pt x 156.58461pt.
 
-Overfull \hbox (32.52217pt too wide) in paragraph at lines 549--550
+Overfull \hbox (32.52217pt too wide) in paragraph at lines 597--598
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<commentbox.png, id=53, 994.71625pt x 523.9575pt>
+<commentbox.png, id=60, 994.71625pt x 523.9575pt>
 File: commentbox.png Graphic file (type png)
 <use commentbox.png>
-Package pdftex.def Info: commentbox.png  used on input line 554.
+Package pdftex.def Info: commentbox.png  used on input line 602.
 (pdftex.def)             Requested size: 497.3569pt x 261.9781pt.
 
-Overfull \hbox (31.01656pt too wide) in paragraph at lines 554--555
+Overfull \hbox (31.01656pt too wide) in paragraph at lines 602--603
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-<payment.png, id=54, 992.70876pt x 394.47375pt>
+<payment.png, id=61, 992.70876pt x 394.47375pt>
 File: payment.png Graphic file (type png)
 <use payment.png>
-Package pdftex.def Info: payment.png  used on input line 559.
+Package pdftex.def Info: payment.png  used on input line 607.
 (pdftex.def)             Requested size: 496.35316pt x 197.23639pt.
 
-Overfull \hbox (30.01282pt too wide) in paragraph at lines 559--560
+Overfull \hbox (30.01282pt too wide) in paragraph at lines 607--608
  [][] 
  []
 
 
 LaTeX Warning: `h' float specifier changed to `ht'.
 
-[11] [12 <./welcome.png>] [13 <./instructions.png>] [14 <./decision_high.png> <
-./decision_low.png> <./results_high_take.png>] [15 <./results_high_leave.png> <
-./end.png> <./commentbox.png>] [16 <./payment.png>] (./Consistent trust.aux)
+[13] [14 <./welcome.png>] [15 <./instructions.png>] [16 <./decision_high.png> <
+./decision_low.png> <./results_high_take.png>] [17 <./results_high_leave.png> <
+./end.png> <./commentbox.png>] [18 <./payment.png>] (./Consistent trust.aux)
 
 LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 6579 strings out of 480608
- 97791 string characters out of 5903629
- 352660 words of memory out of 5000000
- 22355 multiletter control sequences out of 15000+600000
- 552612 words of font info for 69 fonts, out of 8000000 for 9000
+ 7508 strings out of 480608
+ 111402 string characters out of 5903629
+ 375747 words of memory out of 5000000
+ 23245 multiletter control sequences out of 15000+600000
+ 554254 words of font info for 71 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,9n,42p,627b,450s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 41i,9n,42p,627b,471s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/local/texlive/2020/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
 exlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/te
 xlive/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/tex
@@ -839,11 +915,12 @@ ve/2020/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb></usr/local/texlive
 texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/local/texlive/2020/te
 xmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2020/texmf-dist/f
 onts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1
-/urw/times/utmri8a.pfb>
-Output written on "Consistent trust.pdf" (16 pages, 464735 bytes).
+/urw/times/utmr8a.pfb></usr/local/texlive/2020/texmf-dist/fonts/type1/urw/times
+/utmri8a.pfb>
+Output written on "Consistent trust.pdf" (18 pages, 478006 bytes).
 PDF statistics:
- 120 PDF objects out of 1000 (max. 8388607)
- 72 compressed objects within 1 object stream
+ 130 PDF objects out of 1000 (max. 8388607)
+ 79 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
