@@ -11,6 +11,7 @@
 \usepackage{multicol}
 \usepackage{amsmath}
 \usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
 \smallskip
 
 \newcommand{\christian}[1]{\textcolor{blue}{{\bf CH:} #1}} 
@@ -123,22 +124,69 @@ we must show that there is no licensing as well.
 
 \subsection{Testing}
 
-In practice it looks like that:
+\subsubsection{Sender more likely to cooperate when facing a low cost.}
+We must check for monotonicity of costs. If players don't cooperate at significant rates depending on the cost level then the experiment fails. 
+To do that we simply compare first round cooperation rates when facing a low or a high cost (second round too if taken independently from the first round). \\
+
+\subsubsection{Sender more likely to cooperate if cooperated in the past/ \\ more likely (100\%?) to defect if EVER defected} 
+To test this we need to compare cooperation rates in the second round after having faced a high or low cost. 
+As such, the comparison can be between either \textsl{low-low vs high-low} or \textsl{low-high vs high-high} and we compare round 2 cooperation across the two cost combinations. \\ 
+We expect to find a difference in cooperation rates on round 2 between these two treatments based on what they faced in the first round and if they cooperated or not (coop if low 			and defect if high). We can also show that senders loose motivation after defecting. \\
 
 \noindent
-\textbf{Sender cooperate more when facing a high low cost.} \\
-We compare cooperation rates in the first round between treatments that faced a low or a high cost first. \\
-
-\noindent
-\textbf{Sender more likely to cooperate in round 2 when round one had a low cost AND they cooperated.} \\
-Two different comparisons:
+Regression:
 \begin{enumerate}
-    \item \textbf{low-low vs high-low} (compare round 2 cooperation across the two treatments)\\ 
-    		We expect to find a difference in cooperation rates on round 2 between these two treatments based on what they faced in the first round and if they cooperated or not (coop if low 			and defect if high). We can also show that sender lose motivation after defecting.
-    \item \textbf{low-high vs high-any} (compare the cooperation rate in the two high cost rounds across treatments)
-    		Moreover, fully mediated by whether defected in prior rounds. 
-		By having the same definite cost on an early round vs a later round the sender can build social capital.
+    \item probit or logit regression
+    \item cluster standard errors on individual subjects error (there are no groups so no choice there)
+    \item round decisions are no independent from each other as it is played by the same participant.
 \end{enumerate}
+Elements of the regression we would look at: \\
+prob coop $\sim$ round \# + {\color{Green}stakes} + {\color{Green}whether defected in the past} + whether cooperated in the past + {\color{Green}\# of coop} + \# of defection + all 2-way interactions ({\color{Green}whether def in the past \* anything})\\
+\# of cooperation only matter as long as never defected in the past. if defected then stops mattering - complementarity. \\
+we can check if the \# of cooperation effect and the interaction whether defected in the past * anything disappear given there has been a defection. \\
+potentially, we can add +subject as a control to make sure it's not just individual differences. \\
+stakes will pick up on monotonicity already. \\
+
+
+\subsubsection{The longer until the sender faces high stakes for 1st time, the more likely to cooperate then \\ 
+(fully mediated by whether they cooperated prior to this)} 
+By having the same definite cost on an early round vs a later round the sender can build social capital. \\
+
+The comparison can be between either \textsl{low-high vs high-low} and we have two possibilities: compare cooperation rates between facing a high stake in the first round versus facing a high stake in the second round. Or compare over cooperation across the two rounds of these two combinations (compare sum). \\
+
+\noindent
+Regression:
+probability of cooperation whether 1st see high cost $\sim$ round 1st see high cost
+
+
+\subsubsection{if in (all) prior rounds the Sender only faces low stakes, they are more likely to cooperate on this round (for given cost level)} 
+2nd round is what we are interested in depending on what occurred in round 2.
+can be low-low ccs high-low or low-high vs high-high. \\
+
+\noindent
+Regression: \\
+proba coop in round 2 $\sim$ treatment + current cost \\
+proba coop in round 2 $\sim$ earlier cost + whether coop in round 1 \\
+
+\subsection{Experimental set-up}
+
+\begin{description}
+	\item Step 1: Only 1 round, either low or high stake (don?t tell number of rounds).
+	\item Step 2: run all four combinations with 2 rounds.
+	\item Step 3: add more rounds.
+\end{description}
+
+\noindent
+\textbf{Details}
+\begin{itemize}
+	\item treatment vs full random
+	\item number of subjects per combination = equal - 30pp in each
+	\item do we tell pp the distribution of high/low stakes in advance \\ 
+	$\rightarrow$ we tell the pp that both cost and round are independent and chance of occurrence is 1/2 (50-50)
+	\item amount of the costs in real money - test 10p, 50p, 1\pounds
+	\item likelihood of each cost $\rightarrow$ p = 1/2
+	\item we don?t say number of round (?might be repeated?)
+\end{itemize}
 
 \section{Design considerations for later}
 
