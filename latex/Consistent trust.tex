@@ -232,7 +232,7 @@ The advantage of the Trust game is that the recipient is now an active player an
 
 \section{Model}
 
-\subsection{Description of the signaling game}
+\subsection{Description of the signalling game}
 
 
 In the following we describe a simple signaling game. The game involves two players, a sender and a receiver. It consists of several rounds in which senders can decide whether or not to send a costly signal. The exact cost in a given round is determined randomly and may depend on the type of the sender. We use this model to explore under which conditions we observe equilibria that show the characteristics of principled behavior, discontinuity and complementarity. In addition, the same model will also allow us to characterize other equilibria of interest (such as equilibria with moral licensing).
@@ -332,7 +332,7 @@ We refer to the above strategy profile as the `licensing profile'.
 The licensing profile is a perfect Bayesian Nash equilibrium if and only if the following conditions hold:
 \begin{equation}
 \begin{array}{c}
-\displaystyle \frac{b_S}{-b_I} \ge \frac{q_{I,l}(1\!-\!p_S)}{p_S}\\[0.4cm]
+\displaystyle b_I \le \frac{q_{S,l}p_Sb_S + q_{I,l}p_Sb_S}{q_{S,l}p_S + q_{I,l}(1-p_S)}\\[0.4cm]
 \displaystyle a_I \le q_{I,l}(a_I-c_l)+c_h\\[0.4cm]
 \displaystyle  c_h \ge \bar{c}_S \ge c_l. 
 \end{array}
@@ -502,7 +502,25 @@ Same as above for the Superior type and the Receiver. But now the inferior type 
 
 \subsection{Proofs}
 
-\paragraph{Claim 1}zero-tolerance equilibrium:\\
+\paragraph{Claim 1} zero-tolerance equilibrium:\\
+
+Consider a profile in which the receiver accepts only if the sender cooperated in both rounds. 
+Superior senders pay the high cost even on the first round and inferior senders pay the low cost but not the high cost. 
+
+
+If the receiver observes a defection, following (1), it cannot be the superior type sending signal. 
+This means that the benefit of accepting following cd, dc, or dd is lower than 0.
+If the receiver observes cc, he knows it is either a superior sender, or an inferior type if they faced a low cost in the first round. \\
+
+When the benefit of accepting a superior type is larger than the expected cost + the high cost, 
+the superior type prefers to cooperate in the first round regardless of what cost they are facing. 
+and since the benefit of accepting a superior type is bigger than the high cost, they also find it worthwhile to keep cooperating in the second round. 
+Everything that applies to the high cost applies to the low cost as the high cost is bigger and both are smaller than 0. \\
+
+The inferior type only finds it worthwhile to cooperate in the first round when the costs are low 
+as long as the benefit of the inferior type being accepted is bigger than the low cost but not the high cost. \\
+
+
 Receiver:
 \begin{itemize} [noitemsep]
 	\item Receiver after $cc \quad \rightarrow \quad accept \quad \rightarrow \quad \frac{b^S}{b^I}\geq \frac{q^I_l (1-p_S)}{P_S}$\\
