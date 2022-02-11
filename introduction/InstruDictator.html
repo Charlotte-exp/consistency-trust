@@ -31,12 +31,15 @@
 
 <div>
     <p>
-        You are the <b>Decider</b>. This means that in every interaction you have a decision to make.
-        In each interaction, both you and the receiver are allocated with <b>{{half_pot}}</b> each.
-        You have the opportunity to take the money of the receiver or leave it. If you decide to take it,
-        you will earn <b>{{pot_money}}</b> in that interaction and the receiver gets nothing.
-        If you decide to leave it, you keep your allocated <b>{{half_pot}}</b> and so does the receiver.
-        The receiver will know his final amount, but not who decided.
+        For this experiment, you have been randomly assigned the role of <b>Decider</b>.
+    </p>
+    <p>
+        This means that in every interaction you have a decision to make.
+        In each interaction, both you and the recipient are allocated with <b>{{half_pot}}</b> each.
+        You have the opportunity to take the money of the recipient or leave it. If you decide to take it,
+        you will earn <b>{{pot_money}}</b> in that interaction and the recipient gets nothing.
+        If you decide to leave it, you keep your allocated <b>{{half_pot}}</b> and so does the recipient.
+        Recipients will only learn their overall earnings (across all the recipient's interactions), but not the individual decisions of each decider.
     </p>
     <p>
         Remember, in each interaction you are paired up with someone different and make a new decision.
@@ -53,8 +56,8 @@
         Interaction {{ subsession.round_number }}
     </h5>
     <p>
-        Both you and the receiver have been endowed with <b>{{ half_pot }}</b> each.
-        You have the opportunity to take the money from the receiver, or to leave it.
+        Both you and the recipient have been endowed with <b>{{ half_pot }}</b> each.
+        You have the opportunity to take the money from the recipient, or to leave it.
         <ul>
             <li>
                 If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
@@ -64,29 +67,23 @@
             </li>
         </ul>
     </p>
+
+    why not work?
+    {{ if player.condition == 'high-high' }}
+    <img src="{{ static 'introduction/decision_high.png' }}"/>
+    {{ else }}
+    <img src="{{ static 'introduction/decision_low.png' }}"/>
+    {{ endif }}
+
 </div>
 
-    <p></p>
+<p></p>
 
-
-<div class="card bg-light instructions">
-    <div class="card-body">
-        <p style="text-align:center">
-            Do you want to take the {{ half_pot }} or leave it?
-        </p>
-        <div class="row" style="text-align:center">
-            <div class="col">
-                <div class="blue_box">Leave</div>
-            </div>
-            <div class="col" >
-                <div class="blue_box">Take</div>
-            </div>
-        </div>
+    <div align="center">
+        During the study, you make your choice by pressing either the "leave" button or the "Take" button.
     </div>
-</div>
 
-    <p></p>
-
+<p></p>
 
 
 <div>

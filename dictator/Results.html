@@ -1,31 +1,21 @@
 {{ block title }}Results{{ endblock }}
 {{ block content }}
 
-{{ if player.condition == 'high-high' }}
+
     <p>
         {{ if player.decision == 0 }}
-            You decided to take the {{ Constants.high_half_pot }} of the receiver.
+            You decided to take the {{ half_pot }} of your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ else }}
-            You decided to leave the {{ Constants.high_half_pot }} of the receiver.
+            You decided to leave the {{ half_pot }} your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
-{{ else }}
-    <p>
-        {{ if player.decision == 0 }}
-            You decided to take the {{ Constants.low_half_pot }} of the receiver.
-            Your payoff in this round is of <strong>{{ payoff }}</strong>.
-        {{ else }}
-            You decided to leave the {{ Constants.low_half_pot }} of the receiver.
-            Your payoff in this round is of <strong>{{ payoff }}</strong>.
-        {{ endif }}
-    </p>
-{{ endif }}
+
 
 <p style="color:white;">{{ call }}</p>
-
-        <div style="display: fle x; justify-content: flex-end">
+    <p>
+        <div style="display: flex; justify-content: flex-end">
         {{ next_button }}
         </div>
     </p>
