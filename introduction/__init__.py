@@ -13,10 +13,10 @@ class Constants(BaseConstants):
     num_rounds = 1
     num_interactions = 2
 
-    high_pot_money = cu(6)
+    high_pot_money = cu(2)
     high_half_pot = high_pot_money / 2
 
-    low_pot_money = cu(2)
+    low_pot_money = cu(1)
     low_half_pot = low_pot_money / 2
 
     likelihood = 0.5
@@ -85,15 +85,15 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    q4l = models.IntegerField(
-        choices=[
-            [1, '£0.'],
-            [2, f'{Constants.low_half_pot}.'],
-            [3, f'{Constants.low_pot_money}.']
-        ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.low_half_pot}?',
-        widget=widgets.RadioSelect
-    )
+    # q4l = models.IntegerField(
+    #     choices=[
+    #         [1, '£0.'],
+    #         [2, f'{Constants.low_half_pot}.'],
+    #         [3, f'{Constants.low_pot_money}.']
+    #     ],
+    #     verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.low_half_pot}?',
+    #     widget=widgets.RadioSelect
+    # )
 
     q5 = models.IntegerField(
         choices=[
@@ -112,7 +112,7 @@ class Welcome(Page):
     form_fields = ['q1', 'q2']
 
     def error_message(player, values):
-        if values['q1'] != 3:
+        if values['q1'] != 2:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
         if values['q2'] != 3:
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
@@ -127,33 +127,20 @@ class InstruDictator(Page):
 
     def get_form_fields(player: Player):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
-        if player.condition == 'high':
-            return ['q3', 'q4h']
-        else:
-            return ['q3', 'q4l']
+        return ['q3', 'q4h']
 
-    @staticmethod
     def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if player.condition == 'high':
-            if values['q4h'] != 3:
-                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-        else:
-            if values['q4l'] != 3:
-                return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+        if values['q4h'] != 3:
+            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
     def vars_for_template(player: Player):
-        if player.condition == 'high':
-            return dict(
-                pot_money=Constants.high_pot_money,
-                half_pot=Constants.high_half_pot,
-            )
-        else:
-            return dict(
-                pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_half_pot,
-            )
+        return dict(
+            pot_money=Constants.high_pot_money,
+            half_pot=Constants.high_half_pot,
+        )
+
 
 page_sequence = [Welcome,
                  # Introduction,

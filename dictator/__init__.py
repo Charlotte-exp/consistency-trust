@@ -15,32 +15,46 @@ asymmetric token value
 class Constants(BaseConstants):
     name_in_url = 'dictator'
     players_per_group = None
-    num_rounds = 2
+    num_rounds = 1
 
-    high_pot_money = cu(6)
+    high_pot_money = cu(2)
     high_half_pot = high_pot_money / 2
 
-    low_pot_money = cu(2)
+    low_pot_money = cu(1)
     low_half_pot = low_pot_money / 2
 
-    likelihood = 0.5
-    values = [0.10, 0.5, 1]
+    likelihood = 1/3
+    values = [cu(0.10), cu(0.5), cu(1)]
 
 
 class Subsession(BaseSubsession):
     pass
 
 
-# def creating_session(subsession: Subsession):
-#
-#     treatments = itertools.cycle(['high-high', 'low-low'])
-#     for player in subsession.get_players():
-#         player.condition = next(treatments)
-#         print('treatment', player.condition)
-#
-#     # for p in subsession.get_players():
-#     #     p.participant.conversion = random.choice(Constants.values)
-#     #     print(p.participant.conversion)
+# def get_value(subsession: Subsession):
+#     """
+#     Man don't know how to do this
+#     """
+#     value = Constants.values
+#     proba = Constants.likelihood
+#     if proba < random.random():
+#         endowment_value = value[0]
+#         return endowment_value
+
+
+def creating_session(subsession: Subsession):
+
+    treatments = itertools.cycle([cu(0.10), cu(0.5), cu(1)])
+    for p in subsession.get_players():
+        p.condition = next(treatments)
+        p.participant.condition = p.condition
+        print('treatment', p.condition, p.participant.condition)
+
+        # steaks = subsession.get_value()
+        # for p in subsession.get_players():
+        #     p.participant.stakes = steaks
+        #     p.stakes = p.participant.stakes
+        #     print('stakes', p.stakes, p.participant.stakes)
 
 
 class Group(BaseGroup):
@@ -49,9 +63,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    title = models.StringField()
-    # condition = models.StringField()
-    # conversion = models.FloatField()
+    condition = models.CurrencyField()
+    # stakes = models.StringField()
     receiver_payoff = models.CurrencyField()
 
     decision = models.CurrencyField(
@@ -105,24 +118,15 @@ class Player(BasePlayer):
     def set_payoffs(player):
         """  """
         # receiver = player.receiver_payoff
-        if player.participant.condition == 'high':
-            if player.decision == 0:
-                player.payoff = Constants.high_pot_money
-                player.receiver_payoff = 0
-            else:
-                player.payoff = Constants.high_half_pot
-                player.receiver_payoff = Constants.high_half_pot
-            print('Dictator payoff:', player.payoff)
-            print('Receiver payoff:', player.receiver_payoff)
+        if player.decision == 0:
+            player.payoff = player.condition * 2
+            player.receiver_payoff = 0
         else:
-            if player.decision == 0:
-                player.payoff = Constants.low_pot_money
-                player.receiver_payoff = 0
-            else:
-                player.payoff = Constants.low_half_pot
-                player.receiver_payoff = Constants.low_half_pot
-            print('Dictator payoff:', player.payoff)
-            print('Receiver payoff:', player.receiver_payoff)
+            player.payoff = player.condition
+            player.receiver_payoff = player.condition
+        print('Dictator payoff:', player.payoff)
+        print('Receiver payoff:', player.receiver_payoff)
+
 
 
 #######    PAGES   #########
@@ -144,16 +148,10 @@ class Offer(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high':
-            return dict(
-                pot_money=Constants.high_pot_money,
-                half_pot=Constants.high_half_pot,
-            )
-        else:
-            return dict(
-                pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_half_pot,
-            )
+        return dict(
+            pot_money=player.condition * 2,
+            half_pot=player.condition,
+        )
 
 
 # class ResultsWaitPage(WaitPage):
@@ -173,20 +171,13 @@ class Results(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high':
-            return dict(
-                call=player.set_payoffs(),
-                payoff=player.payoff,
-                pot_money=Constants.high_pot_money,
-                half_pot=Constants.high_half_pot,
-            )
-        else:
-            return dict(
-                call=player.set_payoffs(),
-                payoff=player.payoff,
-                pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_half_pot,
-            )
+        return dict(
+            call=player.set_payoffs(),
+            payoff=player.payoff,
+            pot_money=player.condition * 2,
+            half_pot=player.condition,
+        )
+
 
 
 class End(Page):
