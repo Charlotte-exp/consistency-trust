@@ -20,20 +20,20 @@ class Constants(BaseConstants):
     low_half_pot = low_pot_money / 2
 
     likelihood = 0.5
-    values = [1, 2]
+    values = [0.10, 0.5, 1]
 
 
 class Subsession(BaseSubsession):
     pass
 
 
-def creating_session(subsession: Subsession):
-
-    treatments = itertools.cycle(['high-high', 'low-low'])
-    for p in subsession.get_players():
-        p.condition = next(treatments)
-        p.participant.condition = p.condition
-        print('treatment', p.condition, p.participant.condition)
+# def creating_session(subsession: Subsession):
+#
+#     treatments = itertools.cycle(['high', 'low'])
+#     for p in subsession.get_players():
+#         p.condition = next(treatments)
+#         p.participant.condition = p.condition
+#         print('treatment', p.condition, p.participant.condition)
 
 
 class Group(BaseGroup):
@@ -127,7 +127,7 @@ class InstruDictator(Page):
 
     def get_form_fields(player: Player):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
-        if player.condition == 'high-high':
+        if player.condition == 'high':
             return ['q3', 'q4h']
         else:
             return ['q3', 'q4l']
@@ -136,7 +136,7 @@ class InstruDictator(Page):
     def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
         if values['q3'] != 1:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if player.condition == 'high-high':
+        if player.condition == 'high':
             if values['q4h'] != 3:
                 return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
         else:
@@ -144,7 +144,7 @@ class InstruDictator(Page):
                 return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
     def vars_for_template(player: Player):
-        if player.condition == 'high-high':
+        if player.condition == 'high':
             return dict(
                 pot_money=Constants.high_pot_money,
                 half_pot=Constants.high_half_pot,

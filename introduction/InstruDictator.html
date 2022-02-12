@@ -35,18 +35,21 @@
     </p>
     <p>
         This means that in every interaction you have a decision to make.
-        In each interaction, both you and the recipient are allocated with <b>{{half_pot}}</b> each.
+        In each interaction, both you and the recipient are allocated an equal endowment each.
+        The amount can can range from 0.10GBP TO 1GBP EACH. Each of amount can happen with equal probability.
+        <p></p>
         You have the opportunity to take the money of the recipient or leave it. If you decide to take it,
-        you will earn <b>{{pot_money}}</b> in that interaction and the recipient gets nothing.
-        If you decide to leave it, you keep your allocated <b>{{half_pot}}</b> and so does the recipient.
-        Recipients will only learn their overall earnings (across all the recipient's interactions), but not the individual decisions of each decider.
+        you will earn both endowment for yourself in that interaction and the recipient gets nothing.
+        If you decide to leave it, you keep your allocated endowment and so does the recipient.
+        Recipients will only learn their overall earnings (across all the recipient's interactions),
+        but not the individual decisions of each decider.
     </p>
     <p>
         Remember, in each interaction you are paired up with someone different and make a new decision.
-        What happened previously is in the past and you are allocated {{half_pot}} again.
+        What happened previously is in the past and both you and the recipient are allocated a new endowment again.
     </p>
     <p>
-        Below you can see what your choices in each interaction will look like.
+        Below you can see what your choices in each interaction will look like if the endowment is 1GBP each.
     </p>
     <hr size="6" width="100%" align="center" color="black">
 </div>
@@ -56,24 +59,22 @@
         Interaction {{ subsession.round_number }}
     </h5>
     <p>
-        Both you and the recipient have been endowed with <b>{{ half_pot }}</b> each.
+        Both you and the recipient have been endowed with <b>1GBP</b> each.
         You have the opportunity to take the money from the recipient, or to leave it.
         <ul>
             <li>
-                If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+                If you take it, your total payoff for this interaction will be <b>2GBP</b>.
             </li>
             <li>
-                If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+                If you leave it, your total payoff for this interaction will be <b>1GBP</b>.
             </li>
         </ul>
     </p>
 
-    why not work?
-    {{ if player.condition == 'high-high' }}
-    <img src="{{ static 'introduction/decision_high.png' }}"/>
-    {{ else }}
-    <img src="{{ static 'introduction/decision_low.png' }}"/>
-    {{ endif }}
+
+    <img src="{{ static 'introduction/decision_example.png' }}"/>
+
+
 
 </div>
 

@@ -24,7 +24,7 @@ class Constants(BaseConstants):
     low_half_pot = low_pot_money / 2
 
     likelihood = 0.5
-    values = [1, 2]
+    values = [0.10, 0.5, 1]
 
 
 class Subsession(BaseSubsession):
@@ -105,7 +105,7 @@ class Player(BasePlayer):
     def set_payoffs(player):
         """  """
         # receiver = player.receiver_payoff
-        if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high':
             if player.decision == 0:
                 player.payoff = Constants.high_pot_money
                 player.receiver_payoff = 0
@@ -144,7 +144,7 @@ class Offer(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high':
             return dict(
                 pot_money=Constants.high_pot_money,
                 half_pot=Constants.high_half_pot,
@@ -173,7 +173,7 @@ class Results(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high':
             return dict(
                 call=player.set_payoffs(),
                 payoff=player.payoff,
