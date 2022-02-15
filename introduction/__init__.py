@@ -11,7 +11,7 @@ class Constants(BaseConstants):
     name_in_url = 'introduction'
     players_per_group = None
     num_rounds = 1
-    num_interactions = 2
+    num_interactions = 1
 
     high_pot_money = cu(2)
     high_half_pot = high_pot_money / 2
@@ -20,7 +20,7 @@ class Constants(BaseConstants):
     low_half_pot = low_pot_money / 2
 
     likelihood = 0.5
-    values = [0.10, 0.5, 1]
+    endowments = [cu(0.10), cu(0.5), cu(1)]
 
 
 class Subsession(BaseSubsession):
@@ -48,9 +48,9 @@ class Player(BasePlayer):
             choices=[
                 [1, '0 other participants'],
                 [2, '1 other participant'],
-                [3, f'{Constants.num_interactions} different participants']
+                [3, f'2 other participants']
             ],
-            verbose_name='With how many participants will you be playing in this study?',
+            verbose_name='With how many participants will you be playing with in an interaction?',
             widget=widgets.RadioSelect
         )
 
@@ -139,6 +139,9 @@ class InstruDictator(Page):
         return dict(
             pot_money=Constants.high_pot_money,
             half_pot=Constants.high_half_pot,
+            endowment1=Constants.endowments[0],
+            endowment2=Constants.endowments[1],
+            endowment3=Constants.endowments[2],
         )
 
 
