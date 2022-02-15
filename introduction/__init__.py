@@ -12,6 +12,8 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
     num_interactions = 1
+    session_time = 10
+    participation_fee = cu(1)
 
     high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
@@ -140,6 +142,10 @@ class Player(BasePlayer):
 
 
 #######   PAGES   #######
+class Consent(Page):
+    pass
+
+
 class Welcome(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
@@ -183,7 +189,8 @@ class InstruDictator(Page):
         )
 
 
-page_sequence = [Welcome,
+page_sequence = [Consent,
+                 Welcome,
                  # Introduction,
                  InstruDictator,
 ]
