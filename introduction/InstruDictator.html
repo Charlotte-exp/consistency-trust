@@ -40,14 +40,14 @@
         Which of these endowments you receive is random and can be different if the interaction is repeated.
     </p>
     <p>
-        Your decision is as follow: you can take the endowment of the recipient, or to leave it.
+        Your decision is as follow: you can take the endowment of the recipient, or leave it.
         If you decide to take it,
-        you will receive both endowment for yourself and the recipient will get nothing.
+        you will receive both endowments for yourself and the recipient will get nothing.
         If you decide to leave it, you keep your allocated endowment and so does the recipient.
         Recipients know they are on the receiving end of this decision, and will know the final endowment they receive.
     </p>
     <p>
-        Below you can see what your choice in the task will look like if the endowment is £1 each.
+        Below you can see what your choice in the task will look like if the endowment is <b>{{ endowment3 }}</b> each.
     </p>
     <hr size="6" width="100%" align="center" color="black">
 </div>
@@ -57,14 +57,14 @@
         Interaction {{ subsession.round_number }}
     </h5>
     <p>
-        Both you and the recipient have been endowed with <b>£1</b> each.
+        Both you and the recipient have been endowed with <b>{{ half_pot }}</b> each.
         You have the opportunity to take the money from the recipient, or to leave it.
         <ul>
             <li>
-                If you take it, your total payoff for this interaction will be <b>£2</b>.
+                If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
             </li>
             <li>
-                If you leave it, your total payoff for this interaction will be <b>£1</b>.
+                If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
             </li>
         </ul>
     </p>
