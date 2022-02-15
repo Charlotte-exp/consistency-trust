@@ -50,7 +50,27 @@ class Player(BasePlayer):
                 [2, '1 other participant'],
                 [3, f'2 other participants']
             ],
-            verbose_name='With how many participants will you be playing with in an interaction?',
+            verbose_name='With how many participants will you be paired with in each interaction?',
+            widget=widgets.RadioSelect
+        )
+
+    q1b = models.IntegerField(
+            choices=[
+                [1, '0 other participants'],
+                [2, '1 other participant'],
+                [3, f'2 other participants']
+            ],
+            verbose_name='If you play two interactions, how many different participants will you face in total?',
+            widget=widgets.RadioSelect
+        )
+
+    q1c = models.IntegerField(
+            choices=[
+                [1, 'The active player'],
+                [2, 'The passive player'],
+                [3, f"It's random"]
+            ],
+            verbose_name='If you play two interactions, and you are selected to be the active player in the first interaction, what will your role be in the second interaction?',
             widget=widgets.RadioSelect
         )
 
@@ -58,30 +78,51 @@ class Player(BasePlayer):
         choices=[
             [1, 'There is no bonus possible in this study.'],
             [2, 'My bonus payment depends on luck.'],
-            [3, 'My bonus payment depends on a decision taken by '
-                'whichever participant is randomly selected to be the decider.']
+            [3, 'My bonus payment depends on the decision taken by '
+                'the active player.']
         ],
-        verbose_name='What will your bonus payment depend on?',
+        verbose_name='What will your bonus payment in each interaction depend on?',
+        widget=widgets.RadioSelect
+    )
+
+    q3a = models.IntegerField(
+        choices=[
+            [1, f"Either both players get {Constants.high_half_pot} or both players get {Constants.low_half_pot}."],
+            [2, f'Either the active player gets {Constants.high_half_pot} while the passive player gets {Constants.low_half_pot} '
+                f'or the other way around.'],
+            [3, f'Either both players get £0.20 or both players get £2.']
+        ],
+        verbose_name=f"What are the possible endowment sizes in a given interaction?",
         widget=widgets.RadioSelect
     )
 
     q3 = models.IntegerField(
         choices=[
-            [1, 'You, the decider.'],
-            [2, f'The recipient.'],
-            [3, f'Both the decider and the recipient.']
+            [1, "Take or leave the other player's endowment."],
+            [2, f'Keep or give your endowment to the other player.'],
+            [3, f'The active player does not make any decisions.']
         ],
-        verbose_name=f'Who makes the decision in each interaction?',
+        verbose_name=f" What are the active player's options in a given interaction?",
         widget=widgets.RadioSelect
     )
 
     q4h = models.IntegerField(
         choices=[
             [1, '£0.'],
-            [2, f'{Constants.high_half_pot}.'],
-            [3, f'{Constants.high_pot_money}.']
+            [2, f'{Constants.low_half_pot}.'],
+            [3, f'{Constants.low_pot_money}.']
         ],
-        verbose_name=f'What will be your total payoff in this round if you choose to take the {Constants.high_half_pot}?',
+        verbose_name=f"What will be the active player's payoff, if the endowments are {Constants.low_half_pot} and he/she chooses to take?",
+        widget=widgets.RadioSelect
+    )
+
+    q4r = models.IntegerField(
+        choices=[
+            [1, '£0.'],
+            [2, f'{Constants.low_half_pot}.'],
+            [3, f'{Constants.low_pot_money}.']
+        ],
+        verbose_name=f"What will be the passive player's payoff, if the endowments are {Constants.low_half_pot} and the active player chooses to take?",
         widget=widgets.RadioSelect
     )
 
@@ -109,7 +150,7 @@ class Player(BasePlayer):
 #######   PAGES   #######
 class Welcome(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2']
+    form_fields = ['q1', 'q1b', 'q1c', 'q2']
 
     def error_message(player, values):
         if values['q1'] != 2:
@@ -127,7 +168,7 @@ class InstruDictator(Page):
 
     def get_form_fields(player: Player):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
-        return ['q3', 'q4h']
+        return ['q3a', 'q3', 'q4h', 'q4r']
 
     def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
         if values['q3'] != 1:

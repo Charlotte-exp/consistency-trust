@@ -31,23 +31,23 @@
 
 <div>
     <p>
-        For this experiment, you have been randomly assigned the role of <b>Decider</b>.
+        Now we will describe how each interaction works.
     </p>
     <p>
-        This means that you will have a decision to make.
-        In an interaction, both you and the recipient are allocated an equal endowment each.
-        The endowment can be either {{ endowment1 }}, {{ endowment2 }} or {{ endowment3 }}.
-        Which of these endowments you receive is random and can be different if the interaction is repeated.
+        At the beginning of each interaction,
+        both the <b>active player</b> and the <b>passive player</b> are allocated an endowment.
+        Both players' endowments will either be {{ endowment1 }} or {{ endowment3 }}.
+        The size of the endowment is random and might differ between interactions
+        but it will always be the same for the two players.
     </p>
     <p>
-        Your decision is as follow: you can take the endowment of the recipient, or leave it.
-        If you decide to take it,
-        you will receive both endowments for yourself and the recipient will get nothing.
-        If you decide to leave it, you keep your allocated endowment and so does the recipient.
-        Recipients know they are on the receiving end of this decision, and will know the final endowment they receive.
+        After receiving endowments, the <b>active player</b> makes the following decision: he/she can leave the endowments as is or take the <b>passive player's</b> endowment.
+        If the <b>active player</b> decides to leave them as is, both players receive their endowment.
+        If the <b>active player</b> decides to take the other player's endowment,
+        he/she will receive both endowments and the <b>passive player</b> will get nothing from this interaction.
     </p>
     <p>
-        Below you can see what your choice in the task will look like if the endowment is <b>{{ endowment3 }}</b> each.
+        Below you can see what the <b>active player's</b> decision will look like if the endowment is <b>{{ endowment1 }}</b> in this interaction.
     </p>
     <hr size="6" width="100%" align="center" color="black">
 </div>
@@ -57,8 +57,8 @@
         Interaction {{ subsession.round_number }}
     </h5>
     <p>
-        Both you and the recipient have been endowed with <b>{{ half_pot }}</b> each.
-        You have the opportunity to take the money from the recipient, or to leave it.
+        Both you and the other player have been endowed with <b>{{ half_pot }}</b> each.
+        You have the opportunity to take the money from the other player, or to leave it.
         <ul>
             <li>
                 If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
@@ -79,7 +79,7 @@
 <p></p>
 
     <div align="center">
-        During the study, you make your choice by pressing either the "leave" button or the "Take" button.
+        During the study, the <b>active player</b> decides by pressing either the "leave" button or the "Take" button.
     </div>
 
 <p></p>
