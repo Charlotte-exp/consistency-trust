@@ -17,11 +17,11 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
 
-    high_pot_money = cu(2)
-    high_half_pot = high_pot_money / 2
+    high_half_pot = cu(1)
+    high_pot_money = high_half_pot * 2
 
-    low_pot_money = cu(1)
-    low_half_pot = low_pot_money / 2
+    low_half_pot = cu(0.10)
+    low_pot_money = low_half_pot * 2
 
     likelihood = 1/3
     values = [cu(0.10), cu(0.5), cu(1)]
@@ -44,7 +44,7 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession: Subsession):
 
-    treatments = itertools.cycle([cu(0.10), cu(0.5), cu(1)])
+    treatments = itertools.cycle(['high', 'low'])
     for p in subsession.get_players():
         p.condition = next(treatments)
         p.participant.condition = p.condition
@@ -63,7 +63,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    condition = models.CurrencyField()
+    condition = models.StringField()
     # stakes = models.StringField()
     receiver_payoff = models.CurrencyField()
 
@@ -118,14 +118,24 @@ class Player(BasePlayer):
     def set_payoffs(player):
         """  """
         # receiver = player.receiver_payoff
-        if player.decision == 0:
-            player.payoff = player.condition * 2
-            player.receiver_payoff = 0
+        if player.participant.condition == 'high':
+            if player.decision == 0:
+                player.payoff = Constants.high_pot_money
+                player.receiver_payoff = 0
+            else:
+                player.payoff = Constants.high_half_pot
+                player.receiver_payoff = Constants.high_half_pot
+            print('Dictator payoff:', player.payoff)
+            print('Receiver payoff:', player.receiver_payoff)
         else:
-            player.payoff = player.condition
-            player.receiver_payoff = player.condition
-        print('Dictator payoff:', player.payoff)
-        print('Receiver payoff:', player.receiver_payoff)
+            if player.decision == 0:
+                player.payoff = Constants.low_pot_money
+                player.receiver_payoff = 0
+            else:
+                player.payoff = Constants.low_half_pot
+                player.receiver_payoff = Constants.low_half_pot
+            print('Dictator payoff:', player.payoff)
+            print('Receiver payoff:', player.receiver_payoff)
 
 
 
@@ -148,10 +158,17 @@ class Offer(Page):
     #     )
 
     def vars_for_template(player: Player):
-        return dict(
-            pot_money=player.condition * 2,
-            half_pot=player.condition,
-        )
+        """  """
+        if player.participant.condition == 'high':
+            return dict(
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_half_pot,
+            )
 
 
 # class ResultsWaitPage(WaitPage):
@@ -171,12 +188,20 @@ class Results(Page):
     #     )
 
     def vars_for_template(player: Player):
-        return dict(
-            call=player.set_payoffs(),
-            payoff=player.payoff,
-            pot_money=player.condition * 2,
-            half_pot=player.condition,
-        )
+        if player.participant.condition == 'high':
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.high_pot_money,
+                half_pot=Constants.high_half_pot,
+            )
+        else:
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.low_pot_money,
+                half_pot=Constants.low_half_pot,
+            )
 
 
 

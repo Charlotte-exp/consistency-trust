@@ -36,7 +36,7 @@
     <p>
         At the beginning of each interaction,
         both the <b>active player</b> and the <b>passive player</b> are allocated an endowment.
-        Both players' endowments will either be {{ endowment1 }} or {{ endowment3 }}.
+        Both players' endowments will either be {{ Constants.high_half_pot }} or {{ Constants.low_half_pot }}.
         The size of the endowment is random and might differ between interactions
         but it will always be the same for the two players.
     </p>
@@ -47,32 +47,31 @@
         he/she will receive both endowments and the <b>passive player</b> will get nothing from this interaction.
     </p>
     <p>
-        Below you can see what the <b>active player's</b> decision will look like if the endowment is <b>{{ endowment1 }}</b> in this interaction.
+        Below you can see what the <b>active player's</b> decision will look like if the endowment is <b>{{ Constants.low_half_pot }}</b> in this interaction.
     </p>
     <hr size="6" width="100%" align="center" color="black">
 </div>
+
 
 <div  class="card-body">
     <h5>
         Interaction {{ subsession.round_number }}
     </h5>
     <p>
-        Both you and the other player have been endowed with <b>{{ half_pot }}</b> each.
+        Both you and the other player have been endowed with <b>{{ Constants.low_half_pot }}</b> each.
         You have the opportunity to take the money from the other player, or to leave it.
         <ul>
             <li>
-                If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+                If you take it, your total payoff for this interaction will be <b>{{ Constants.low_half_pot }}</b>.
             </li>
             <li>
-                If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+                If you leave it, your total payoff for this interaction will be <b>{{ Constants.low_half_pot }}</b>.
             </li>
         </ul>
     </p>
 
 
-    <img src="{{ static 'introduction/decision_example.png' }}"/>
-
-
+    <img src="{{ static 'introduction/decision_10p.png' }}"/>
 
 </div>
 
