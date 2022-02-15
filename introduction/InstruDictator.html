@@ -23,6 +23,20 @@
     margin-top: -200px;
     margin-left: -250px;
 }
+
+    .screenshot {
+    background: white;
+    border: 1px solid #3b84c3;
+    border-radius: 5px;
+    box-shadow: 0 0 20px #999;
+    /*width: 940px; */
+    margin: 22px auto;
+    }
+
+    img.resize {
+    max-width:50%;
+    max-height:50%;
+    }
 </style>
 
 {{ endblock }}
@@ -49,10 +63,9 @@
     <p>
         Below you can see what the <b>active player's</b> decision will look like if the endowment is <b>{{ Constants.low_half_pot }}</b> in this interaction.
     </p>
-    <hr size="6" width="100%" align="center" color="black">
 </div>
 
-
+<div class="screenshot">
 <div  class="card-body">
     <h5>
         Interaction {{ subsession.round_number }}
@@ -71,14 +84,15 @@
     </p>
 
 
-    <img src="{{ static 'introduction/decision_10p.png' }}"/>
+    <img src="{{ static 'introduction/decision_10p.png'}}" width="910" height="auto"/>
 
+</div>
 </div>
 
 <p></p>
 
     <div align="center">
-        During the study, the <b>active player</b> decides by pressing either the "leave" button or the "Take" button.
+        During the study, the <b>active player</b> decides by pressing either the "Leave" button or the "Take" button.
     </div>
 
 <p></p>
