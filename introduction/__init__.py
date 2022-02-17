@@ -155,7 +155,7 @@ class Welcome(Page):
             return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
         if values['q2'] != 3:
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q3'] != 3:
+        if values['q3'] != 1:
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
         if values['q4'] != 3:
             return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'

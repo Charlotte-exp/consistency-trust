@@ -259,7 +259,7 @@ class Demographics(Page):
 
 class CommentBox(Page):
     form_model = 'player'
-    form_fields = ['comment_box', 'being_receiver']
+    form_fields = ['comment_box']
 
     @staticmethod
     def is_displayed(player: Player):
