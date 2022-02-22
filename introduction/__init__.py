@@ -90,9 +90,9 @@ class Player(BasePlayer):
     q5 = models.IntegerField(
         choices=[
             [1, f"Either both players get {Constants.high_half_pot} or both players get {Constants.low_half_pot}."],
-            [2, f'Either the active player gets {Constants.high_half_pot} while the passive player gets {Constants.low_half_pot} '
-                f'or the other way around.'],
-            [3, f'Either both players get {Constants.low_half_pot*2} or both players get {Constants.high_half_pot*2}.']
+            [2, f'Either both players get {Constants.low_half_pot*2} or both players get {Constants.high_half_pot*2}.'],
+            [3, f'Either the active player gets {Constants.high_half_pot} '
+                f'while the passive player gets {Constants.low_half_pot} or the other way around.']
         ],
         verbose_name=f"What are the possible endowment sizes in a given interaction?",
         widget=widgets.RadioSelect
@@ -115,7 +115,7 @@ class Player(BasePlayer):
             [3, f'{Constants.low_pot_money}.']
         ],
         verbose_name=f"What will be the active player's payoff, "
-                     f"if the endowments are {Constants.low_half_pot} and he/she chooses to take?",
+                     f"if the endowments are {Constants.low_half_pot} and he/she chooses to take in this interaction?",
         widget=widgets.RadioSelect
     )
 
@@ -126,17 +126,7 @@ class Player(BasePlayer):
             [3, f'{Constants.low_pot_money}.']
         ],
         verbose_name=f"What will be the passive player's payoff, "
-                     f"if the endowments are {Constants.low_half_pot} and the active player chooses to take?",
-        widget=widgets.RadioSelect
-    )
-
-    q9 = models.IntegerField(
-        choices=[
-            [1, 'The decider.'],
-            [2, f'You, the recipient.'],
-            [3, f'Both the decider and the recipient.']
-        ],
-        verbose_name=f'Who makes the decision in each interaction?',
+                     f"if the endowments are {Constants.low_half_pot} and the active player chooses to take in this interaction?",
         widget=widgets.RadioSelect
     )
 
