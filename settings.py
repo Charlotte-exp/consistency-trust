@@ -18,7 +18,9 @@ SESSION_CONFIGS = [
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
-        name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
+        name='survey',
+        app_sequence=['survey', 'payment_info'],
+        num_demo_participants=1
     ),
 ]
 

@@ -15,7 +15,7 @@ asymmetric token value
 class Constants(BaseConstants):
     name_in_url = 'dictator'
     players_per_group = None
-    num_rounds = 2
+    num_rounds = 1
 
     high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
