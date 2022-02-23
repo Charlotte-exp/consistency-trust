@@ -128,45 +128,62 @@ we must show that there is no licensing as well.
 We must check for monotonicity of costs. If players don't cooperate at significant rates depending on the cost level then the experiment fails. 
 To do that we simply compare first round cooperation rates when facing a low or a high cost (second round too if taken independently from the first round). \\
 
-\subsubsection{Sender more likely to cooperate if cooperated in the past/ \\ more likely (100\%?) to defect if EVER defected} 
+\subsubsection{Sender more likely to cooperate if cooperated in the past/ \\ more likely (100\%?) to defect if ever defected} 
 To test this we need to compare cooperation rates in the second round after having faced a high or low cost. 
 As such, the comparison can be between either \textsl{low-low vs high-low} or \textsl{low-high vs high-high} and we compare round 2 cooperation across the two cost combinations. \\ 
 We expect to find a difference in cooperation rates on round 2 between these two treatments based on what they faced in the first round and if they cooperated or not (coop if low 			and defect if high). We can also show that senders loose motivation after defecting. \\
 
 \noindent
-Regression:
+\textbf{Regression}:
 \begin{enumerate}
     \item probit or logit regression
     \item cluster standard errors on individual subjects error (there are no groups so no choice there)
     \item round decisions are no independent from each other as it is played by the same participant.
 \end{enumerate}
 Elements of the regression we would look at: \\
-prob coop $\sim$ round \# + {\color{Green}stakes} + {\color{Green}whether defected in the past} + whether cooperated in the past + {\color{Green}\# of coop} + \# of defection + all 2-way interactions ({\color{Green}whether def in the past \* anything})\\
-\# of cooperation only matter as long as never defected in the past. if defected then stops mattering - complementarity. \\
-we can check if the \# of cooperation effect and the interaction whether defected in the past * anything disappear given there has been a defection. \\
-potentially, we can add +subject as a control to make sure it's not just individual differences. \\
-stakes will pick up on monotonicity already. \\
+probability of cooperation $\sim$ round number \\
+\hspace*{20mm} + {\color{Green}stakes} \\
+\hspace*{20mm} + {\color{Green}whether defected in the past} \\
+\hspace*{20mm} + whether cooperated in the past \\
+\hspace*{20mm} + {\color{Green}number of cooperations} \\
+\hspace*{20mm} + number of defections \\
+\hspace*{20mm} + all 2-way interactions ({\color{Green}whether def in the past \* anything})\\
 
+\noindent
+Number of cooperation only matter as long as they never defected in the past. Because of complementarity, if they defected, then it stops mattering. \\
+Something we can check is if the \textsl{number of cooperation} effect and the \textsl{interaction whether defected in the past * anything} disappear given that a defection has occured. \\
+Potentially, we can add + subject as a control to make sure it's not just individual differences. \\
+Stakes will pick up on monotonicity already. \\
 
-\subsubsection{The longer until the sender faces high stakes for 1st time, the more likely to cooperate then \\ 
-(fully mediated by whether they cooperated prior to this)} 
+\subsubsection{The longer until the sender faces high stakes for the 1st time, the more likely to cooperate then} 
+
+$\rightarrow$ fully mediated by whether they cooperated prior to this.\\
 By having the same definite cost on an early round vs a later round the sender can build social capital. \\
-
-The comparison can be between either \textsl{low-high vs high-low} and we have two possibilities: compare cooperation rates between facing a high stake in the first round versus facing a high stake in the second round. Or compare over cooperation across the two rounds of these two combinations (compare sum). \\
-
-\noindent
-Regression:
-probability of cooperation whether 1st see high cost $\sim$ round 1st see high cost
-
-
-\subsubsection{if in (all) prior rounds the Sender only faces low stakes, they are more likely to cooperate on this round (for given cost level)} 
-2nd round is what we are interested in depending on what occurred in round 2.
-can be low-low ccs high-low or low-high vs high-high. \\
+The comparison can be between either \textsl{low-high vs high-low} and we have two possibilities: 
+compare cooperation rates between facing a high stake in the first round versus facing a high stake in the second round. 
+Or compare over cooperation across the two rounds of these two combinations (compare sum). \\
 
 \noindent
-Regression: \\
-proba coop in round 2 $\sim$ treatment + current cost \\
-proba coop in round 2 $\sim$ earlier cost + whether coop in round 1 \\
+\textbf{Regression}:\\
+Same as above.\\
+
+\noindent
+Elements of the regression we would look at: \\
+Probability of cooperation whether the high cost occurs on the 1st round $\sim$ on which round round the high cost occurs first.
+
+
+\subsubsection{If in (all) prior rounds the Sender only faces low stakes, they are more likely to cooperate on this round (for given cost level)} 
+2nd round is what we are interested in depending on what occurred in round 1.
+The comparison can be between either \textsl{low-low vs high-low} or \textsl{low-high vs high-high}. \\
+
+\noindent
+\textbf{Regression}:\\
+Same as above.\\
+
+\noindent
+Elements of the regression we would look at: \\
+Probability of cooperation in round 2 $\sim$ treatment + current cost \\
+Probability of cooperation in round 2 $\sim$ earlier cost + whether cooperated in round 1 \\
 
 \subsection{Experimental set-up}
 

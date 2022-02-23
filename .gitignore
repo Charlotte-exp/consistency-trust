@@ -1,3 +1,10 @@
+*.aux
+*.log
+*.pdf
+*.synctex.gz
+*.bbl
+*.blg
+
 venv
 staticfiles
 ./db.sqlite3
