@@ -15,7 +15,7 @@ asymmetric token value
 class Constants(BaseConstants):
     name_in_url = 'dictator'
     players_per_group = None
-    num_rounds = 1
+    num_rounds = 2
 
     high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
@@ -140,8 +140,12 @@ class Player(BasePlayer):
 
 
 #######    PAGES   #########
-class Introduction(Page):
-    pass
+class Start(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
 
 
 class Offer(Page):
@@ -163,11 +167,13 @@ class Offer(Page):
             return dict(
                 pot_money=Constants.high_pot_money,
                 half_pot=Constants.high_half_pot,
+                # round_number=subsession.round_number,
             )
         else:
             return dict(
                 pot_money=Constants.low_pot_money,
                 half_pot=Constants.low_half_pot,
+                # round_number=subsession.round_number,
             )
 
 
@@ -296,7 +302,8 @@ class ProlificLink(Page):
         return player.round_number == Constants.num_rounds
 
 
-page_sequence = [Offer,
+page_sequence = [Start,
+                 Offer,
                  # ResultsWaitPage,
                  Results,
                  End,

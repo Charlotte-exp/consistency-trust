@@ -1,18 +1,33 @@
-{{ block title }}Interaction {{ subsession.round_number }}{{ endblock }}
+{{ block title }}
+
+Interaction {{ subsession.round_number }}
+
+{{ endblock }}
+
 {{ block content }}
 
-<h5>
-    Your decision
-</h5>
 <p>
-    Both you and the recipient have been endowed with <b>{{ half_pot }}</b> each.
-    You have the opportunity to take the money from the recipient, or to leave it.
+    {{ if subsession.round_number == 1 }}
+
+    {{ else }}
+        Remember, you are the active player.
+    {{ endif }}
+</p>
+<p>
+    Both you and the passive player have been endowed with <b>{{ half_pot }}</b> each.
+    You have the opportunity to take the endowment from the recipient, or to leave it.
+</p>
+
+<p>
+    As a reminder:
     <ul>
         <li>
-            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>.
+            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>,
+            and the payoff for the passive player will be <b>£0</b>
         </li>
         <li>
-            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>.
+            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>,
+            and the payoff for the passive player will be <b>{{ half_pot }}</b>
         </li>
     </ul>
 </p>
