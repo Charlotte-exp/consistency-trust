@@ -45,6 +45,8 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     condition = models.StringField()
+    num_failed_attempts = models.IntegerField(initial=0)
+    failed_too_many = models.BooleanField(initial=False)
 
     q1 = models.IntegerField(
             choices=[
@@ -140,16 +142,29 @@ class Welcome(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
 
-    def error_message(player, values):
-        if values['q1'] != 2:
-            return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
-        if values['q2'] != 3:
-            return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q3'] != 1:
-            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-        if values['q4'] != 3:
-            return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
+    # def error_message(player, values):
+    #     if values['q1'] != 2:
+    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q2'] != 3:
+    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q3'] != 1:
+    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q4'] != 3:
+    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
+    @staticmethod
+    def error_message(player: Player, values):
+        # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+        # but if you have many similar fields, this is more efficient.
+        solutions = dict(q1=2, q2=3, q3=1, q4=3)
+
+        # error_message can return a dict whose keys are field names and whose
+        # values are error messages
+        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+        # print('errors is', errors)
+        if errors:
+            player.num_failed_attempts += 1
+            return errors
 
 class Introduction(Page):
     pass
@@ -171,6 +186,20 @@ class InstruDictator(Page):
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
         if values['q8'] != 1:
             return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
+
+    @staticmethod
+    def error_message(player: Player, values):
+        # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+        # but if you have many similar fields, this is more efficient.
+        solutions = dict(q5=1, q6=2, q7=3, q8=1)
+
+        # error_message can return a dict whose keys are field names and whose
+        # values are error messages
+        errors = {f: 'Wrong' for f in solutions if values[f] != solutions[f]}
+        # print('errors is', errors)
+        if errors:
+            player.num_failed_attempts += 1
+            return errors
 
     def vars_for_template(player: Player):
         return dict(
