@@ -46,7 +46,6 @@ class Player(BasePlayer):
 
     condition = models.StringField()
     num_failed_attempts = models.IntegerField(initial=0)
-    failed_too_many = models.BooleanField(initial=False)
 
     q1 = models.IntegerField(
             choices=[
@@ -142,16 +141,6 @@ class Welcome(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
 
-    # def error_message(player, values):
-    #     if values['q1'] != 2:
-    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q2'] != 3:
-    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q3'] != 1:
-    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q4'] != 3:
-    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
-
     @staticmethod
     def error_message(player: Player, values):
         # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
@@ -176,16 +165,6 @@ class InstruDictator(Page):
     def get_form_fields(player: Player):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
         return ['q5', 'q6', 'q7', 'q8']
-
-    # def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
-    #     if values['q5'] != 1:
-    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q6'] != 2:
-    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q7'] != 3:
-    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q8'] != 1:
-    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
     @staticmethod
     def error_message(player: Player, values):

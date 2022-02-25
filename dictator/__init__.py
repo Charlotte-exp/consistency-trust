@@ -108,11 +108,6 @@ class Player(BasePlayer):
         verbose_name=''
     )
 
-    being_receiver = models.StringField(
-        choices=['Yes', 'No'],
-        verbose_name='Would you like to be the receiver for another dictator?',
-        widget=widgets.RadioSelect)
-
 
 #######   FUNCTIONS   #######
     def set_payoffs(player):
@@ -177,10 +172,6 @@ class Offer(Page):
             )
 
 
-# class ResultsWaitPage(WaitPage):
-#     player.set_payoffs()
-## why is it so fucking hard to call a function?? al the examples online use self! why did they fucking change it!!
-
 class Results(Page):
     """
     This is the only way I found to call this fucking function... ask Nik how these work and how it should be done
@@ -223,34 +214,7 @@ class End(Page):
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
         )
-
-    # def vars_for_template(player: Player):
-    #     opponent = player.get_others_in_group()[0]
-    #     print(sum([p.payoff for p in player.in_all_rounds()]))
-    #     print(sum([p.payoff for p in opponent.in_all_rounds()]))
-    #     p1 = player.group.get_player_by_id(1)
-    #     p2 = player.group.get_player_by_id(2)
-    #     return dict(
-    #         player_in_all_rounds=player.in_all_rounds(),
-    #         p1_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-    #         p2_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-    #         my_total_payoff=sum([p.payoff for p in p1.in_all_rounds()]),
-    #         opponent_total_payoff=sum([p.payoff for p in p2.in_all_rounds()]),
-    #         partner=opponent,
-    #         my_player_id=player.id_in_subsession,
-    #         opponent_id=opponent.id_in_subsession,
-    #     )
-
-
-# class BeingReceiver(Page):
-#     form_model = 'player'
-#     form_fields = ['being_receiver']
-#
-#     @staticmethod
-#     def is_displayed(player: Player):
-#         if player.round_number == Constants.num_rounds:
-#             return True
-
+    
 
 class Demographics(Page):
     """ This page displays survey box to record pp's demographics. it's just made of simple form fields. """
