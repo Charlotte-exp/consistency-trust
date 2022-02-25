@@ -91,10 +91,10 @@ class Player(BasePlayer):
 
     q5 = models.IntegerField(
         choices=[
-            [1, f"Either both players get {Constants.high_half_pot} or both players get {Constants.low_half_pot}."],
+            [1, f"Either both players get {Constants.low_half_pot} or both players get {Constants.high_half_pot}."],
             [2, f'Either both players get {Constants.low_half_pot*2} or both players get {Constants.high_half_pot*2}.'],
-            [3, f'Either the active player gets {Constants.high_half_pot} '
-                f'while the passive player gets {Constants.low_half_pot} or the other way around.']
+            [3, f'Either the active player gets {Constants.low_half_pot} '
+                f'while the passive player gets {Constants.high_half_pot} or the other way around.']
         ],
         verbose_name=f"What are the possible endowment sizes in a given interaction?",
         widget=widgets.RadioSelect
