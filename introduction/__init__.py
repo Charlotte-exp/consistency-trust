@@ -177,15 +177,15 @@ class InstruDictator(Page):
         """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
         return ['q5', 'q6', 'q7', 'q8']
 
-    def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
-        if values['q5'] != 1:
-            return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
-        if values['q6'] != 2:
-            return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-        if values['q7'] != 3:
-            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-        if values['q8'] != 1:
-            return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
+    # def error_message(player, values):  # it works but the message is wrong... it says question 2 and 3 when it should be question 1 and 2
+    #     if values['q5'] != 1:
+    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q6'] != 2:
+    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q7'] != 3:
+    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q8'] != 1:
+    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
     @staticmethod
     def error_message(player: Player, values):
@@ -195,7 +195,7 @@ class InstruDictator(Page):
 
         # error_message can return a dict whose keys are field names and whose
         # values are error messages
-        errors = {f: 'Wrong' for f in solutions if values[f] != solutions[f]}
+        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
         # print('errors is', errors)
         if errors:
             player.num_failed_attempts += 1
