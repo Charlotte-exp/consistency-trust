@@ -173,7 +173,7 @@ class Welcome(Page):
         if values['q3'] != 1:
             player.q3_failed_attempts += 1
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-        if values['q2'] != 3:
+        if values['q4'] != 3:
             player.q4_failed_attempts += 1
             return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
