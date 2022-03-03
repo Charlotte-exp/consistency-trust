@@ -15,7 +15,7 @@ class Constants(BaseConstants):
     session_time = 10
     participation_fee = cu(1)
 
-    high_half_pot = cu(0.50)
+    high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
 
     low_half_pot = cu(0.10)

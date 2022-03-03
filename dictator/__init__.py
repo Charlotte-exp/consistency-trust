@@ -17,10 +17,10 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
 
-    high_half_pot = cu(0.50)
+    high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
 
-    low_half_pot = cu(0.10)
+    low_half_pot = cu(1)
     low_pot_money = low_half_pot * 2
 
     likelihood = 1/3
