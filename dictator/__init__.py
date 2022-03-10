@@ -15,32 +15,46 @@ asymmetric token value
 class Constants(BaseConstants):
     name_in_url = 'dictator'
     players_per_group = None
-    num_rounds = 2
+    num_rounds = 1
 
-    high_pot_money = cu(6)
-    high_half_pot = high_pot_money / 2
+    high_half_pot = cu(1)
+    high_pot_money = high_half_pot * 2
 
-    low_pot_money = cu(2)
-    low_half_pot = low_pot_money / 2
+    low_half_pot = cu(1)
+    low_pot_money = low_half_pot * 2
 
-    likelihood = 0.5
-    values = [1, 2]
+    likelihood = 1/3
+    values = [cu(0.10), cu(0.5), cu(1)]
 
 
 class Subsession(BaseSubsession):
     pass
 
 
-# def creating_session(subsession: Subsession):
-#
-#     treatments = itertools.cycle(['high-high', 'low-low'])
-#     for player in subsession.get_players():
-#         player.condition = next(treatments)
-#         print('treatment', player.condition)
-#
-#     # for p in subsession.get_players():
-#     #     p.participant.conversion = random.choice(Constants.values)
-#     #     print(p.participant.conversion)
+# def get_value(subsession: Subsession):
+#     """
+#     Man don't know how to do this
+#     """
+#     value = Constants.values
+#     proba = Constants.likelihood
+#     if proba < random.random():
+#         endowment_value = value[0]
+#         return endowment_value
+
+
+def creating_session(subsession: Subsession):
+
+    treatments = itertools.cycle(['high', 'low'])
+    for p in subsession.get_players():
+        p.condition = next(treatments)
+        p.participant.condition = p.condition
+        print('treatment', p.condition, p.participant.condition)
+
+        # steaks = subsession.get_value()
+        # for p in subsession.get_players():
+        #     p.participant.stakes = steaks
+        #     p.stakes = p.participant.stakes
+        #     print('stakes', p.stakes, p.participant.stakes)
 
 
 class Group(BaseGroup):
@@ -49,9 +63,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    title = models.StringField()
-    # condition = models.StringField()
-    # conversion = models.FloatField()
+    condition = models.StringField()
+    # stakes = models.StringField()
     receiver_payoff = models.CurrencyField()
 
     decision = models.CurrencyField(
@@ -95,17 +108,12 @@ class Player(BasePlayer):
         verbose_name=''
     )
 
-    being_receiver = models.StringField(
-        choices=['Yes', 'No'],
-        verbose_name='Would you like to be the receiver for another dictator?',
-        widget=widgets.RadioSelect)
-
 
 #######   FUNCTIONS   #######
     def set_payoffs(player):
         """  """
         # receiver = player.receiver_payoff
-        if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high':
             if player.decision == 0:
                 player.payoff = Constants.high_pot_money
                 player.receiver_payoff = 0
@@ -125,9 +133,14 @@ class Player(BasePlayer):
             print('Receiver payoff:', player.receiver_payoff)
 
 
+
 #######    PAGES   #########
-class Introduction(Page):
-    pass
+class Start(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
 
 
 class Offer(Page):
@@ -144,21 +157,20 @@ class Offer(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high-high':
+        """  """
+        if player.participant.condition == 'high':
             return dict(
                 pot_money=Constants.high_pot_money,
                 half_pot=Constants.high_half_pot,
+                # round_number=subsession.round_number,
             )
         else:
             return dict(
                 pot_money=Constants.low_pot_money,
                 half_pot=Constants.low_half_pot,
+                # round_number=subsession.round_number,
             )
 
-
-# class ResultsWaitPage(WaitPage):
-#     player.set_payoffs()
-## why is it so fucking hard to call a function?? al the examples online use self! why did they fucking change it!!
 
 class Results(Page):
     """
@@ -173,7 +185,7 @@ class Results(Page):
     #     )
 
     def vars_for_template(player: Player):
-        if player.participant.condition == 'high-high':
+        if player.participant.condition == 'high':
             return dict(
                 call=player.set_payoffs(),
                 payoff=player.payoff,
@@ -189,6 +201,7 @@ class Results(Page):
             )
 
 
+
 class End(Page):
 
     @staticmethod
@@ -201,34 +214,7 @@ class End(Page):
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
         )
-
-    # def vars_for_template(player: Player):
-    #     opponent = player.get_others_in_group()[0]
-    #     print(sum([p.payoff for p in player.in_all_rounds()]))
-    #     print(sum([p.payoff for p in opponent.in_all_rounds()]))
-    #     p1 = player.group.get_player_by_id(1)
-    #     p2 = player.group.get_player_by_id(2)
-    #     return dict(
-    #         player_in_all_rounds=player.in_all_rounds(),
-    #         p1_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-    #         p2_total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-    #         my_total_payoff=sum([p.payoff for p in p1.in_all_rounds()]),
-    #         opponent_total_payoff=sum([p.payoff for p in p2.in_all_rounds()]),
-    #         partner=opponent,
-    #         my_player_id=player.id_in_subsession,
-    #         opponent_id=opponent.id_in_subsession,
-    #     )
-
-
-# class BeingReceiver(Page):
-#     form_model = 'player'
-#     form_fields = ['being_receiver']
-#
-#     @staticmethod
-#     def is_displayed(player: Player):
-#         if player.round_number == Constants.num_rounds:
-#             return True
-
+    
 
 class Demographics(Page):
     """ This page displays survey box to record pp's demographics. it's just made of simple form fields. """
@@ -243,7 +229,7 @@ class Demographics(Page):
 
 class CommentBox(Page):
     form_model = 'player'
-    form_fields = ['comment_box', 'being_receiver']
+    form_fields = ['comment_box']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -280,7 +266,8 @@ class ProlificLink(Page):
         return player.round_number == Constants.num_rounds
 
 
-page_sequence = [Offer,
+page_sequence = [Start,
+                 Offer,
                  # ResultsWaitPage,
                  Results,
                  End,

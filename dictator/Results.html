@@ -1,13 +1,16 @@
-{{ block title }}Results{{ endblock }}
+{{ block title }}Interaction {{ subsession.round_number }} {{ endblock }}
 {{ block content }}
 
+<h5>
+    Results
+</h5>
 
     <p>
         {{ if player.decision == 0 }}
             You decided to take the {{ half_pot }} of your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ else }}
-            You decided to leave the {{ half_pot }} your partner.
+            You decided to leave the {{ half_pot }} of your partner.
             Your payoff in this round is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>

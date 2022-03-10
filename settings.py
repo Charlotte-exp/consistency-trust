@@ -18,7 +18,9 @@ SESSION_CONFIGS = [
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
-        name='survey', app_sequence=['survey', 'payment_info'], num_demo_participants=1
+        name='survey',
+        app_sequence=['survey', 'payment_info'],
+        num_demo_participants=1
     ),
 ]
 
@@ -28,7 +30,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=2.00, doc=""
+    real_world_currency_per_point=1.00, participation_fee=1.00, doc=""
 )
 
 SESSION_FIELDS = ['past_groups', ]
