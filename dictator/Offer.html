@@ -1,48 +1,29 @@
 {{ block title }}
 
-Interaction {{ subsession.round_number }}
+Decision
 
 {{ endblock }}
 
 {{ block content }}
 
 <p>
-    {{ if subsession.round_number == 1 }}
-
-    {{ else }}
-        Remember, you are the active player.
-    {{ endif }}
-</p>
-<p>
-    Both you and the passive player have been endowed with <b>{{ half_pot }}</b> each.
-    You have the opportunity to take the endowment from the recipient, or to leave it.
+    Another participant will be given {{ half_pot }}. However, you have the option to take this money, in which case
+    they will not receive the money.
 </p>
 
 <p>
-    As a reminder:
-    <ul>
-        <li>
-            If you take it, your total payoff for this interaction will be <b>{{ pot_money }}</b>,
-            and the payoff for the passive player will be <b>£0</b>
-        </li>
-        <li>
-            If you leave it, your total payoff for this interaction will be <b>{{ half_pot }}</b>,
-            and the payoff for the passive player will be <b>{{ half_pot }}</b>
-        </li>
-    </ul>
-</p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
-            Do you want to take the {{ half_pot }} or leave it?
+            Do you want to take the other participant's {{ half_pot }}?
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="decision" value="1" class="btn btn-primary btn-large">Leave</button>
+                <button name="decision" value="0" class="btn btn-primary btn-large">Take</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="decision" value="0" class="btn btn-primary btn-large">Take</button>
+                <button name="decision" value="1" class="btn btn-primary btn-large">Don't take</button>
             </div>
         </div>
     </div>

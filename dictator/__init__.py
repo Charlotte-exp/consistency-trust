@@ -108,6 +108,10 @@ class Player(BasePlayer):
         verbose_name=''
     )
 
+    strategy_box = models.LongStringField(
+        verbose_name=''
+    )
+
 
 #######   FUNCTIONS   #######
     def set_payoffs(player):
@@ -237,6 +241,16 @@ class CommentBox(Page):
             return True
 
 
+class StrategyBox(Page):
+    form_model = 'player'
+    form_fields = ['strategy_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == Constants.num_rounds:
+            return True
+
+
 class Payment(Page):
 
     @staticmethod
@@ -266,12 +280,13 @@ class ProlificLink(Page):
         return player.round_number == Constants.num_rounds
 
 
-page_sequence = [Start,
+page_sequence = [# Start,
                  Offer,
                  # ResultsWaitPage,
-                 Results,
+                 # Results,
                  End,
                  Demographics,
+                 StrategyBox,
                  CommentBox,
                  Payment,
                  ProlificLink]
