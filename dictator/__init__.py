@@ -70,7 +70,7 @@ class Player(BasePlayer):
     decision = models.CurrencyField(
         choices=[
             [0, f'Take'],  # defect
-            [1, f'Leave'],  # cooperate
+            [1, f"Don't take"],  # cooperate
         ],
         doc="""This player's decision""",
         verbose_name='Your decision:',
@@ -151,15 +151,6 @@ class Offer(Page):
     form_model = 'player'
     form_fields = ['decision']
 
-    # def vars_for_template(player: Player):
-    #     return dict(
-    #         condition_sa_mere=player.participant.condition,
-    #         high_pot=Constants.high_pot_money,
-    #         low_pot=Constants.low_pot_money,
-    #         high_half_pot=Constants.high_pot_money/2,
-    #         low_half_pot=Constants.low_pot_money/2,
-    #     )
-
     def vars_for_template(player: Player):
         """  """
         if player.participant.condition == 'high':
@@ -180,13 +171,6 @@ class Results(Page):
     """
     This is the only way I found to call this fucking function... ask Nik how these work and how it should be done
     """
-    # def vars_for_template(player: Player):
-    #     dictator = player.group.get_player_by_id(1)
-    #     return dict(
-    #         call=player.set_payoffs(),
-    #         payoff=player.payoff,
-    #         my_player_id=player.id_in_subsession,
-    #     )
 
     def vars_for_template(player: Player):
         if player.participant.condition == 'high':
@@ -283,8 +267,8 @@ class ProlificLink(Page):
 page_sequence = [# Start,
                  Offer,
                  # ResultsWaitPage,
-                 # Results,
-                 End,
+                 Results,
+                 # End,
                  Demographics,
                  StrategyBox,
                  CommentBox,
