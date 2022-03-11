@@ -12,10 +12,10 @@ Decision
 
     <p>
         {{ if player.decision == 0 }}
-            You decided to take the {{ half_pot }} of your partner.
+            You decided not to take the {{ pot_money }} of the other participant.
             Your bonus is of <strong>{{ payoff }}</strong>.
         {{ else }}
-            You decided to leave the {{ half_pot }} of your partner.
+            You decided not to take the {{ pot_money }} of the other participant.
             Your bonus is of <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>

@@ -17,14 +17,14 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
 
-    high_half_pot = cu(1)
-    high_pot_money = high_half_pot * 2
+    high_pot_money = cu(1)
+    high_loser = cu(0)
 
-    low_half_pot = cu(1)
-    low_pot_money = low_half_pot * 2
+    low_pot_money = cu(0.1)
+    low_loser = cu(0)
 
-    likelihood = 1/3
-    values = [cu(0.10), cu(0.5), cu(1)]
+    # likelihood = 1/3
+    # values = [cu(0.10), cu(0.5), cu(1)]
 
 
 class Subsession(BaseSubsession):
@@ -120,19 +120,19 @@ class Player(BasePlayer):
         if player.participant.condition == 'high':
             if player.decision == 0:
                 player.payoff = Constants.high_pot_money
-                player.receiver_payoff = 0
+                player.receiver_payoff = Constants.high_loser
             else:
-                player.payoff = Constants.high_half_pot
-                player.receiver_payoff = Constants.high_half_pot
+                player.payoff = Constants.high_loser
+                player.receiver_payoff = Constants.high_pot_money
             print('Dictator payoff:', player.payoff)
             print('Receiver payoff:', player.receiver_payoff)
         else:
             if player.decision == 0:
                 player.payoff = Constants.low_pot_money
-                player.receiver_payoff = 0
+                player.receiver_payoff = Constants.low_loser
             else:
-                player.payoff = Constants.low_half_pot
-                player.receiver_payoff = Constants.low_half_pot
+                player.payoff = Constants.low_loser
+                player.receiver_payoff = Constants.low_pot_money
             print('Dictator payoff:', player.payoff)
             print('Receiver payoff:', player.receiver_payoff)
 
@@ -156,13 +156,13 @@ class Offer(Page):
         if player.participant.condition == 'high':
             return dict(
                 pot_money=Constants.high_pot_money,
-                half_pot=Constants.high_half_pot,
+                loser=Constants.high_loser,
                 # round_number=subsession.round_number,
             )
         else:
             return dict(
                 pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_half_pot,
+                loser=Constants.low_loser,
                 # round_number=subsession.round_number,
             )
 
@@ -178,14 +178,14 @@ class Results(Page):
                 call=player.set_payoffs(),
                 payoff=player.payoff,
                 pot_money=Constants.high_pot_money,
-                half_pot=Constants.high_half_pot,
+                loser=Constants.high_loser,
             )
         else:
             return dict(
                 call=player.set_payoffs(),
                 payoff=player.payoff,
                 pot_money=Constants.low_pot_money,
-                half_pot=Constants.low_half_pot,
+                loser=Constants.low_loser,
             )
 
 
