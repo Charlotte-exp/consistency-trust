@@ -13,7 +13,6 @@ class Constants(BaseConstants):
     num_rounds = 1
     num_interactions = 1
     session_time = 5
-    participation_fee = cu(0.50)
 
     high_half_pot = cu(1)
     high_pot_money = high_half_pot * 2
@@ -141,7 +140,12 @@ class Player(BasePlayer):
 
 #######   PAGES   #######
 class Consent(Page):
-    pass
+
+    def vars_for_template(player: Player):
+        session = player.session
+        return dict(
+            participation_fee=session.config['participation_fee'],
+        )
 
 
 class Welcome(Page):

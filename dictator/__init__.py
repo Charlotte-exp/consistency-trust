@@ -202,17 +202,6 @@ class End(Page):
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
         )
-    
-
-class Demographics(Page):
-    """ This page displays survey box to record pp's demographics. it's just made of simple form fields. """
-    form_model = 'player'
-    form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
-
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == Constants.num_rounds:
-            return True
 
 
 class CommentBox(Page):
@@ -228,6 +217,17 @@ class CommentBox(Page):
 class StrategyBox(Page):
     form_model = 'player'
     form_fields = ['strategy_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == Constants.num_rounds:
+            return True
+
+
+class Demographics(Page):
+    """ This page displays survey box to record pp's demographics. it's just made of simple form fields. """
+    form_model = 'player'
+    form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -269,8 +269,8 @@ page_sequence = [# Start,
                  # ResultsWaitPage,
                  Results,
                  # End,
-                 Demographics,
                  StrategyBox,
                  CommentBox,
+                 Demographics,
                  Payment,
                  ProlificLink]

@@ -1,7 +1,5 @@
 {{ block title }}
-
-Decision
-
+    The study
 {{ endblock }}
 
 {{ block content }}
@@ -12,11 +10,11 @@ Decision
 
     <p>
         {{ if player.decision == 0 }}
-            You decided not to take the {{ pot_money }} of the other participant.
-            Your bonus is of <strong>{{ payoff }}</strong>.
+            You decided to take the {{ pot_money }} of the other participant.
+            Your bonus is <strong>{{ payoff }}</strong>.
         {{ else }}
             You decided not to take the {{ pot_money }} of the other participant.
-            Your bonus is of <strong>{{ payoff }}</strong>.
+            Your bonus is <strong>{{ payoff }}</strong>.
         {{ endif }}
     </p>
 
