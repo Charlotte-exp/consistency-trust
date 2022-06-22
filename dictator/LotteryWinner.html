@@ -1,0 +1,34 @@
+{{ block title }}
+    Lottery
+{{ endblock }}
+
+{% block content %}
+
+{{ if player.lucky_winner == 1 }}
+<p>
+    Congratulations! You you are the participant who won the lottery draw.
+    This means you will get a bonus based on your decision.
+</p>
+    {{ if player.decision == 0 }}
+    <p>
+        You decided to take the money,
+        as such your bonus is {{ pot_money }} and the other participant will get nothing.
+    </p>
+    {{ else }}
+    <p>
+        You decided not to take the money,
+        as such your bonus is {{ loser }} and the other participant will receive {{ pot_money }}.
+    </p>
+    {{ endif }}
+{{ else }}
+    <p>
+        Unfortunately you were not the winner this time.
+        You will still receive you participation payment but no bonus.
+    </p>
+{{ endif }}
+
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+
+{% endblock %}

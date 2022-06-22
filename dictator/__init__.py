@@ -2,6 +2,7 @@ from otree.api import *
 
 import itertools
 import random
+import numpy as np
 
 
 doc = """
@@ -20,7 +21,7 @@ class Constants(BaseConstants):
     high_pot_money = cu(1)
     high_loser = cu(0)
 
-    low_pot_money = cu(0.1)
+    low_pot_money = cu(10)
     low_loser = cu(0)
 
     # likelihood = 1/3
@@ -45,10 +46,15 @@ class Subsession(BaseSubsession):
 def creating_session(subsession: Subsession):
 
     treatments = itertools.cycle(['high', 'low'])
+    random_number = itertools.cycle([0, 1])
     for p in subsession.get_players():
         p.condition = next(treatments)
         p.participant.condition = p.condition
         print('treatment', p.condition, p.participant.condition)
+
+        p.lucky_winner = next(random_number)
+        p.participant.lucky_winner = p.lucky_winner
+        print('winner', p.lucky_winner, p.participant.lucky_winner)
 
         # steaks = subsession.get_value()
         # for p in subsession.get_players():
@@ -66,6 +72,8 @@ class Player(BasePlayer):
     condition = models.StringField()
     # stakes = models.StringField()
     receiver_payoff = models.CurrencyField()
+
+    lucky_winner = models.IntegerField(initial=0)
 
     decision = models.CurrencyField(
         choices=[
@@ -235,6 +243,32 @@ class Demographics(Page):
             return True
 
 
+class LotteryWinner(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == Constants.num_rounds:
+            return True
+
+    def vars_for_template(player: Player):
+        participant = player.participant
+        session = player.session
+        if player.participant.condition == 'high':
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.high_pot_money,
+                loser=Constants.high_loser,
+            )
+        else:
+            return dict(
+                call=player.set_payoffs(),
+                payoff=player.payoff,
+                pot_money=Constants.low_pot_money,
+                loser=Constants.low_loser,
+            )
+
+
 class Payment(Page):
 
     @staticmethod
@@ -245,11 +279,22 @@ class Payment(Page):
     def vars_for_template(player: Player):
         participant = player.participant
         session = player.session
-        return dict(
-            bonus=participant.payoff.to_real_world_currency(session),
-            participation_fee=session.config['participation_fee'],
-            final_payment=participant.payoff_plus_participation_fee(),
-        )
+        if player.participant.condition == 'high':
+            return dict(
+                pot_money=Constants.high_pot_money,
+                loser=Constants.high_loser,
+                bonus=participant.payoff.to_real_world_currency(session),
+                participation_fee=session.config['participation_fee'],
+                final_payment=participant.payoff_plus_participation_fee(),
+            )
+        else:
+            return dict(
+                pot_money=Constants.low_pot_money,
+                loser=Constants.low_loser,
+                bonus=participant.payoff.to_real_world_currency(session),
+                participation_fee=session.config['participation_fee'],
+                final_payment=participant.payoff_plus_participation_fee(),
+            )
 
 
 class ProlificLink(Page):
@@ -269,8 +314,9 @@ page_sequence = [# Start,
                  # ResultsWaitPage,
                  Results,
                  # End,
-                 StrategyBox,
-                 CommentBox,
-                 Demographics,
+                 # StrategyBox,
+                 # CommentBox,
+                 # Demographics,
+                 LotteryWinner,
                  Payment,
                  ProlificLink]

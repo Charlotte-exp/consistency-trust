@@ -4,14 +4,29 @@
 
 {% block content %}
 
+{{ if player.lucky_winner == 1 }}
 <div class="panel panel-default" style="margin-bottom:10px">
     <div class="panel-body">
-        The study is now over. <strong>Thank you for participating!</strong>
-        Below is your total score and the money you earned.
+        <p>
+            <b>Congratulations!</b> You you are the participant who won the lottery draw.
+            This means you will get a bonus based on your decision.
+        </p>
+            {{ if player.decision == 0 }}
+            <p>
+                You decided to take the money,
+                as such your bonus is {{ pot_money }} and the other participant will get nothing.
+            </p>
+            {{ else }}
+            <p>
+                You decided not to take the money,
+                as such your bonus is {{ loser }} and the other participant will receive {{ pot_money }}.
+            </p>
+            {{ endif }}
         <p> </p>
         <hr size="6" width="50%" align="center" color="black">
     </div>
 </div>
+
 
 <div class="panel panel-default" style="margin-bottom:10px">
     <div class="panel-body">
@@ -22,11 +37,47 @@
             </tr>
             <tr>
                 <th>Participation payment <span style="font-weight:normal">(paid to you immediately)</span></th>
-                <td align="right"> {{ participation_fee }}</td>
+                <td align="right">{{ participation_fee }}</td>
             </tr>
         </table>
     </div>
 </div>
+
+{{ else }}
+
+<div class="panel panel-default" style="margin-bottom:10px">
+    <div class="panel-body">
+        <p>
+            Unfortunately you were not the winner this time.
+            You will still receive you participation payment but no bonus.
+        </p>
+        <p> </p>
+        <hr size="6" width="50%" align="center" color="black">
+    </div>
+</div>
+
+
+<div class="panel panel-default" style="margin-bottom:10px">
+    <div class="panel-body">
+        <table style="width:100%">
+            <tr>
+                <th>Bonus <span style="font-weight:normal">(paid to you in 3-5 days)</span></th>
+                <td align="right">N/A</td>
+            </tr>
+            <tr>
+                <th>Participation payment</th>
+                <td align="right">{{ participation_fee }}</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+{{ endif }}
+
+<p>
+    The study is now over. <strong>Thank you for participating!</strong>
+    Below is your total score and the money you earned.
+</p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
@@ -45,5 +96,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}
