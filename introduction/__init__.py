@@ -231,7 +231,7 @@ class InstruDictator(Page):
 
 
 page_sequence = [Consent,
-                 # Welcome,
+                 Welcome,
                  # Introduction,
-                 # InstruDictator,
+                 InstruDictator,
 ]

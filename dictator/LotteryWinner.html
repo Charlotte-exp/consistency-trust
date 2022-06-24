@@ -1,12 +1,12 @@
 {{ block title }}
-    Lottery
+    Lottery results
 {{ endblock }}
 
 {% block content %}
 
 {{ if player.lucky_winner == 1 }}
 <p>
-    Congratulations! You you are the participant who won the lottery draw.
+    <b><h3>Congratulations!</h3></b> You you are the participant who won the lottery draw.
     This means you will get a bonus based on your decision.
 </p>
     {{ if player.decision == 0 }}

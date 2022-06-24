@@ -47,14 +47,20 @@ def creating_session(subsession: Subsession):
 
     treatments = itertools.cycle(['high', 'low'])
     random_number = itertools.cycle([0, 1])
+    chosen_one = random.choice(subsession.get_players())
+    chosen_one.lucky_winner = 1
+    print('winner', chosen_one)
+    print(subsession.get_players()[1])
     for p in subsession.get_players():
         p.condition = next(treatments)
         p.participant.condition = p.condition
         print('treatment', p.condition, p.participant.condition)
 
-        p.lucky_winner = next(random_number)
-        p.participant.lucky_winner = p.lucky_winner
-        print('winner', p.lucky_winner, p.participant.lucky_winner)
+        # p.lucky_winner = next(random_number)
+        # p.participant.lucky_winner = p.lucky_winner
+        # print('winner', p.lucky_winner, p.participant.lucky_winner)
+        # print(subsession.get_players()[1])
+
 
         # steaks = subsession.get_value()
         # for p in subsession.get_players():
@@ -64,7 +70,8 @@ def creating_session(subsession: Subsession):
 
 
 class Group(BaseGroup):
-    pass
+
+    lucky_winner = models.IntegerField(initial=0)
 
 
 class Player(BasePlayer):
