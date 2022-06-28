@@ -17,11 +17,11 @@ SESSION_CONFIGS = [
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
     ),
-    dict(
-        name='survey',
-        app_sequence=['survey', 'payment_info'],
-        num_demo_participants=1
-    ),
+    # dict(
+    #     name='survey',
+    #     app_sequence=['survey', 'payment_info'],
+    #     num_demo_participants=1
+    # ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
