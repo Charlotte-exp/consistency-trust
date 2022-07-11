@@ -1,10 +1,26 @@
 {{ block title }}
-    Page title
+    Results
 {{ endblock }}
 
 {{ block content }}
+    <p>
+        {{ if player.role == Receiver }}
+        You chose {{ player.choice }}.
+        {{ else }}
+        The receiver chose {{ player.choice }}.
+        {{ endif }}
+    </p>
 
-    {{ next_button }}
+    <p>
+        This means that you get {{ player.payoff }}.
+    </p>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
 {{ endblock }}
 
 

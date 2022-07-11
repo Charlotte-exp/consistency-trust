@@ -1,10 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{{ block title }}
 
-</body>
-</html>
+Choice
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    Here are the two boxes with your bonuses inside.
+</p>
+
+<p>
+    The sender knows what is inside the boxes. His message is to open:
+    {{ sender_message }}
+</p>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which box do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="1" class="btn btn-primary btn-large">Box A</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="0" class="btn btn-primary btn-large">Box B</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ endblock }}

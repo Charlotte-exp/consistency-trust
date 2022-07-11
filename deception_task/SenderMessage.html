@@ -1,0 +1,50 @@
+{{ block title }}
+
+Message
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    Below are the payoff for both you and the receiver based on which box is chosen.
+</p>
+
+<p>
+    If the receiver choses Box A:
+    <ul>
+        <li>
+            <b>{{ C.boxA_sender }} for you.</b>
+        </li>
+        <li>
+            <b>{{ C.boxA_receiver }} for the receiver.</b>
+        </li>
+    </ul>
+    If the receiver choses Box B:
+    <ul>
+        <li>
+            <b>{{ C.boxA_sender }} for you.</b>
+        </li>
+        <li>
+            <b>{{ C.boxA_receiver }} for the receiver.</b>
+        </li>
+    </ul>
+</p>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which message would you like to send?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="message" value="1" class="btn btn-primary btn-large">Box A</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="message" value="0" class="btn btn-primary btn-large">Box B</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ endblock }}
