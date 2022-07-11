@@ -1,5 +1,6 @@
 from otree.api import *
 
+import itertools
 
 doc = """
 Your app description
@@ -128,11 +129,11 @@ class SenderMessage(Page):
         """  """
         if player.participant.condition == 'high':
             return dict(
-                sender_message=player.receiver.message
+                sender_message=player.message.field_maybe_none()
             )
         else:
             return dict(
-                sender_message=player.receiver.message
+                sender_message=player.message.field_maybe_none()
             )
 
 
@@ -157,11 +158,11 @@ class ReceiverChoice(Page):
         """  """
         if player.participant.condition == 'high':
             return dict(
-                sender_message=player.receiver.message
+                sender_message=player.message
             )
         else:
             return dict(
-                sender_message=player.receiver.message
+                sender_message=player.message
             )
 
 
