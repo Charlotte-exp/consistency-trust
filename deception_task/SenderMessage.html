@@ -10,26 +10,36 @@ Message
     Below are the payoff for both you and the receiver based on which box is chosen.
 </p>
 
-<p>
-    If the receiver choses Box A:
-    <ul>
-        <li>
-            <b>{{ C.boxA_sender }} for you.</b>
-        </li>
-        <li>
-            <b>{{ C.boxA_receiver }} for the receiver.</b>
-        </li>
-    </ul>
-    If the receiver choses Box B:
-    <ul>
-        <li>
-            <b>{{ C.boxA_sender }} for you.</b>
-        </li>
-        <li>
-            <b>{{ C.boxA_receiver }} for the receiver.</b>
-        </li>
-    </ul>
-</p>
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                If the receiver choses Box A:
+                <ul>
+                    <li>
+                        <b>{{ C.boxA_sender }} for you.</b>
+                    </li>
+                    <li>
+                        <b>{{ C.boxA_receiver }} for the receiver.</b>
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                If the receiver choses Box B:
+                <ul>
+                    <li>
+                        <b>{{ C.boxB_sender }} for you.</b>
+                    </li>
+                    <li>
+                        <b>{{ C.boxB_receiver }} for the receiver.</b>
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
 
 <div class="card bg-light instructions">
     <div class="card-body">

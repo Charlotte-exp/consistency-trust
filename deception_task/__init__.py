@@ -9,7 +9,7 @@ Your app description
 
 class C(BaseConstants):
     NAME_IN_URL = 'deception_task'
-    PLAYERS_PER_GROUP = None
+    PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
 
     SENDER_ROLE = 'Sender'
@@ -36,7 +36,8 @@ def creating_session(subsession: Subsession):
 
 class Group(BaseGroup):
 
-    choice = models.CurrencyField(
+    choice = models.IntegerField(
+        initial=2,
         choices=[
             [0, f'Box A'],
             [1, f'Box B'],
@@ -50,9 +51,9 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     condition = models.StringField()
-    message = models.StringField()
+    message = models.StringField(initial='')
 
-    choice = models.CurrencyField(
+    choice = models.IntegerField(
         choices=[
             [0, f'Box A'],
             [1, f'Box B'],
@@ -107,6 +108,10 @@ def set_payoffs(group: Group):
         sender.payoff = C.boxB_sender
 
 
+# def set_message(player: Player):
+#     if player.message == 'Box A':
+#         return print("whatever")
+
     # def set_payoff(player):
     #     if player.recevier.choice == 'Box A':
     #         player.receiver.payoff = C.boxA_receiver
@@ -129,19 +134,19 @@ class SenderMessage(Page):
         """  """
         if player.participant.condition == 'high':
             return dict(
-                sender_message=player.message.field_maybe_none()
+                sender_message=player.message
             )
         else:
             return dict(
-                sender_message=player.message.field_maybe_none()
+                sender_message=player.message
             )
 
 
 class MessageWaitPage(WaitPage):
 
-    @staticmethod
-    def is_displayed(player):
-        return player.role == C.RECEIVER_ROLE
+    # @staticmethod
+    # def is_displayed(player):
+    #     return player.role == C.RECEIVER_ROLE
 
     body_text = "Please wait for the Sender to send his message."
 
@@ -169,19 +174,20 @@ class ReceiverChoice(Page):
 class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
 
-    @staticmethod
-    def is_displayed(player):
-        return player.role == C.SENDER_ROLE
+    # @staticmethod
+    # def is_displayed(player):
+    #     return player.role == C.SENDER_ROLE
 
     body_text = "Please wait for the Receiver to make their choice."
 
 
 class Results(Page):
 
-    def vars_for_template(player: Player):
+    def vars_for_template(group: Group):
         """  """
-        if player.receiver.choice == 'Box A':
+        if group.choice == 'Box A':
             return dict(
+                role=player.role,  # so how tf am I supposed to have a mix of group and player arguments??
                 receiver_payoff=C.boxA_sender,
                 sender_payoff=C.boxA_receiver,
             )
@@ -194,10 +200,10 @@ class Results(Page):
 
 class End(Page):
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == C.num_rounds:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.round_number == C.num_rounds:
+    #         return True
 
     def vars_for_template(player: Player):
         return dict(
@@ -211,28 +217,28 @@ class Demographics(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == C.num_rounds:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.round_number == C.num_rounds:
+    #         return True
 
 
 class CommentBox(Page):
     form_model = 'player'
     form_fields = ['comment_box']
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == C.num_rounds:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.round_number == C.num_rounds:
+    #         return True
 
 
 class Payment(Page):
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == C.num_rounds:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.round_number == C.num_rounds:
+    #         return True
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -250,17 +256,18 @@ class ProlificLink(Page):
     There is a short text and the link in case it is not automatic.
     """
 
-    @staticmethod
-    def is_displayed(player: Player):
-        """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
-        return player.round_number == C.num_rounds
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
+    #     return player.round_number == C.num_rounds
 
 
 page_sequence = [SenderMessage,
+                 MessageWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
                  Results,
-                 End,
+                 # End,
                  Demographics,
                  CommentBox,
                  Payment,
