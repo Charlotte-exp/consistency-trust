@@ -35,31 +35,29 @@ def creating_session(subsession: Subsession):
 
 
 class Group(BaseGroup):
-
-    choice = models.IntegerField(
-        initial=2,
-        choices=[
-            [0, f'Box A'],
-            [1, f'Box B'],
-        ],
-        doc="""This player's decision""",
-        verbose_name='Your decision:',
-        widget=widgets.RadioSelect
-    )
+    pass
+    # choice = models.StringField(
+    #     initial='',
+    #     choices=['Box A', 'Box B'],
+    #     doc="""This player's decision""",
+    #     verbose_name='Your choice:',
+    #     widget=widgets.RadioSelect
+    # )
 
 
 class Player(BasePlayer):
 
     condition = models.StringField()
-    message = models.StringField(initial='')
+    message = models.StringField(
+        initial='',
+        choices=['Box A', 'Box B'],
+    )
 
-    choice = models.IntegerField(
-        choices=[
-            [0, f'Box A'],
-            [1, f'Box B'],
-        ],
+    choice = models.StringField(
+        initial='',
+        choices=['Box A', 'Box B'],
         doc="""This player's decision""",
-        verbose_name='Your decision:',
+        verbose_name='Your choice:',
         widget=widgets.RadioSelect
     )
 
@@ -97,10 +95,14 @@ class Player(BasePlayer):
 
 ########  Functions #######
 
+def other_player(player: Player):
+    return player.get_others_in_group()[0]
+
+
 def set_payoffs(group: Group):
     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
     sender = group.get_player_by_role(C.SENDER_ROLE)
-    if group.choice == 'Box A':
+    if receiver.choice == 'Box A':
         receiver.payoff = C.boxA_receiver
         sender.payoff = C.boxA_sender
     else:
@@ -130,17 +132,6 @@ class SenderMessage(Page):
     def is_displayed(player):
         return player.role == C.SENDER_ROLE
 
-    def vars_for_template(player: Player):
-        """  """
-        if player.participant.condition == 'high':
-            return dict(
-                sender_message=player.message
-            )
-        else:
-            return dict(
-                sender_message=player.message
-            )
-
 
 class MessageWaitPage(WaitPage):
 
@@ -161,14 +152,17 @@ class ReceiverChoice(Page):
 
     def vars_for_template(player: Player):
         """  """
-        if player.participant.condition == 'high':
-            return dict(
-                sender_message=player.message
-            )
-        else:
-            return dict(
-                sender_message=player.message
-            )
+        me = player
+        partner = other_player(me)
+        return dict(sender_message=partner.message)
+        # if player.participant.condition == 'high':
+        #     return dict(
+        #         sender_message=player.message
+        #     )
+        # else:
+        #     return dict(
+        #         sender_message=player.message
+        #     )
 
 
 class ResultsWaitPage(WaitPage):
@@ -183,19 +177,40 @@ class ResultsWaitPage(WaitPage):
 
 class Results(Page):
 
-    def vars_for_template(group: Group):
+    def vars_for_template(player: Player):
         """  """
-        if group.choice == 'Box A':
-            return dict(
-                role=player.role,  # so how tf am I supposed to have a mix of group and player arguments??
-                receiver_payoff=C.boxA_sender,
-                sender_payoff=C.boxA_receiver,
-            )
+        if player.role == C.RECEIVER_ROLE:
+            if player.choice == 'Box A':
+                return dict(
+                    # role=player.role,
+                    choice=player.choice,
+                    receiver_payoff=C.boxA_sender,
+                    sender_payoff=C.boxA_receiver,
+                )
+            else:
+                return dict(
+                    # role=player.role,
+                    choice=player.choice,
+                    receiver_payoff=C.boxB_sender,
+                    sender_payoff=C.boxB_receiver,
+                )
         else:
-            return dict(
-                receiver_payoff=C.boxB_sender,
-                sender_payoff=C.boxB_receiver,
-            )
+            me = player
+            partner = other_player(me)
+            if partner.choice == 'Box A':
+                return dict(
+                    # role=player.role,
+                    choice=partner.choice,
+                    receiver_payoff=C.boxA_sender,
+                    sender_payoff=C.boxA_receiver,
+                )
+            else:
+                return dict(
+                    # role=player.role,
+                    choice=partner.choice,
+                    receiver_payoff=C.boxB_sender,
+                    sender_payoff=C.boxB_receiver,
+                )
 
 
 class End(Page):
