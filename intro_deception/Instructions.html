@@ -23,11 +23,45 @@ Instructions
 </div>
 
 <div class="card bg-light instructions">
-    <p>
-        In this task, you have been assigned the role of:
-    </p>
+    <div  class="card-body">
+        <p>
+            In this task, you have been assigned the role of: <b>{{ player.role }}</b>
+        </p>
 
+        {{ if player.role == C.RECEIVER_ROLE }}
+        <p>
+            You are the one choosing between box A and B.
+            Before you make your choice, you will get a suggestion from the Sender.
+            This suggestion is not binding: it is your choice only in the end.
+            Your choice will decided both yours and the Sender's bonus.
+        </p>
+        {{ else }}
+        <p>
+            You are the one who knows which bonuses are inside the boxes.
+            You have to send a message to the Receiver suggesting that they open either Box A or Box B.
+            The Receiver is free to use this information or not to chose between the boxes.
+            What they decided will decided both or your payoffs, regardless of what you suggested.
+        </p>
+        {{ endif }}
+    </div>
 </div>
+
+<p></p>
+
+<div>
+    <p>
+        After you press the "Next" button,
+        you will be redirected to a waitroom to be paired with another player who will be the
+        {{ if player.role == C.RECEIVER_ROLE }} Sender {{ else }} Receiver{{ endif }}.
+        Once you are paired, the task will start immediately.
+    </p>
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
 
 
 {{ endblock }}

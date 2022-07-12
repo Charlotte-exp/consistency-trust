@@ -42,7 +42,22 @@ class Consent(Page):
 
 
 class Instructions(Page):
-    pass
+
+
+    def vars_for_template(player: Player):
+        """  """
+        if player.role == C.RECEIVER_ROLE:
+            return dict(
+                # role=player.role,
+                receiver_payoff=C.boxB_sender,
+                sender_payoff=C.boxB_receiver,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                receiver_payoff=C.boxB_sender,
+                sender_payoff=C.boxB_receiver,
+            )
 
 
 page_sequence = [Consent,

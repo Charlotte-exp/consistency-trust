@@ -141,8 +141,8 @@ class SenderMessage(Page):
     def is_displayed(player):
         return player.role == C.SENDER_ROLE
 
-    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 2 * 60
+    # timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    # timeout_seconds = 2 * 60
 
     # def before_next_page(player, timeout_happened):
     #     """
@@ -190,8 +190,8 @@ class ReceiverChoice(Page):
         #         sender_message=player.message
         #     )
 
-    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 2 * 60
+    # timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    # timeout_seconds = 2 * 60
 
     # def before_next_page(player, timeout_happened):
     #     """
