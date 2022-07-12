@@ -11,6 +11,14 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
+    SENDER_ROLE = 'Sender'
+    RECEIVER_ROLE = 'Receiver'
+
+    boxA_sender = cu(1)
+    boxA_receiver = cu(2)
+    boxB_sender = cu(10)
+    boxB_receiver = cu(20)
+
 
 class Subsession(BaseSubsession):
     pass
@@ -25,16 +33,17 @@ class Player(BasePlayer):
 
 
 # PAGES
-class MyPage(Page):
+class Consent(Page):
+
+    def vars_for_template(player: Player):
+        return {
+            'participation_fee': player.session.config['participation_fee'],
+        }
+
+
+class Instructions(Page):
     pass
 
 
-class ResultsWaitPage(WaitPage):
-    pass
-
-
-class Results(Page):
-    pass
-
-
-page_sequence = [MyPage, ResultsWaitPage, Results]
+page_sequence = [Consent,
+                 Instructions]

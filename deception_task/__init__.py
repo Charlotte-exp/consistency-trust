@@ -16,9 +16,9 @@ class C(BaseConstants):
     RECEIVER_ROLE = 'Receiver'
 
     boxA_sender = cu(1)
-    boxA_receiver = cu(1)
+    boxA_receiver = cu(2)
     boxB_sender = cu(10)
-    boxB_receiver = cu(10)
+    boxB_receiver = cu(20)
 
 
 class Subsession(BaseSubsession):
@@ -124,6 +124,15 @@ def set_payoffs(group: Group):
 
 
 #######  PAGES  #########
+# class PairingWaitPage(WaitPage):
+#     group_by_arrival_time = True
+#
+#     def is_displayed(player: Player):
+#         return player.round_number == 1
+#
+#     template_name = 'deception_task/Waitroom.html'
+#
+
 class SenderMessage(Page):
     form_model = 'player'
     form_fields = ['message']
@@ -131,6 +140,23 @@ class SenderMessage(Page):
     @staticmethod
     def is_displayed(player):
         return player.role == C.SENDER_ROLE
+
+    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    timeout_seconds = 2 * 60
+
+    # def before_next_page(player, timeout_happened):
+    #     """
+    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
+    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
+    #     a different text (left_hanging = 2).
+    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
+    #     """
+    #     me = player
+    #     co_player = other_player(player)
+    #     if timeout_happened:
+    #         co_player.left_hanging = 1
+    #         me.left_hanging = 2
+    #         me.message = 'left_hanging'
 
 
 class MessageWaitPage(WaitPage):
@@ -163,6 +189,23 @@ class ReceiverChoice(Page):
         #     return dict(
         #         sender_message=player.message
         #     )
+
+    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    timeout_seconds = 2 * 60
+
+    # def before_next_page(player, timeout_happened):
+    #     """
+    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
+    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
+    #     a different text (left_hanging = 2).
+    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
+    #     """
+    #     me = player
+    #     co_player = other_player(player)
+    #     if timeout_happened:
+    #         co_player.left_hanging = 1
+    #         me.left_hanging = 2
+    #         me.choice = 'left_hanging'
 
 
 class ResultsWaitPage(WaitPage):
@@ -211,6 +254,10 @@ class Results(Page):
                     receiver_payoff=C.boxB_sender,
                     sender_payoff=C.boxB_receiver,
                 )
+
+    # only need this if it is repeated rounds
+    # timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    # timeout_seconds = 2 * 60
 
 
 class End(Page):
@@ -283,8 +330,8 @@ page_sequence = [SenderMessage,
                  ResultsWaitPage,
                  Results,
                  # End,
-                 Demographics,
-                 CommentBox,
+                 # Demographics,
+                 # CommentBox,
                  Payment,
                  ProlificLink]
 
