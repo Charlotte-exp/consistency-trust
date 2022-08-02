@@ -35,8 +35,8 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1.00, participation_fee=1.00, doc=""
 )
 
-SESSION_FIELDS = ['past_groups', ]
-PARTICIPANT_FIELDS = ['title', 'conversion', 'new_conversion', 'condition']
+SESSION_FIELDS = ['past_groups', 'SENDER_ROLE', 'RECEIVER_ROLE']
+PARTICIPANT_FIELDS = ['title', 'conversion', 'new_conversion', 'condition', 'role']
 
 
 # ISO-639 code

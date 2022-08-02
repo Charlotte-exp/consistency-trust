@@ -8,7 +8,7 @@ Your app description
 
 class C(BaseConstants):
     NAME_IN_URL = 'intro_deception'
-    PLAYERS_PER_GROUP = None
+    PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
 
     SENDER_ROLE = 'Sender'
@@ -22,6 +22,12 @@ class C(BaseConstants):
 
 class Subsession(BaseSubsession):
     pass
+
+
+def creating_session(subsession: Subsession):
+    for p in subsession.get_players():
+        p.participant.role = p.role
+        print('treatment', p.role, p.participant.role)
 
 
 class Group(BaseGroup):
