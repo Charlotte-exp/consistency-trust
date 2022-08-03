@@ -27,7 +27,7 @@ class Subsession(BaseSubsession):
 def creating_session(subsession: Subsession):
     for p in subsession.get_players():
         p.participant.role = p.role
-        print('treatment', p.role, p.participant.role)
+        print('roles', p.role, p.participant.role)
 
 
 class Group(BaseGroup):

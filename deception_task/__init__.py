@@ -15,10 +15,10 @@ class C(BaseConstants):
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
 
-    boxA_sender = cu(5)
-    boxA_receiver = cu(6)
-    boxB_sender = cu(6)
-    boxB_receiver = cu(5)
+    boxA_sender = cu(1)
+    boxA_receiver = cu(2)
+    boxB_sender = cu(3)
+    boxB_receiver = cu(4)
 
 
 class Subsession(BaseSubsession):
@@ -139,9 +139,16 @@ def other_player(player: Player):
     return player.get_others_in_group()[0]
 
 
+def set_role(player: Player):
+    if player.participant.role == 'Sender':
+        return player.role == player.participant.role
+    else:
+        return player.role == player.participant.role
+
+
 def set_payoffs(group: Group):
-    receiver = group.get_player_by_role(C.RECEIVER_ROLE)
     sender = group.get_player_by_role(C.SENDER_ROLE)
+    receiver = group.get_player_by_role(C.RECEIVER_ROLE)
     if receiver.choice == 'Box A':
         receiver.payoff = C.boxA_receiver
         sender.payoff = C.boxA_sender
@@ -182,6 +189,13 @@ class SenderMessage(Page):
     def is_displayed(player):
         if player.participant.role == 'Sender':
             return True
+
+    # def vars_for_template(player: Player):
+    #     """  """
+    #     me = player
+    #     partner = other_player(me)
+    #     return dict(call_sender=player.get_sender(),
+    #                 call_receiver=player.get_receiver())
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
     timeout_seconds = 2 * 60
