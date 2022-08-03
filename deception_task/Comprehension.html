@@ -1,0 +1,22 @@
+{{ block title }}
+Comprehension checks
+{{ endblock }}
+
+
+{{ block content }}
+
+
+<div class="card-body">
+    <h4>Please these short questions about the game before finishing:</h4>
+    {{ formfields }}
+</div>
+
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+
+{{ endblock }}

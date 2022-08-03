@@ -4,6 +4,39 @@ Message
 
 {{ endblock }}
 
+{{ block styles }}
+
+    <script>
+        setTimeout(
+        function () {
+            alert("Please make your decision soon.");
+        },
+        90*1000 // 90 seconds
+    );
+    </script>
+
+{{ endblock }}
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
 {{ block content }}
 
 <p>
@@ -58,3 +91,5 @@ Message
 </div>
 
 {{ endblock }}
+
+

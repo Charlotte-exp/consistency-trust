@@ -14,10 +14,10 @@ class C(BaseConstants):
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
 
-    boxA_sender = cu(1)
-    boxA_receiver = cu(2)
-    boxB_sender = cu(10)
-    boxB_receiver = cu(20)
+    boxA_sender = cu(5)
+    boxA_receiver = cu(6)
+    boxB_sender = cu(6)
+    boxB_receiver = cu(5)
 
 
 class Subsession(BaseSubsession):
