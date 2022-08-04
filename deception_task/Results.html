@@ -5,14 +5,14 @@
 {{ block content }}
     <p>
         {{ if player.role == C.RECEIVER_ROLE }}
-        You chose {{ choice }}.
+        You chose <b>{{ choice }}</b>.
         {{ else }}
-        The Receiver chose {{ choice }}.
+        The Receiver chose <b>{{ choice }}</b>.
         {{ endif }}
     </p>
 
     <p>
-        This means that you get {{ player.payoff }}.
+        The bonus you earned from {{ choice }} is {{ player.payoff }}.
     </p>
 
     <p>

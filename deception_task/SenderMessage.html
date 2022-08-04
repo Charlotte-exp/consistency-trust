@@ -40,33 +40,38 @@ Message
 {{ block content }}
 
 <p>
-    Below are the payoff for both you and the receiver based on which box is chosen.
+    Below are the bonuses for both you and the Receiver based on which option is chosen.
+</p>
+<p>
+    Remember that the Receiver does not know the amounts attached to each options
+    and will only learn what they earned themselves based on their choice.
+    They will not know what the other option was nor what you earned from their choice.
 </p>
 
 <div class="card-body">
     <div class="row">
         <div class="col">
             <p>
-                If the Receiver chooses <font color="blue">Box A</font>:
+                If the Receiver chooses <font color="blue">Option A</font>:
                 <ul>
                     <li>
-                        <b>{{ C.boxA_sender }}</b> for you.
+                        <b>{{ C.optionA_sender }}</b> for you.
                     </li>
                     <li>
-                        <b>{{ C.boxA_receiver }}</b> for the Receiver.
+                        <b>{{ C.optionA_receiver }}</b> for the Receiver.
                     </li>
                 </ul>
             </p>
         </div>
         <div class="col">
             <p>
-                If the Receiver chooses <font color="blue">Box B</font>:
+                If the Receiver chooses <font color="blue">Option B</font>:
                 <ul>
                     <li>
-                        <b>{{ C.boxB_sender }}</b> for you.
+                        <b>{{ C.optionB_sender }}</b> for you.
                     </li>
                     <li>
-                        <b>{{ C.boxB_receiver }}</b> for the Receiver.
+                        <b>{{ C.optionB_receiver }}</b> for the Receiver.
                     </li>
                 </ul>
             </p>
@@ -81,17 +86,15 @@ Message
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="message" value="Box A" class="btn btn-primary btn-large">Box A</button>
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus that Option B</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="message" value="Box B" class="btn btn-primary btn-large">Box B</button>
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus that Option A</button>
             </div>
         </div>
     </div>
 </div>
 
-<p style="color:white;">{{ call }}</p>
+
 
 {{ endblock }}
-
-

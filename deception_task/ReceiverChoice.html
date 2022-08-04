@@ -40,25 +40,25 @@ Choice
 {{ block content }}
 
 <p>
-    Here are the two boxes with your bonuses inside.
+    Here are the two options with your bonuses inside.
 </p>
 
 <p>
-    The sender knows what is inside the boxes. His message is to open:
-    <b>{{ sender_message }}</b>
+    The Sender knows the amounts inside the options. Their message is:
+    <b>{{ best_option }} will earn you more money than {{ worst_option}}</b>
 </p>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
-            Which box do you chose?
+            Which option do you chose?
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="choice" value="Box A" class="btn btn-primary btn-large">Box A</button>
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="choice" value="Box B" class="btn btn-primary btn-large">Box B</button>
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
             </div>
         </div>
     </div>

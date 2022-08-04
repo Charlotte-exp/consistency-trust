@@ -10,22 +10,22 @@ Instructions
         There are two players in this task: a <b>Sender</b> and a <b>Receiver</b>.
     </p>
     <p>
-        The task is a choice between two boxes: A and B.
-        Inside the boxes are the bonuses for both the Sender and the Receiver.
-        The box chosen dictates which bonus both players get.
+        The task is a choice between two options: A and B.
+        The options determine a bonus each for the Sender and the Receiver.
+        The option chosen dictates which bonus both players get.
     </p>
     <p>
-        The Receiver makes the choice, but they do not know what is inside the boxes.
-        The Sender does not make the choice, but they do know the content of the boxes.
+        The Receiver makes the choice, but they do not know the bonuses from the options.
+        The Sender does not make the choice, but they do know the bonuses from the options.
     </p>
         The task is made of two steps.
-        First, the Sender has the opportunity to send a message to the Receiver recommending one box over the other.
-        Then the Receiver sees that message and can chose one of the two boxes.
+        First, the Sender has the opportunity to send a message to the Receiver recommending one option over the other.
+        Then the Receiver sees that message and can chose one of the two options.
     </p>
     <p>
-        The Receiver is free to chose whichever box they wish, regardless of what the message is.
+        The Receiver is free to chose whichever option they wish, regardless of what the message is.
         Whether the Receiver follows the message or not has no impact on the bonus of either player.
-        The payoffs inside the box chosen by the Receiver are the bonus that both of you will receive.
+        The amounts from the option chosen by the Receiver are the bonus that both will receive.
         They are not necessarily the same for each player.
     </p>
 </div>
@@ -38,16 +38,16 @@ Instructions
 
         {{ if player.role == C.RECEIVER_ROLE }}
         <p>
-            You are the one choosing between box A and box B.
+            You are the one choosing between option A and option B.
             Before you make your choice, you will get a suggestion from the Sender.
             This suggestion is not binding: in the end, it only depends on your choice.
             Your choice will decide both yours and the Sender's bonus.
         </p>
         {{ else }}
         <p>
-            You are the one who knows what the bonuses inside each box are.
-            You have to send a message to the Receiver suggesting that they open either Box A or Box B.
-            The Receiver can choose whether or not to use this information when deciding which box to pick.
+            You are the one who knows what the bonuses from each option are.
+            You have to send a message to the Receiver suggesting that they open either option A or option B.
+            The Receiver can choose whether or not to use this information when deciding which option to pick.
             Their decision will determine both of your bonuses, regardless of whether or not they followed your suggestion.
         </p>
         {{ endif }}
