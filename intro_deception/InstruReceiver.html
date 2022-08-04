@@ -1,0 +1,66 @@
+{{ block title }}
+Instructions
+{{ endblock }}
+
+
+{{ block content }}
+
+<div>
+    <p>
+        This is a short experiment in decision-making.
+        In this experiment you will be matched with another participant from Prolific.
+        Neither of you will ever know the identity of the other.
+    </p>
+    <p>
+        Two possible bonuses are available to you and your counterpart in the experiment.
+        The bonuses depend on the option chosen by you.
+        We showed the two payment options to your counterpart.
+        The only information you will have is the message your counterpart sends to you.
+    </p>
+
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+        Two possible messages could be sent:
+    </p>
+    <ul>
+        <li>
+            Message 1: “Option A will earn you more money than option B.”
+        </li>
+        <li>
+            Message 2: “Option B will earn you more money than option A.”
+        </li>
+    </ul>
+    </div>
+</div>
+
+<div>
+    <p>
+        Once you have the message, it is your turn to choose either option A or option B.
+        Your choice will determine the bonuses of both of you in the experiment.
+        You will never know what sums were actually offered in the option not chosen
+        (that is, if the message sent by your counterpart was true or not).
+        Moreover, you will never know the sums your counterpart could be paid with the other option.
+    </p>
+</div>
+
+<p></p>
+
+<div>
+    <p>
+        After you press the "Next" button,
+        you will be redirected to a waitroom to be paired with another player who will send you the message
+        Once you are paired, the task will start immediately.
+    </p>
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+
+{{ endblock }}

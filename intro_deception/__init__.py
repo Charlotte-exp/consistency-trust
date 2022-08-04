@@ -14,10 +14,10 @@ class C(BaseConstants):
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
 
-    boxA_sender = cu(5)
-    boxA_receiver = cu(6)
-    boxB_sender = cu(6)
-    boxB_receiver = cu(5)
+    boxA_sender = cu(1)
+    boxA_receiver = cu(2)
+    boxB_sender = cu(3)
+    boxB_receiver = cu(4)
 
 
 class Subsession(BaseSubsession):
@@ -27,7 +27,7 @@ class Subsession(BaseSubsession):
 def creating_session(subsession: Subsession):
     for p in subsession.get_players():
         p.participant.role = p.role
-        print('roles', p.role, p.participant.role)
+        # print('roles', p.role, p.participant.role)
 
 
 class Group(BaseGroup):

@@ -1,5 +1,6 @@
 from otree.api import *
 
+import random
 import itertools
 
 doc = """
@@ -22,17 +23,22 @@ class C(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+
+    def get_treatments(self):
+        if random.random() > 0.5:
+            return 'high_temptation'
+        else:
+            return 'low_temptation'
 
 
-def creating_session(subsession: Subsession):
-
-    treatments = itertools.cycle(['high', 'low'])
-    for p in subsession.get_players():
-        p.condition = next(treatments)
-        p.participant.condition = p.condition
-        print('treatment', p.condition, p.participant.condition)
-        # p.role = p.participant.role
+# def creating_session(subsession: Subsession):
+#
+#     treatments = itertools.cycle(['high', 'low'])
+#     for p in subsession.get_players():
+#         p.condition = next(treatments)
+#         p.participant.condition = p.condition
+#         print('treatment', p.condition, p.participant.condition)
+#         # p.role = p.participant.role
 
 
 class Group(BaseGroup):
@@ -48,7 +54,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    condition = models.StringField()
+    treatment = models.StringField()
     left_hanging = models.IntegerField(initial=0)
     message = models.StringField(
         initial='',
@@ -132,18 +138,29 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    # def set_role(player):
+    #     if player.participant.role == 'Sender':
+    #         return C.SENDER_ROLE == player.participant.role
+    #     else:
+    #         return C.RECEIVER_ROLE == player.participant.role
+
 
 ########  Functions #######
 
+def group_by_arrival_time_method(subsession, waiting_players):
+    senders = [p for p in waiting_players if p.participant.role == 'Sender']
+    receivers = [p for p in waiting_players if p.participant.role == 'Receiver']
+    if len(senders) >= 1 and len(receivers) >= 1:
+        players = [senders[0], receivers[0]]
+        treatment = subsession.get_treatments()
+        for p in players:
+            p.participant.treatment = treatment
+            p.treatment = p.participant.treatment
+        return players
+
+
 def other_player(player: Player):
     return player.get_others_in_group()[0]
-
-
-def set_role(player: Player):
-    if player.participant.role == 'Sender':
-        return player.role == player.participant.role
-    else:
-        return player.role == player.participant.role
 
 
 def set_payoffs(group: Group):
@@ -192,10 +209,7 @@ class SenderMessage(Page):
 
     # def vars_for_template(player: Player):
     #     """  """
-    #     me = player
-    #     partner = other_player(me)
-    #     return dict(call_sender=player.get_sender(),
-    #                 call_receiver=player.get_receiver())
+    #     return dict(call=player.set_role())
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
     timeout_seconds = 2 * 60
@@ -415,12 +429,12 @@ class ProlificLink(Page):
     #     return player.round_number == C.num_rounds
 
 
-page_sequence = [SenderMessage,
+page_sequence = [PairingWaitPage,
+                 SenderMessage,
                  MessageWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
                  Results,
-                 # End,
                  # Demographics,
                  Comprehension,
                  # CommentBox,
