@@ -6,10 +6,14 @@ import random
 
 class PlayerBot(Bot):
     def play_round(self):
-        yield SenderMessage, dict(message=random.choice(['Box A', 'Box B']))
-        yield ReceiverChoice, dict(choice=random.choice(['Box A', 'Box B']))
+        if self.participant.role == "Sender":
+            yield SenderMessage, dict(message=random.choice(['Option A', 'Option B']))
+        else:
+            yield ReceiverChoice, dict(choice=random.choice(['Option A', 'Option B']))
         yield Results
-        yield Comprehension
+        yield Comprehension, dict(q1=random.choice(['1', '2']),
+                                  q2=random.choice(['1', '2']),
+                                  q3=random.choice(['1', '2']))
         # yield StrategyBox, {"strategy_box": 'n/a'}
         # yield CommentBox, {"comment_box": 'n/a'}
         yield Payment

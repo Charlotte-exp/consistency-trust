@@ -39,16 +39,44 @@ Instructions
         {{ if player.role == C.RECEIVER_ROLE }}
         <p>
             You are the one choosing between option A and option B.
-            Before you make your choice, you will get a suggestion from the Sender.
-            This suggestion is not binding: in the end, it only depends on your choice.
+            Before you do so, you will receive a message from the Sender who themselves know what the bonuses attached to each option are.
+            You will never know what bonuses were actually offered in the option not chosen
+            (that is, if the message sent by the Sender was true or not).
+            Moreover, you will never know the bonus the Sender could have earned with the other option.
+            The message is not binding: in the end, it only depends on your choice.
             Your choice will decide both yours and the Sender's bonus.
+        </p>
+        <p>
+            The message you receive will be either of:
+            <ul>
+                <li>
+                    Option A will earn you a bigger bonus that Option B.
+                </li>
+                <li>
+                    Option B will earn you a bigger bonus that Option A.
+                </li>
+            </ul>
         </p>
         {{ else }}
         <p>
             You are the one who knows what the bonuses from each option are.
-            You have to send a message to the Receiver suggesting that they open either option A or option B.
+            You have a choice between two messages to send to the Receiver to influence their choice.
             The Receiver can choose whether or not to use this information when deciding which option to pick.
             Their decision will determine both of your bonuses, regardless of whether or not they followed your suggestion.
+            However, the Receiver will never know what bonuses were actually offered in the option not chosen
+            (that is,they will never know whether your message was true or not).
+            Moreover, they will never know the bonuses that you could have earned according to the different options.
+        </p>
+        <p>
+            The message you send can be either of:
+            <ul>
+                <li>
+                    Option A will earn you a bigger bonus that Option B.
+                </li>
+                <li>
+                    Option B will earn you a bigger bonus that Option A.
+                </li>
+            </ul>
         </p>
         {{ endif }}
     </div>
@@ -60,7 +88,7 @@ Instructions
     <p>
         After you press the "Next" button,
         you will be redirected to a waitroom to be paired with another player who will be the
-        {{ if player.role == C.RECEIVER_ROLE }} Sender {{ else }} Receiver{{ endif }}.
+        {{ if player.role == C.RECEIVER_ROLE }}Sender{{ else }}Receiver{{ endif }}.
         Once you are paired, the task will start immediately.
     </p>
 </div>

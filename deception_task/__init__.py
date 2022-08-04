@@ -385,7 +385,7 @@ class Demographics(Page):
 
 class Comprehension(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2', 'q3', 'q4']
+    form_fields = ['q1', 'q2', 'q3']
 
     # @staticmethod
     # def error_message(player: Player, values):
