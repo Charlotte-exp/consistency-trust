@@ -40,7 +40,7 @@ Message
 {{ block content }}
 
 <p>
-    Below are the bonuses for both you and the Receiver based on which option the latter choses.
+    Below are the bonuses for both you and the Receiver based on which option the Receiver choses later.
 </p>
 <p>
     Remember that the Receiver does not know the bonuses attached to each options
@@ -52,7 +52,7 @@ Message
     <div class="row">
         <div class="col">
             <p>
-                If the Receiver chooses <font color="blue">Option A</font>:
+                <font color="blue">Option A</font>:
                 <ul>
                     <li>
                         <b>{{ C.optionA_sender }}</b> for you.
@@ -65,7 +65,7 @@ Message
         </div>
         <div class="col">
             <p>
-                If the Receiver chooses <font color="blue">Option B</font>:
+                <font color="blue">Option B</font>:
                 <ul>
                     <li>
                         <b>{{ C.optionB_sender }}</b> for you.
@@ -86,10 +86,10 @@ Message
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus that Option B</button>
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus than Option B</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus that Option A</button>
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus than Option A</button>
             </div>
         </div>
     </div>
