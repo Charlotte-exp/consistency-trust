@@ -21,15 +21,15 @@ class C(BaseConstants):
     # optionB_sender = cu(15)
     # optionB_receiver = cu(5)
     #
-    optionA_sender_high = cu(5)
-    optionA_receiver_high = cu(15)
-    optionB_sender_high = cu(15)
-    optionB_receiver_high = cu(5)
+    optionA_sender_high = cu(0.5)
+    optionA_receiver_high = cu(1.5)
+    optionB_sender_high = cu(1.5)
+    optionB_receiver_high = cu(0.5)
 
-    optionA_sender_low = cu(5)
-    optionA_receiver_low = cu(6)
-    optionB_sender_low = cu(6)
-    optionB_receiver_low = cu(5)
+    optionA_sender_low = cu(0.5)
+    optionA_receiver_low = cu(0.6)
+    optionB_sender_low = cu(0.6)
+    optionB_receiver_low = cu(0.5)
 
 
 class Subsession(BaseSubsession):
