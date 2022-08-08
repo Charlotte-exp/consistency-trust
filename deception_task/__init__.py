@@ -16,10 +16,20 @@ class C(BaseConstants):
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
 
-    optionA_sender = cu(1)
-    optionA_receiver = cu(2)
-    optionB_sender = cu(3)
-    optionB_receiver = cu(4)
+    # optionA_sender = cu(5)
+    # optionA_receiver = cu(15)
+    # optionB_sender = cu(15)
+    # optionB_receiver = cu(5)
+    #
+    optionA_sender_high = cu(5)
+    optionA_receiver_high = cu(15)
+    optionB_sender_high = cu(15)
+    optionB_receiver_high = cu(5)
+
+    optionA_sender_low = cu(5)
+    optionA_receiver_low = cu(6)
+    optionB_sender_low = cu(6)
+    optionB_receiver_low = cu(5)
 
 
 class Subsession(BaseSubsession):
@@ -32,14 +42,14 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    pass
-    # choice = models.StringField(
-    #     initial='',
-    #     choices=['Option A', 'Option B'],
-    #     doc="""This player's decision""",
-    #     verbose_name='Your choice:',
-    #     widget=widgets.RadioSelect
-    # )
+    # pass
+    choice = models.StringField(
+        initial='',
+        choices=['Option A', 'Option B'],
+        doc="""This player's decision""",
+        verbose_name='Your choice:',
+        widget=widgets.RadioSelect
+    )
 
 
 class Player(BasePlayer):
@@ -51,13 +61,13 @@ class Player(BasePlayer):
         choices=['Option A', 'Option B'],
     )
 
-    choice = models.StringField(
-        initial='',
-        choices=['Option A', 'Option B'],
-        doc="""This player's decision""",
-        verbose_name='Your choice:',
-        widget=widgets.RadioSelect
-    )
+    # choice = models.StringField(
+    #     initial='',
+    #     choices=['Option A', 'Option B'],
+    #     doc="""This player's decision""",
+    #     verbose_name='Your choice:',
+    #     widget=widgets.RadioSelect
+    # )
 
     age = models.IntegerField(
         verbose_name='What is your age?',
@@ -153,33 +163,34 @@ def other_player(player: Player):
     return player.get_others_in_group()[0]
 
 
+# def set_payoffs(group: Group):
+#     sender = group.get_player_by_role(C.SENDER_ROLE)
+#     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
+#     if receiver.choice == 'Option A':
+#         receiver.payoff = C.optionA_receiver
+#         sender.payoff = C.optionA_sender
+#     else:
+#         receiver.payoff = C.optionB_receiver
+#         sender.payoff = C.optionB_sender
+
+
 def set_payoffs(group: Group):
     sender = group.get_player_by_role(C.SENDER_ROLE)
     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-    if receiver.choice == 'Option A':
-        receiver.payoff = C.optionA_receiver
-        sender.payoff = C.optionA_sender
-    else:
-        receiver.payoff = C.optionB_receiver
-        sender.payoff = C.optionB_sender
-
-# def set_payoffs(player: Player):
-#     me = player
-#     partner = other_player(me)
-#     if player.participant.role == "Sender":
-#         if partner.choice == 'Option A':
-#             partner.payoff = C.optionA_receiver
-#             player.payoff = C.optionA_sender
-#         else:
-#             partner.payoff = C.optionB_receiver
-#             player.payoff = C.optionB_sender
-#     elif player.participant.role == "Receiver":
-#         if player.choice == 'Option A':
-#             player.payoff = C.optionA_receiver
-#             partner.payoff = C.optionA_sender
-#         else:
-#             player.payoff = C.optionB_receiver
-#             partner.payoff = C.optionB_sender
+    if receiver.treatment == 'high_temptation' and sender.treatment == 'high_temptation':
+        if group.choice == 'Option A':
+            receiver.payoff = C.optionA_receiver_high
+            sender.payoff = C.optionA_sender_high
+        else:
+            receiver.payoff = C.optionB_receiver_high
+            sender.payoff = C.optionB_sender_high
+    elif receiver.treatment == 'low_temptation' and sender.treatment == 'low_temptation':
+        if group.choice == 'Option A':
+            receiver.payoff = C.optionA_receiver_low
+            sender.payoff = C.optionA_sender_low
+        else:
+            receiver.payoff = C.optionB_receiver_low
+            sender.payoff = C.optionB_sender_low
 
 
 ######  PAGES  #########
@@ -204,9 +215,24 @@ class SenderMessage(Page):
         elif player.participant.role == 'Sender':
             return True
 
-    # def vars_for_template(player: Player):
-    #     """  """
-    #     return dict(call=player.set_role())
+    def vars_for_template(player: Player):
+        """  """
+        if player.treatment == 'high_temptation':
+            return dict(
+                # role=player.role,
+                receiver_optionA=C.optionA_sender_high,
+                sender_optionA=C.optionA_receiver_high,
+                receiver_optionB=C.optionB_sender_high,
+                sender_optionB=C.optionB_receiver_high,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                receiver_optionA=C.optionA_sender_low,
+                sender_optionA=C.optionA_receiver_low,
+                receiver_optionB=C.optionB_sender_low,
+                sender_optionB=C.optionB_receiver_low,
+            )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
     timeout_seconds = 2 * 60
@@ -240,7 +266,7 @@ class MessageWaitPage(WaitPage):
 
 
 class ReceiverChoice(Page):
-    form_model = 'player'
+    form_model = 'group'
     form_fields = ['choice']
 
     @staticmethod
@@ -288,10 +314,11 @@ class ReceiverChoice(Page):
         """
         me = player
         partner = other_player(me)
+        group = player.group
         if timeout_happened:
             partner.left_hanging = 1
             me.left_hanging = 2
-            me.choice = 'None'
+            group.choice = 'None'
 
 
 class ResultsWaitPage(WaitPage):
@@ -319,38 +346,44 @@ class Results(Page):
 
     def vars_for_template(player: Player):
         """  """
-        if player.participant.role == 'Receiver':
-            if player.choice == 'Option A':
-                return dict(
-                    # role=player.role,
-                    choice=player.choice,
-                    receiver_payoff=C.optionA_sender,
-                    sender_payoff=C.optionA_receiver,
-                )
-            else:
-                return dict(
-                    # role=player.role,
-                    choice=player.choice,
-                    receiver_payoff=C.optionB_sender,
-                    sender_payoff=C.optionB_receiver,
-                )
-        else:
-            me = player
-            partner = other_player(me)
-            if partner.choice == 'Option A':
-                return dict(
-                    # role=player.role,
-                    choice=partner.choice,
-                    receiver_payoff=C.optionA_sender,
-                    sender_payoff=C.optionA_receiver,
-                )
-            else:
-                return dict(
-                    # role=player.role,
-                    choice=partner.choice,
-                    receiver_payoff=C.optionB_sender,
-                    sender_payoff=C.optionB_receiver,
-                )
+        group = player.group
+        return dict(choice=group.choice)
+
+# If choice is group field
+    # def vars_for_template(player: Player):
+    #     """  """
+    #     me = player
+    #     partner = other_player(me)
+    #     if player.particpant.role == 'Receiver':
+    #         if player.choice == 'Option A':
+    #             return dict(
+    #                 # role=player.role,
+    #                 choice=group.choice,
+    #                 sender_payoff=C.optionA_sender_high,
+    #                 receiver_payoff=C.optionA_receiver_high,
+    #             )
+    #         else:
+    #             return dict(
+    #                 # role=player.role,
+    #                 choice=player.choice,
+    #                 sender_payoff=C.optionB_sender_high,
+    #                 receiver_payoff=C.optionB_receiver_high,
+    #             )
+    #     else:
+    #         if partner.choice == 'Option A':
+    #             return dict(
+    #                 # role=player.role,
+    #                 choice=partner.choice,
+    #                 sender_payoff=C.optionA_sender_low,
+    #                 receiver_payoff=C.optionA_receiver_low,
+    #             )
+    #         else:
+    #             return dict(
+    #                 # role=player.role,
+    #                 choice=partner.choice,
+    #                 sender_payoff=C.optionB_sender_low,
+    #                 receiver_payoff=C.optionB_receiver_low,
+    #             )
 
     # only need this if it is repeated rounds
     # timer_text = 'If you stay inactive for too long you will be considered a dropout:'

@@ -4,12 +4,12 @@ from os import popen
 
 SESSION_CONFIGS = [
     dict(
-            name='deception_task',
-            display_name="otree5 deception task",
-            app_sequence=['intro_deception', 'deception_task'],
-            num_demo_participants=12,
-            use_browser_bots=False,
-            oTree_version_used=popen('otree --version').read().strip()
+        name='deception_task',
+        display_name="otree5 deception task",
+        app_sequence=['intro_deception', 'deception_task'],
+        num_demo_participants=12,
+        use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
         ),
     dict(
         name='dictator',
