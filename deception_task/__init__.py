@@ -418,7 +418,7 @@ class Demographics(Page):
 
 class Comprehension(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2', 'q3']
+    form_fields = ['q2', 'q3']
 
     # @staticmethod
     # def error_message(player: Player, values):
@@ -512,9 +512,9 @@ page_sequence = [PairingWaitPage,
                  Results,
                  LeftHanging,
                  # End,
-                 # Demographics,
+                 Demographics,
                  Comprehension,
-                 # CommentBox,
+                 CommentBox,
                  Payment,
                  ProlificLink]
 
