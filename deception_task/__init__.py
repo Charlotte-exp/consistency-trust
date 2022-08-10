@@ -105,7 +105,7 @@ class Player(BasePlayer):
             [1, 'Yes'],
             [2, 'No']
         ],
-        verbose_name='Do you think you played with a real other participant?',
+        verbose_name='Did both player know that the Receiver would never learn the bonuses from the option not chosen?',
         widget=widgets.RadioSelect
     )
 
@@ -418,7 +418,7 @@ class Demographics(Page):
 
 class Comprehension(Page):
     form_model = 'player'
-    form_fields = ['q2', 'q3']
+    form_fields = ['q1', 'q2', 'q3']
 
     # @staticmethod
     # def error_message(player: Player, values):
