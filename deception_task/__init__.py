@@ -179,18 +179,18 @@ def set_payoffs(group: Group):
     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
     if receiver.treatment == 'high_temptation' and sender.treatment == 'high_temptation':
         if group.choice == 'Option A':
-            receiver.payoff = C.optionA_receiver_high
             sender.payoff = C.optionA_sender_high
+            receiver.payoff = C.optionA_receiver_high
         else:
-            receiver.payoff = C.optionB_receiver_high
             sender.payoff = C.optionB_sender_high
+            receiver.payoff = C.optionB_receiver_high
     elif receiver.treatment == 'low_temptation' and sender.treatment == 'low_temptation':
         if group.choice == 'Option A':
-            receiver.payoff = C.optionA_receiver_low
             sender.payoff = C.optionA_sender_low
+            receiver.payoff = C.optionA_receiver_low
         else:
-            receiver.payoff = C.optionB_receiver_low
             sender.payoff = C.optionB_sender_low
+            receiver.payoff = C.optionB_receiver_low
 
 
 ######  PAGES  #########
@@ -220,18 +220,18 @@ class SenderMessage(Page):
         if player.treatment == 'high_temptation':
             return dict(
                 # role=player.role,
-                receiver_optionA=C.optionA_sender_high,
-                sender_optionA=C.optionA_receiver_high,
-                receiver_optionB=C.optionB_sender_high,
-                sender_optionB=C.optionB_receiver_high,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
             )
         else:
             return dict(
                 # role=player.role,
-                receiver_optionA=C.optionA_sender_low,
-                sender_optionA=C.optionA_receiver_low,
-                receiver_optionB=C.optionB_sender_low,
-                sender_optionB=C.optionB_receiver_low,
+                sender_optionA=C.optionA_sender_low,
+                receiver_optionA=C.optionA_receiver_low,
+                sender_optionB=C.optionB_sender_low,
+                receiver_optionB=C.optionB_receiver_low,
             )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
