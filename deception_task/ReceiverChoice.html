@@ -1,10 +1,69 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{{ block title }}
 
-</body>
-</html>
+Choice
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <script>
+        setTimeout(
+        function () {
+            alert("Please make your decision soon.");
+        },
+        90*1000 // 90 seconds
+    );
+    </script>
+
+{{ endblock }}
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    Here are the two options with your bonuses inside.
+</p>
+
+<p>
+    The Sender knows the bonuses inside the options. <br>
+    Their message is:
+    <b>{{ best_option }} will earn you more money than {{ worst_option}}</b>
+</p>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{{ endblock }}

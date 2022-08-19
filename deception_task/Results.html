@@ -1,10 +1,26 @@
 {{ block title }}
-    Page title
+    Results
 {{ endblock }}
 
 {{ block content }}
+    <p>
+        {{ if player.role == C.RECEIVER_ROLE }}
+        You chose <b>{{ choice }}</b>.
+        {{ else }}
+        The Receiver chose <b>{{ choice }}</b>.
+        {{ endif }}
+    </p>
 
-    {{ next_button }}
+    <p>
+        The bonus you earned from {{ choice }} is {{ player.payoff }}.
+    </p>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
 {{ endblock }}
 
 

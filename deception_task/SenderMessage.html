@@ -1,0 +1,100 @@
+{{ block title }}
+
+Message
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <script>
+        setTimeout(
+        function () {
+            alert("Please make your decision soon.");
+        },
+        90*1000 // 90 seconds
+    );
+    </script>
+
+{{ endblock }}
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    Below are the bonuses for both you and the Receiver based on which option the Receiver choses later.
+</p>
+<p>
+    Remember that the Receiver does not know the bonuses attached to each options
+    and will only learn what they earned themselves based on their choice.
+    They will not know what the other option was nor what you earned from their choice.
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which message would you like to send to the Receiver?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus than Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus than Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+{{ endblock }}
