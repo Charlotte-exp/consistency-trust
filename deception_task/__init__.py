@@ -11,7 +11,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'deception_task'
     PLAYERS_PER_GROUP = 2
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 3
 
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
@@ -35,14 +35,22 @@ class C(BaseConstants):
 class Subsession(BaseSubsession):
 
     def get_treatments(self):
-        if random.random() > 0.5:
-            return 'high_temptation'
-        else:
-            return 'low_temptation'
+        items = [1, 2, 3, 4]
+        random_item = random.choice(items)
+        if random_item == 1:
+            return 'high_high_high'
+        elif random_item == 2:
+            return 'high_high_low'
+        elif random_item == 3:
+            return 'high_low_high'
+        elif random_item == 4:
+            return 'high_low_low'
 
 
 class Group(BaseGroup):
     # pass
+    stake = models.StringField()
+
     choice = models.StringField(
         initial='',
         choices=['Option A', 'Option B'],
@@ -53,6 +61,12 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+
+    optionA_sender = models.CurrencyField()
+    optionA_receiver = models.CurrencyField()
+    optionB_sender = models.CurrencyField()
+    optionB_receiver = models.CurrencyField()
+    # stake = models.StringField()
 
     treatment = models.StringField()
     left_hanging = models.IntegerField(initial=0)
@@ -144,6 +158,22 @@ class Player(BasePlayer):
     #     else:
     #         return C.RECEIVER_ROLE == player.participant.role
 
+    def set_round_stakes(player):
+        list_round_stakes = []
+        if player.treatment == 'high_high_high':
+            list_round_stakes = ['high', 'high', 'high']
+        elif player.treatment == 'high_high_low':
+            list_round_stakes = ['high', 'high', 'low']
+        elif player.treatment == 'high_low_high':
+            list_round_stakes = ['high', 'low', 'high']
+        elif player.treatment == 'high_low_low':
+            list_round_stakes = ['high', 'low', 'low']
+
+        round_stake = list_round_stakes[player.round_number - 1]
+        print(player.treatment)
+        print(list_round_stakes)
+        print(round_stake)
+        return round_stake
 
 ########  Functions #######
 
@@ -163,10 +193,79 @@ def other_player(player: Player):
     return player.get_others_in_group()[0]
 
 
+# def set_round_stakes(player: Player):
+#     if player.treatment == 'high_high_high':
+#         if player.round_number == 1 or 2 or 3:
+#             player.group.stake = 'high'
+#     if player.treatment == 'high_high_low':
+#         if player.round_number == 1 or 2:
+#             player.group.stake = 'high'
+#         elif player.round_number == 3:
+#             player.group.stake = 'low'
+#     if player.treatment == 'high_low_high':
+#         if player.round_number == 1 or 3:
+#             player.group.stake = 'high'
+#         elif player.round_number == 2:
+#             player.group.stake = 'low'
+#     if player.treatment == 'high_low_low':
+#         if player.round_number == 1:
+#             player.group.stake = 'high'
+#         elif player.round_number == 2 or 3:
+#             player.group.stake = 'low'
+
+
+# def get_stakes(player: Player):
+#     if player.group.stake == 'high':
+#         player.optionA_sender = cu(0.5)
+#         player.optionA_receiver = cu(1.5)
+#         player.optionB_sender = cu(1.5)
+#         player.optionB_receiver = cu(0.5)
+#     else:
+#         player.optionA_sender = cu(0.5)
+#         player.optionA_receiver = cu(0.6)
+#         player.optionB_sender = cu(0.6)
+#         player.optionB_receiver = cu(0.5)
+
+def set_options(group: Group):
+    for p in group.get_players():
+        get_options(p)
+
+
+def get_options(player: Player):
+    if player.set_round_stakes() == 'high':
+        player.optionA_sender = cu(0.5)
+        player.optionA_receiver = cu(1.5)
+        player.optionB_sender = cu(1.5)
+        player.optionB_receiver = cu(0.5)
+    else:
+        player.optionA_sender = cu(0.5)
+        player.optionA_receiver = cu(0.6)
+        player.optionB_sender = cu(0.6)
+        player.optionB_receiver = cu(0.5)
+
+
+def set_payoffs(group: Group):
+    sender = group.get_player_by_role(C.SENDER_ROLE)
+    receiver = group.get_player_by_role(C.RECEIVER_ROLE)
+    if group.choice == 'Option A':
+        receiver.payoff = receiver.optionA_receiver
+        sender.payoff = sender.optionA_sender
+    else:
+        receiver.payoff = receiver.optionB_receiver
+        sender.payoff = sender.optionB_sender
+
+
+# def get_stakes(player: Player):
+#     if player.group.stake == 'high':
+#         return C.optionA_sender_high, C.optionA_receiver_high, C.optionB_sender_high, C.optionB_receiver_high
+#     else:
+#         return C.optionA_sender_low, C.optionA_receiver_low, C.optionB_sender_low, C.optionB_receiver_low
+
+
 # def set_payoffs(group: Group):
 #     sender = group.get_player_by_role(C.SENDER_ROLE)
 #     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-#     if receiver.choice == 'Option A':
+#     if group.choice == 'Option A':
 #         receiver.payoff = C.optionA_receiver
 #         sender.payoff = C.optionA_sender
 #     else:
@@ -174,23 +273,23 @@ def other_player(player: Player):
 #         sender.payoff = C.optionB_sender
 
 
-def set_payoffs(group: Group):
-    sender = group.get_player_by_role(C.SENDER_ROLE)
-    receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-    if receiver.treatment == 'high_temptation' and sender.treatment == 'high_temptation':
-        if group.choice == 'Option A':
-            sender.payoff = C.optionA_sender_high
-            receiver.payoff = C.optionA_receiver_high
-        else:
-            sender.payoff = C.optionB_sender_high
-            receiver.payoff = C.optionB_receiver_high
-    elif receiver.treatment == 'low_temptation' and sender.treatment == 'low_temptation':
-        if group.choice == 'Option A':
-            sender.payoff = C.optionA_sender_low
-            receiver.payoff = C.optionA_receiver_low
-        else:
-            sender.payoff = C.optionB_sender_low
-            receiver.payoff = C.optionB_receiver_low
+# def set_payoffs(group: Group):
+#     sender = group.get_player_by_role(C.SENDER_ROLE)
+#     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
+#     if receiver.treatment == 'high_high_high' and sender.treatment == 'high_high_high':
+#         if group.choice == 'Option A':
+#             sender.payoff = C.optionA_sender_high
+#             receiver.payoff = C.optionA_receiver_high
+#         else:
+#             sender.payoff = C.optionB_sender_high
+#             receiver.payoff = C.optionB_receiver_high
+#     elif receiver.treatment == 'low_temptation' and sender.treatment == 'low_temptation':
+#         if group.choice == 'Option A':
+#             sender.payoff = C.optionA_sender_low
+#             receiver.payoff = C.optionA_receiver_low
+#         else:
+#             sender.payoff = C.optionB_sender_low
+#             receiver.payoff = C.optionB_receiver_low
 
 
 ######  PAGES  #########
@@ -202,6 +301,13 @@ class PairingWaitPage(WaitPage):
         return player.round_number == 1
 
     template_name = 'deception_task/Waitroom.html'
+
+
+class StakesWaitPage(WaitPage):
+    after_all_players_arrive = set_options
+
+    template_name = 'deception_task/ResultsWaitPage.html'
+    # body_text = "Please wait for the Receiver to make their choice."
 
 
 class SenderMessage(Page):
@@ -224,6 +330,8 @@ class SenderMessage(Page):
                 receiver_optionA=C.optionA_receiver_high,
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
+
+                call_stakes=player.set_round_stakes(),
             )
         else:
             return dict(
@@ -232,6 +340,8 @@ class SenderMessage(Page):
                 receiver_optionA=C.optionA_receiver_low,
                 sender_optionB=C.optionB_sender_low,
                 receiver_optionB=C.optionB_receiver_low,
+
+                call_stakes=player.set_round_stakes(),
             )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
@@ -282,6 +392,8 @@ class ReceiverChoice(Page):
         partner = other_player(me)
         if partner.message == 'Option A':
             return dict(
+                other_player=partner,
+                olayer=player,
                 best_option='Option A',
                 worst_option='Option B'
             )
@@ -354,7 +466,7 @@ class Results(Page):
     #     """  """
     #     me = player
     #     partner = other_player(me)
-    #     if player.particpant.role == 'Receiver':
+    #     if player.participant.role == 'Receiver':
     #         if player.choice == 'Option A':
     #             return dict(
     #                 # role=player.role,
@@ -406,19 +518,24 @@ class Results(Page):
 
 
 class Demographics(Page):
-    """ This page displays survey box to record pp's demographics. it's just made of simple form fields. """
+    """ This page displays survey box to record participants' demographics. it's just made of simple form fields. """
     form_model = 'player'
     form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.round_number == C.num_rounds:
-    #         return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
 
 
 class Comprehension(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
 
     # @staticmethod
     # def error_message(player: Player, values):
@@ -454,18 +571,18 @@ class CommentBox(Page):
     form_model = 'player'
     form_fields = ['comment_box']
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.round_number == C.num_rounds:
-    #         return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
 
 
 class Payment(Page):
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.round_number == C.num_rounds:
-    #         return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -498,13 +615,14 @@ class ProlificLink(Page):
     There is a short text and the link in case it is not automatic.
     """
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
-    #     return player.round_number == C.num_rounds
+    @staticmethod
+    def is_displayed(player: Player):
+        """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
+        return player.round_number == C.NUM_ROUNDS
 
 
 page_sequence = [PairingWaitPage,
+                 StakesWaitPage, 
                  SenderMessage,
                  MessageWaitPage,
                  ReceiverChoice,
@@ -517,4 +635,3 @@ page_sequence = [PairingWaitPage,
                  CommentBox,
                  Payment,
                  ProlificLink]
-
