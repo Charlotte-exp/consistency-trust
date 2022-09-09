@@ -160,17 +160,17 @@ class Player(BasePlayer):
 
     def set_round_stakes(player):
         list_round_stakes = []
-        if player.treatment == 'high_high_high':
+        if player.participant.treatment == 'high_high_high':
             list_round_stakes = ['high', 'high', 'high']
-        elif player.treatment == 'high_high_low':
+        elif player.participant.treatment == 'high_high_low':
             list_round_stakes = ['high', 'high', 'low']
-        elif player.treatment == 'high_low_high':
+        elif player.participant.treatment == 'high_low_high':
             list_round_stakes = ['high', 'low', 'high']
-        elif player.treatment == 'high_low_low':
+        elif player.participant.treatment == 'high_low_low':
             list_round_stakes = ['high', 'low', 'low']
 
         round_stake = list_round_stakes[player.round_number - 1]
-        print(player.treatment)
+        print(player.participant.treatment)
         print(list_round_stakes)
         print(round_stake)
         return round_stake
@@ -323,26 +323,15 @@ class SenderMessage(Page):
 
     def vars_for_template(player: Player):
         """  """
-        if player.treatment == 'high_temptation':
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
+        return dict(
+            # role=player.role,
+            sender_optionA=player.optionA_sender,
+            receiver_optionA=player.optionA_receiver,
+            sender_optionB=player.optionB_sender,
+            receiver_optionB=player.optionB_receiver,
 
-                call_stakes=player.set_round_stakes(),
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_low,
-                receiver_optionA=C.optionA_receiver_low,
-                sender_optionB=C.optionB_sender_low,
-                receiver_optionB=C.optionB_receiver_low,
-
-                call_stakes=player.set_round_stakes(),
-            )
+            call_stakes=player.set_round_stakes(),
+        )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
     timeout_seconds = 2 * 60
@@ -498,23 +487,23 @@ class Results(Page):
     #             )
 
     # only need this if it is repeated rounds
-    # timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    # timeout_seconds = 2 * 60
+    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+    timeout_seconds = 2 * 60
 
 
 # only need this if it is repeated rounds
-# class End(Page):
-#
-#     @staticmethod
-#     def is_displayed(player: Player):
-#         if player.round_number == C.num_rounds:
-#             return True
-#
-#     def vars_for_template(player: Player):
-#         return dict(
-#             player_in_all_rounds=player.in_all_rounds(),
-#             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-#         )
+class End(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+    def vars_for_template(player: Player):
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+        )
 
 
 class Demographics(Page):
@@ -622,14 +611,14 @@ class ProlificLink(Page):
 
 
 page_sequence = [PairingWaitPage,
-                 StakesWaitPage, 
+                 StakesWaitPage,
                  SenderMessage,
                  MessageWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
                  Results,
                  LeftHanging,
-                 # End,
+                 End,
                  Demographics,
                  Comprehension,
                  CommentBox,
