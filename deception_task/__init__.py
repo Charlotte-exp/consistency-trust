@@ -15,9 +15,6 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = 6
     NUM_ROUNDS = 3
 
-    # SENDER_ROLE = 'Sender'
-    # RECEIVER_ROLE = 'Receiver'
-
     optionA_sender_high = cu(0.5)
     optionA_receiver_high = cu(1.5)
     optionB_sender_high = cu(1.5)
@@ -66,6 +63,7 @@ class Player(BasePlayer):
     # stake = models.StringField()
 
     treatment = models.StringField()
+    partner = models.IntegerField()
     left_hanging = models.IntegerField(initial=0)
 
     message = models.StringField(
@@ -150,12 +148,6 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    # def set_role(player):
-    #     if player.participant.role == 'Sender':
-    #         return C.SENDER_ROLE == player.participant.role
-    #     else:
-    #         return C.RECEIVER_ROLE == player.participant.role
-
     def set_round_stakes(player):
         list_round_stakes = []
         if player.participant.treatment == 'high_high_high':
@@ -168,9 +160,10 @@ class Player(BasePlayer):
             list_round_stakes = ['high', 'low', 'low']
 
         round_stake = list_round_stakes[player.round_number - 1]
-        print(player.participant.treatment)
-        print(list_round_stakes)
-        print(round_stake)
+        player.group.stake = round_stake
+        # print(player.participant.treatment)
+        # print(list_round_stakes)
+        # print(round_stake)
         return round_stake
 
 
@@ -187,11 +180,6 @@ def group_by_arrival_time_method(subsession, waiting_players):
             p.participant.treatment = treatment
             p.treatment = p.participant.treatment
         return players
-
-
-# def other_player(player: Player):
-#     print(player.get_others_in_group()[0])
-#     return player.get_others_in_group()[0]
 
 
 def get_partner(player: Player):
@@ -213,18 +201,21 @@ def get_partner(player: Player):
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
                     print(partner)
+                    # player.partner = partner
                     return partner
     elif player.round_number == 2:
         for partner_id in matches_round2[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
                     print(partner)
+                    # player.partner = partner
                     return partner
     elif player.round_number == 3:
         for partner_id in matches_round3[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
                     print(partner)
+                    # player.partner = partner
                     return partner
 
 
@@ -235,15 +226,15 @@ def set_options(group: Group):
 
 def get_options(player: Player):
     if player.set_round_stakes() == 'high':
-        player.optionA_sender = cu(0.5)
-        player.optionA_receiver = cu(1.5)
-        player.optionB_sender = cu(1.5)
-        player.optionB_receiver = cu(0.5)
+        player.optionA_sender = C.optionA_sender_high
+        player.optionA_receiver = C.optionA_receiver_high
+        player.optionB_sender = C.optionB_sender_high
+        player.optionB_receiver = C.optionB_receiver_high
     else:
-        player.optionA_sender = cu(0.5)
-        player.optionA_receiver = cu(0.6)
-        player.optionB_sender = cu(0.6)
-        player.optionB_receiver = cu(0.5)
+        player.optionA_sender = C.optionA_sender_low
+        player.optionA_receiver = C.optionA_receiver_low
+        player.optionB_sender = C.optionB_sender_low
+        player.optionB_receiver = C.optionB_receiver_low
 
 
 def set_payoffs(group: Group):
@@ -268,43 +259,6 @@ def get_payoffs(player: Player):
         else:
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
-
-
-# def get_stakes(player: Player):
-#     if player.group.stake == 'high':
-#         return C.optionA_sender_high, C.optionA_receiver_high, C.optionB_sender_high, C.optionB_receiver_high
-#     else:
-#         return C.optionA_sender_low, C.optionA_receiver_low, C.optionB_sender_low, C.optionB_receiver_low
-
-
-# def set_payoffs(group: Group):
-#     sender = group.get_player_by_role(C.SENDER_ROLE)
-#     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-#     if group.choice == 'Option A':
-#         receiver.payoff = C.optionA_receiver
-#         sender.payoff = C.optionA_sender
-#     else:
-#         receiver.payoff = C.optionB_receiver
-#         sender.payoff = C.optionB_sender
-
-
-# def set_payoffs(group: Group):
-#     sender = group.get_player_by_role(C.SENDER_ROLE)
-#     receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-#     if receiver.treatment == 'high_high_high' and sender.treatment == 'high_high_high':
-#         if group.choice == 'Option A':
-#             sender.payoff = C.optionA_sender_high
-#             receiver.payoff = C.optionA_receiver_high
-#         else:
-#             sender.payoff = C.optionB_sender_high
-#             receiver.payoff = C.optionB_receiver_high
-#     elif receiver.treatment == 'low_temptation' and sender.treatment == 'low_temptation':
-#         if group.choice == 'Option A':
-#             sender.payoff = C.optionA_sender_low
-#             receiver.payoff = C.optionA_receiver_low
-#         else:
-#             sender.payoff = C.optionB_sender_low
-#             receiver.payoff = C.optionB_receiver_low
 
 
 ######  PAGES  #########
