@@ -4,23 +4,20 @@ import random
 import itertools
 
 doc = """
-Your app description
+Deception task
+multi round
+multi treatment
 """
 
 
 class C(BaseConstants):
     NAME_IN_URL = 'deception_task'
-    PLAYERS_PER_GROUP = 2
+    PLAYERS_PER_GROUP = 6
     NUM_ROUNDS = 3
 
-    SENDER_ROLE = 'Sender'
-    RECEIVER_ROLE = 'Receiver'
+    # SENDER_ROLE = 'Sender'
+    # RECEIVER_ROLE = 'Receiver'
 
-    # optionA_sender = cu(5)
-    # optionA_receiver = cu(15)
-    # optionB_sender = cu(15)
-    # optionB_receiver = cu(5)
-    #
     optionA_sender_high = cu(0.5)
     optionA_receiver_high = cu(1.5)
     optionB_sender_high = cu(1.5)
@@ -51,13 +48,13 @@ class Group(BaseGroup):
     # pass
     stake = models.StringField()
 
-    choice = models.StringField(
-        initial='',
-        choices=['Option A', 'Option B'],
-        doc="""This player's decision""",
-        verbose_name='Your choice:',
-        widget=widgets.RadioSelect
-    )
+    # choice = models.StringField(
+    #     initial='',
+    #     choices=['Option A', 'Option B'],
+    #     doc="""This player's decision""",
+    #     verbose_name='Your choice:',
+    #     widget=widgets.RadioSelect
+    # )
 
 
 class Player(BasePlayer):
@@ -70,18 +67,19 @@ class Player(BasePlayer):
 
     treatment = models.StringField()
     left_hanging = models.IntegerField(initial=0)
+
     message = models.StringField(
         initial='',
         choices=['Option A', 'Option B'],
     )
 
-    # choice = models.StringField(
-    #     initial='',
-    #     choices=['Option A', 'Option B'],
-    #     doc="""This player's decision""",
-    #     verbose_name='Your choice:',
-    #     widget=widgets.RadioSelect
-    # )
+    choice = models.StringField(
+        initial='',
+        choices=['Option A', 'Option B'],
+        doc="""This player's decision""",
+        verbose_name='Your choice:',
+        widget=widgets.RadioSelect
+    )
 
     age = models.IntegerField(
         verbose_name='What is your age?',
@@ -175,13 +173,15 @@ class Player(BasePlayer):
         print(round_stake)
         return round_stake
 
+
 ########  Functions #######
+
 
 def group_by_arrival_time_method(subsession, waiting_players):
     senders = [p for p in waiting_players if p.participant.role == 'Sender']
     receivers = [p for p in waiting_players if p.participant.role == 'Receiver']
-    if len(senders) >= 1 and len(receivers) >= 1:
-        players = [senders[0], receivers[0]]
+    if len(senders) >= 3 and len(receivers) >= 3:
+        players = [senders[0], receivers[0], senders[1], receivers[1], senders[2], receivers[2]]
         treatment = subsession.get_treatments()
         for p in players:
             p.participant.treatment = treatment
@@ -189,42 +189,44 @@ def group_by_arrival_time_method(subsession, waiting_players):
         return players
 
 
-def other_player(player: Player):
-    return player.get_others_in_group()[0]
+# def other_player(player: Player):
+#     print(player.get_others_in_group()[0])
+#     return player.get_others_in_group()[0]
 
 
-# def set_round_stakes(player: Player):
-#     if player.treatment == 'high_high_high':
-#         if player.round_number == 1 or 2 or 3:
-#             player.group.stake = 'high'
-#     if player.treatment == 'high_high_low':
-#         if player.round_number == 1 or 2:
-#             player.group.stake = 'high'
-#         elif player.round_number == 3:
-#             player.group.stake = 'low'
-#     if player.treatment == 'high_low_high':
-#         if player.round_number == 1 or 3:
-#             player.group.stake = 'high'
-#         elif player.round_number == 2:
-#             player.group.stake = 'low'
-#     if player.treatment == 'high_low_low':
-#         if player.round_number == 1:
-#             player.group.stake = 'high'
-#         elif player.round_number == 2 or 3:
-#             player.group.stake = 'low'
+def get_partner(player: Player):
+    """
+    We have group of 6 participants who switch partner on each round.
+    We create a dictionary (matches) that matches the correct partner with each player.
+    We create a list of all the possible partners in the group (so 3 players without oneself).
+    Then for each player, we pick the matching partners from the dic and the 3 other players,
+    and the id that match in both lists make the new partners list.
+    """
+    matches_round1 = {1: [2], 2: [1], 3: [4], 4: [3], 5: [6], 6: [5]}
+    matches_round2 = {1: [4], 2: [5], 3: [6], 4: [1], 5: [2], 6: [3]}
+    matches_round3 = {1: [6], 2: [3], 3: [2], 4: [5], 5: [4], 6: [1]}
+    list_partners = player.get_others_in_group()
+    print(player.get_others_in_group())
+    print(player.id_in_group)
+    if player.round_number == 1:
+        for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
+            for partner in list_partners:
+                if partner.id_in_group == partner_id:
+                    print(partner)
+                    return partner
+    elif player.round_number == 2:
+        for partner_id in matches_round2[player.id_in_group]:
+            for partner in list_partners:
+                if partner.id_in_group == partner_id:
+                    print(partner)
+                    return partner
+    elif player.round_number == 3:
+        for partner_id in matches_round3[player.id_in_group]:
+            for partner in list_partners:
+                if partner.id_in_group == partner_id:
+                    print(partner)
+                    return partner
 
-
-# def get_stakes(player: Player):
-#     if player.group.stake == 'high':
-#         player.optionA_sender = cu(0.5)
-#         player.optionA_receiver = cu(1.5)
-#         player.optionB_sender = cu(1.5)
-#         player.optionB_receiver = cu(0.5)
-#     else:
-#         player.optionA_sender = cu(0.5)
-#         player.optionA_receiver = cu(0.6)
-#         player.optionB_sender = cu(0.6)
-#         player.optionB_receiver = cu(0.5)
 
 def set_options(group: Group):
     for p in group.get_players():
@@ -245,14 +247,27 @@ def get_options(player: Player):
 
 
 def set_payoffs(group: Group):
-    sender = group.get_player_by_role(C.SENDER_ROLE)
-    receiver = group.get_player_by_role(C.RECEIVER_ROLE)
-    if group.choice == 'Option A':
-        receiver.payoff = receiver.optionA_receiver
-        sender.payoff = sender.optionA_sender
+    for p in group.get_players():
+        get_payoffs(p)
+
+
+def get_payoffs(player: Player):
+    me = player
+    partner = get_partner(me)
+    if me.participant.role == 'Receiver':
+        if me.choice == 'Option A':
+            partner.payoff = partner.optionA_sender
+            me.payoff = me.optionA_receiver
+        else:
+            partner.payoff = partner.optionB_sender
+            me.payoff = me.optionB_receiver
     else:
-        receiver.payoff = receiver.optionB_receiver
-        sender.payoff = sender.optionB_sender
+        if partner.choice == 'Option A':
+            me.payoff = me.optionA_sender
+            partner.payoff = partner.optionA_receiver
+        else:
+            me.payoff = partner.optionB_sender
+            partner.payoff = me.optionB_receiver
 
 
 # def get_stakes(player: Player):
@@ -334,7 +349,7 @@ class SenderMessage(Page):
         )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 2 * 60
+    timeout_seconds = 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -344,7 +359,7 @@ class SenderMessage(Page):
         Decisions for the missed round are automatically filled to avoid an NONE type error.
         """
         me = player
-        partner = other_player(me)
+        partner = get_partner(me)
         if timeout_happened:
             partner.left_hanging = 1
             me.left_hanging = 2
@@ -365,7 +380,7 @@ class MessageWaitPage(WaitPage):
 
 
 class ReceiverChoice(Page):
-    form_model = 'group'
+    form_model = 'player'
     form_fields = ['choice']
 
     @staticmethod
@@ -378,11 +393,11 @@ class ReceiverChoice(Page):
     def vars_for_template(player: Player):
         """  """
         me = player
-        partner = other_player(me)
+        partner = get_partner(me)
         if partner.message == 'Option A':
             return dict(
                 other_player=partner,
-                olayer=player,
+                player=player,
                 best_option='Option A',
                 worst_option='Option B'
             )
@@ -392,19 +407,8 @@ class ReceiverChoice(Page):
                 worst_option='Option A'
             )
 
-        # return dict(sender_message=partner.message)
-
-        # if player.participant.condition == 'high':
-        #     return dict(
-        #         sender_message=player.message
-        #     )
-        # else:
-        #     return dict(
-        #         sender_message=player.message
-        #     )
-
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 2 * 60
+    timeout_seconds = 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -414,12 +418,12 @@ class ReceiverChoice(Page):
         Decisions for the missed round are automatically filled to avoid an NONE type error.
         """
         me = player
-        partner = other_player(me)
-        group = player.group
+        partner = get_partner(me)
         if timeout_happened:
             partner.left_hanging = 1
             me.left_hanging = 2
-            group.choice = 'None'
+            me.choice = 'None'
+            partner.choice = 'None'
 
 
 class ResultsWaitPage(WaitPage):
@@ -447,8 +451,19 @@ class Results(Page):
 
     def vars_for_template(player: Player):
         """  """
-        group = player.group
-        return dict(choice=group.choice)
+        me = player
+        partner = get_partner(me)
+        if me.participant.role == 'Receiver':
+            return dict(
+                choice=me.choice,
+                payoff=me.payoff
+            )
+        else:
+            return dict(
+                choice=partner.choice,
+                payoff=me.payoff
+            )
+
 
 # If choice is group field
     # def vars_for_template(player: Player):
@@ -488,7 +503,7 @@ class Results(Page):
 
     # only need this if it is repeated rounds
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 2 * 60
+    timeout_seconds = 12 * 60
 
 
 # only need this if it is repeated rounds

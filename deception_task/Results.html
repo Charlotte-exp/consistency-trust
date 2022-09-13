@@ -25,7 +25,7 @@
 
 {{ block content }}
     <p>
-        {{ if player.role == C.RECEIVER_ROLE }}
+        {{ if player.participant.role == 'Receiver' }}
         You chose <b>{{ choice }}</b>.
         {{ else }}
         The Receiver chose <b>{{ choice }}</b>.
@@ -33,7 +33,7 @@
     </p>
 
     <p>
-        The bonus you earned from {{ choice }} is {{ player.payoff }}.
+        The bonus you earned from {{ choice }} is {{ payoff }}.
     </p>
 
     <p>
