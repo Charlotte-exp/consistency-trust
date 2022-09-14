@@ -30,10 +30,26 @@ Instructions
     </p>
 </div>
 
+<div>
+    <p>
+        The task is repeated three times, each time with a different partner.
+        The role of all participants is fixed across all three repetitions.
+        The new partner does not know what happened in the previous repetition(s).
+    </p>
+    <p>
+        This means that Senders will send a message three times, each to a different Receiver.
+        And Receiver will make three different choices, each about a different Sender.
+    </p>
+    <p>
+        The bonuses are accumulated over the three repetitions and summed up.
+        The total amount will be paid as one bonus at the end of the experiment.
+    </p>
+</div>
+
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            In this task, you have been assigned the role of: <b>{{ player.role }}</b>
+            For all three repetitions of the task, you have been assigned the role of: <b>{{ player.role }}</b>
         </p>
 
         {{ if player.role == C.RECEIVER_ROLE }}

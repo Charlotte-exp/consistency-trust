@@ -49,7 +49,6 @@ class Consent(Page):
 
 class Instructions(Page):
 
-
     def vars_for_template(player: Player):
         """  """
         if player.role == C.RECEIVER_ROLE:
