@@ -25,7 +25,7 @@
 
 {{ block content }}
     <p>
-        {{ if player.participant.role == 'Receiver' }}
+        {{ if role == 'Receiver' }}
         You chose <b>{{ choice }}</b>.
         {{ else }}
         The Receiver chose <b>{{ choice }}</b>.

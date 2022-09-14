@@ -194,27 +194,26 @@ def get_partner(player: Player):
     matches_round2 = {1: [4], 2: [5], 3: [6], 4: [1], 5: [2], 6: [3]}
     matches_round3 = {1: [6], 2: [3], 3: [2], 4: [5], 5: [4], 6: [1]}
     list_partners = player.get_others_in_group()
-    print(player.get_others_in_group())
     print(player.id_in_group)
     if player.round_number == 1:
         for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner)
+                    print(partner.id_in_group)
                     # player.partner = partner
                     return partner
     elif player.round_number == 2:
         for partner_id in matches_round2[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner)
+                    print(partner.id_in_group)
                     # player.partner = partner
                     return partner
     elif player.round_number == 3:
         for partner_id in matches_round3[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner)
+                    print(partner.id_in_group)
                     # player.partner = partner
                     return partner
 
@@ -292,12 +291,17 @@ class SenderMessage(Page):
 
     def vars_for_template(player: Player):
         """  """
+        me = player
+        partner = get_partner(me)
         return dict(
             # role=player.role,
             sender_optionA=player.optionA_sender,
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
             receiver_optionB=player.optionB_receiver,
+
+            player=player.id_in_group,
+            partner=partner.id_in_group,
 
             call_stakes=player.set_round_stakes(),
         )
@@ -350,13 +354,15 @@ class ReceiverChoice(Page):
         partner = get_partner(me)
         if partner.message == 'Option A':
             return dict(
-                other_player=partner,
-                player=player,
+                other_player=partner.id_in_group,
+                player=player.id_in_group,
                 best_option='Option A',
                 worst_option='Option B'
             )
         else:
             return dict(
+                other_player=partner.id_in_group,
+                player=player.id_in_group,
                 best_option='Option B',
                 worst_option='Option A'
             )
@@ -390,7 +396,7 @@ class ResultsWaitPage(WaitPage):
     def is_displayed(player):
         if player.left_hanging == 1 or player.left_hanging == 2:
             return False
-        elif player.participant.role == 'Sender':
+        elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
             return True
 
 
@@ -410,12 +416,20 @@ class Results(Page):
         if me.participant.role == 'Receiver':
             return dict(
                 choice=me.choice,
-                payoff=me.payoff
+                payoff=me.payoff,
+                role=me.participant.role,
+
+                player=player.id_in_group,
+                partner=partner.id_in_group,
             )
         else:
             return dict(
                 choice=partner.choice,
-                payoff=me.payoff
+                payoff=me.payoff,
+                role=me.participant.role,
+
+                player=player.id_in_group,
+                partner=partner.id_in_group,
             )
 
 
@@ -589,7 +603,7 @@ page_sequence = [PairingWaitPage,
                  LeftHanging,
                  End,
                  Demographics,
-                 Comprehension,
-                 CommentBox,
+                 # Comprehension,
+                 # CommentBox,
                  Payment,
                  ProlificLink]
