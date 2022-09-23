@@ -166,6 +166,12 @@ class Player(BasePlayer):
         # print(round_stake)
         return round_stake
 
+    def get_button_order(player):
+        if random.random() > 0.5:
+            return 1
+        else:
+            return 0
+
 
 ########  Functions #######
 
@@ -357,14 +363,18 @@ class ReceiverChoice(Page):
                 other_player=partner.id_in_group,
                 player=player.id_in_group,
                 best_option='Option A',
-                worst_option='Option B'
+                worst_option='Option B',
+
+                button=player.get_button_order(),
             )
         else:
             return dict(
                 other_player=partner.id_in_group,
                 player=player.id_in_group,
                 best_option='Option B',
-                worst_option='Option A'
+                worst_option='Option A',
+
+                button=player.get_button_order(),
             )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'

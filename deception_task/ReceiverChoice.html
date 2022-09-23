@@ -53,6 +53,8 @@ Choice
     {{ player }}, {{ other_player }}
 </div>
 
+{{ if button == 1 }}
+
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
@@ -69,5 +71,24 @@ Choice
     </div>
 </div>
 
+{{ else }}
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ endif }}
 
 {{ endblock }}
