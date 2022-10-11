@@ -55,7 +55,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-
     optionA_sender = models.CurrencyField()
     optionA_receiver = models.CurrencyField()
     optionB_sender = models.CurrencyField()
@@ -200,7 +199,7 @@ def get_partner(player: Player):
     matches_round2 = {1: [4], 2: [5], 3: [6], 4: [1], 5: [2], 6: [3]}
     matches_round3 = {1: [6], 2: [3], 3: [2], 4: [5], 5: [4], 6: [1]}
     list_partners = player.get_others_in_group()
-    print(player.id_in_group)
+    # print(player.id_in_group)
     if player.round_number == 1:
         for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
             for partner in list_partners:
@@ -254,16 +253,22 @@ def get_payoffs(player: Player):
         if me.choice == 'Option A':
             partner.payoff = partner.optionA_sender
             me.payoff = me.optionA_receiver
-        else:
+        elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
+        elif me.choice == 'None':
+            partner.payoff = cu(0)
+            me.payoff = cu(0)
     else:
         if partner.choice == 'Option A':
             me.payoff = me.optionA_sender
             partner.payoff = partner.optionA_receiver
-        else:
+        elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
+        elif me.choice == 'None':
+            partner.payoff = cu(0)
+            me.payoff = cu(0)
 
 
 ######  PAGES  #########
@@ -280,7 +285,7 @@ class PairingWaitPage(WaitPage):
 class StakesWaitPage(WaitPage):
     after_all_players_arrive = set_options
 
-    template_name = 'deception_task/ResultsWaitPage.html'
+    template_name = 'deception_task/StakesWaitPage.html'
     # body_text = "Please wait for the Receiver to make their choice."
 
 
@@ -313,7 +318,15 @@ class SenderMessage(Page):
         )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+
+        if participant.is_dropout:
+            return 1  # instant timeout, 1 second
+        else:
+            return 0.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -325,14 +338,16 @@ class SenderMessage(Page):
         me = player
         partner = get_partner(me)
         if timeout_happened:
+            me.participant.is_dropout = True
+            print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
             me.message = 'None'
 
 
 class MessageWaitPage(WaitPage):
-
     template_name = 'deception_task/MessageWaitPage.html'
+
     # body_text = "Please wait for the Sender to send his message."
 
     @staticmethod
@@ -400,6 +415,7 @@ class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
 
     template_name = 'deception_task/ResultsWaitPage.html'
+
     # body_text = "Please wait for the Receiver to make their choice."
 
     @staticmethod
@@ -442,46 +458,33 @@ class Results(Page):
                 partner=partner.id_in_group,
             )
 
-
-# If choice is group field
-    # def vars_for_template(player: Player):
-    #     """  """
-    #     me = player
-    #     partner = other_player(me)
-    #     if player.participant.role == 'Receiver':
-    #         if player.choice == 'Option A':
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=group.choice,
-    #                 sender_payoff=C.optionA_sender_high,
-    #                 receiver_payoff=C.optionA_receiver_high,
-    #             )
-    #         else:
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=player.choice,
-    #                 sender_payoff=C.optionB_sender_high,
-    #                 receiver_payoff=C.optionB_receiver_high,
-    #             )
-    #     else:
-    #         if partner.choice == 'Option A':
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=partner.choice,
-    #                 sender_payoff=C.optionA_sender_low,
-    #                 receiver_payoff=C.optionA_receiver_low,
-    #             )
-    #         else:
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=partner.choice,
-    #                 sender_payoff=C.optionB_sender_low,
-    #                 receiver_payoff=C.optionB_receiver_low,
-    #             )
-
     # only need this if it is repeated rounds
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
     timeout_seconds = 12 * 60
+
+
+class LeftHanging(Page):
+    """
+    This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
+    and decision page that redirect them to this page. Here depending on who left and who was left hanging,
+    they get a different message (based on their left_hanging value).
+    The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
+    """
+
+    @staticmethod
+    def is_displayed(player):
+        """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
+        if player.left_hanging == 1 or player.left_hanging == 2:
+            return True
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+
+        if participant.is_dropout:
+            return 0.5 * 60  # instant timeout, 1 second
+        else:
+            return 2 * 60
 
 
 # only need this if it is repeated rounds
@@ -489,7 +492,9 @@ class End(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -506,7 +511,9 @@ class Demographics(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
 
@@ -516,7 +523,9 @@ class Comprehension(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     # @staticmethod
@@ -555,7 +564,9 @@ class CommentBox(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
 
@@ -563,7 +574,9 @@ class Payment(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -576,31 +589,17 @@ class Payment(Page):
         )
 
 
-class LeftHanging(Page):
-    """
-    This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
-    and decision page that redirect them to this page. Here depending on who left and who was left hanging,
-    they get a different message (based on their left_hanging value).
-    The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
-    """
-
-    @staticmethod
-    def is_displayed(player):
-        """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return True
-
-
 class ProlificLink(Page):
     """
     This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
     There is a short text and the link in case it is not automatic.
     """
-
     @staticmethod
     def is_displayed(player: Player):
-        """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
-        return player.round_number == C.NUM_ROUNDS
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
+            return True
 
 
 page_sequence = [PairingWaitPage,
@@ -612,7 +611,7 @@ page_sequence = [PairingWaitPage,
                  Results,
                  LeftHanging,
                  End,
-                 Demographics,
+                 # Demographics,
                  # Comprehension,
                  # CommentBox,
                  Payment,

@@ -36,7 +36,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 SESSION_FIELDS = []
-PARTICIPANT_FIELDS = ['treatment', 'role']
+PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout']
 
 
 # ISO-639 code
