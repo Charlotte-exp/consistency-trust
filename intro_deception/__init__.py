@@ -14,10 +14,15 @@ class C(BaseConstants):
     SENDER_ROLE = 'Sender'
     RECEIVER_ROLE = 'Receiver'
 
-    boxA_sender = cu(1)
-    boxA_receiver = cu(2)
-    boxB_sender = cu(3)
-    boxB_receiver = cu(4)
+    optionA_sender_high = cu(0.5)
+    optionA_receiver_high = cu(1.5)
+    optionB_sender_high = cu(1.5)
+    optionB_receiver_high = cu(0.5)
+
+    optionA_sender_low = cu(0.5)
+    optionA_receiver_low = cu(0.6)
+    optionB_sender_low = cu(0.6)
+    optionB_receiver_low = cu(0.5)
 
 
 class Subsession(BaseSubsession):
@@ -49,6 +54,32 @@ class Consent(Page):
         }
 
 
+class InstruSender(Page):
+
+    def vars_for_template(player: Player):
+        """  """
+        return dict(
+            # role=player.role,
+            sender_optionA=C.optionA_sender_high,
+            receiver_optionA=C.optionA_receiver_high,
+            sender_optionB=C.optionB_sender_high,
+            receiver_optionB=C.optionB_receiver_high,
+        )
+
+
+class InstruReceiver(Page):
+
+    def vars_for_template(player: Player):
+        """  """
+        return dict(
+            # role=player.role,
+            sender_optionA=C.optionA_sender_high,
+            receiver_optionA=C.optionA_receiver_high,
+            sender_optionB=C.optionB_sender_high,
+            receiver_optionB=C.optionB_receiver_high,
+        )
+
+
 class Instructions(Page):
 
     def vars_for_template(player: Player):
@@ -56,16 +87,22 @@ class Instructions(Page):
         if player.role == C.RECEIVER_ROLE:
             return dict(
                 # role=player.role,
-                receiver_payoff=C.boxB_sender,
-                sender_payoff=C.boxB_receiver,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
             )
         else:
             return dict(
                 # role=player.role,
-                receiver_payoff=C.boxB_sender,
-                sender_payoff=C.boxB_receiver,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
             )
 
 
 page_sequence = [Consent,
+                 # InstruSender,
+                 # InstruReceiver,
                  Instructions]
