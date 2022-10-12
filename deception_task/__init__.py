@@ -326,7 +326,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 0.5 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -393,7 +393,15 @@ class ReceiverChoice(Page):
             )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+
+        if participant.is_dropout:
+            return 1  # instant timeout, 1 second
+        else:
+            return 0.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -405,6 +413,8 @@ class ReceiverChoice(Page):
         me = player
         partner = get_partner(me)
         if timeout_happened:
+            me.participant.is_dropout = True
+            print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
             me.choice = 'None'
@@ -482,7 +492,7 @@ class LeftHanging(Page):
         participant = player.participant
 
         if participant.is_dropout:
-            return 0.5 * 60  # instant timeout, 1 second
+            return 0.5 * 60  # quick timeout so doesn't hold the others too long
         else:
             return 2 * 60
 
