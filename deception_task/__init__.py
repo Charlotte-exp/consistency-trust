@@ -64,6 +64,7 @@ class Player(BasePlayer):
     treatment = models.StringField()
     partner = models.IntegerField()
     left_hanging = models.IntegerField(initial=0)
+    missing_bonus = models.CurrencyField(initial=0)
 
     message = models.StringField(
         initial='',
@@ -171,6 +172,15 @@ class Player(BasePlayer):
         else:
             return 0
 
+    def get_missing_bonus(player):
+        if player.left_hanging == 1:
+            if player.set_round_stakes() == 'high':
+                player.missing_bonus = C.optionA_receiver_high
+                player.payoff = player.missing_bonus
+            else:
+                player.missing_bonus = C.optionA_receiver_low
+                player.payoff = player.missing_bonus
+
 
 ########  Functions #######
 
@@ -256,9 +266,9 @@ def get_payoffs(player: Player):
         elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
-        elif me.choice == 'None':
+        elif me.left_hanging == 1:
             partner.payoff = cu(0)
-            me.payoff = cu(0)
+            me.payoff = me.missing_bonus
     else:
         if partner.choice == 'Option A':
             me.payoff = me.optionA_sender
@@ -266,9 +276,9 @@ def get_payoffs(player: Player):
         elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
-        elif me.choice == 'None':
+        elif me.left_hanging == 1:
             partner.payoff = cu(0)
-            me.payoff = cu(0)
+            me.payoff = me.missing_bonus
 
 
 ######  PAGES  #########
@@ -326,7 +336,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 12 * 60
+            return 0.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -496,6 +506,35 @@ class LeftHanging(Page):
         else:
             return 2 * 60
 
+    def vars_for_template(player: Player):
+        """  """
+        me = player
+        partner = get_partner(me)
+        if me.participant.role == 'Receiver':
+            return dict(
+                call_missing_bonus=player.get_missing_bonus(),
+
+                payoff=me.payoff,
+                role=me.participant.role,
+                left_hanging=player.left_hanging,
+                missing_bonus=player.missing_bonus,
+
+                player=player.id_in_group,
+                partner=partner.id_in_group,
+            )
+        else:
+            return dict(
+                call_missing_bonus=player.get_missing_bonus(),
+
+                payoff=me.payoff,
+                role=me.participant.role,
+                left_hanging=player.left_hanging,
+                missing_bonus=player.missing_bonus,
+
+                player=player.id_in_group,
+                partner=partner.id_in_group,
+            )
+
 
 # only need this if it is repeated rounds
 class End(Page):
@@ -511,6 +550,8 @@ class End(Page):
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+            left_hanging_score=sum([p.left_hanging for p in player.in_all_rounds()]),
+            missing_bonus=player.missing_bonus,
         )
 
 

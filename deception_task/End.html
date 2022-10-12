@@ -24,9 +24,19 @@
         </tr>
     </table>
 
+{{ if left_hanging_score > 0 }}
 
-<div style="display: flex; justify-content: flex-end">
+<div>
+    <p>
+        In one of the tasks your partner dropped out.
+        As indicated then your bonus for that round is the highest of the two possible bonuses for you ({{ missing_bonus }}).
+    </p>
+</div>
+
+{{ endif }}
+
+    <div style="display: flex; justify-content: flex-end">
         {% next_button %}
-        </div>
+    </div>
 
 {{ endblock }}

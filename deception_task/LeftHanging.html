@@ -15,7 +15,7 @@
 
 {{ block content }}
 
-{{ if player.left_hanging == 1 }}
+{{ if left_hanging == 1 }}
     <div>
         <p>
             Looks like the participant you were paired with in this round left the study.
@@ -26,6 +26,25 @@
             You might have to wait a bit for them to finish this round.
         </p>
    </div>
+
+    {{ if role == 'Receiver' }}
+    <div>
+        <p>
+            Given that there was no sender to send a message,
+            you will simply be paid the highest of the two possible bonuses for you in this round,
+            which is {{ missing_bonus }}/ {{ payoff }}.
+        </p>
+    </div>
+    {{ else }}
+    <div>
+        <p>
+            Given that there was not receiver to make a choice,
+            you will simply be paid the highest of the two possible bonuses for you in this round,
+            which is {{ missing_bonus }}/ {{ payoff }}.
+        </p>
+    </div>
+
+    {{ endif }}
 
     <p>
         <div style="display: flex; justify-content: flex-end">
