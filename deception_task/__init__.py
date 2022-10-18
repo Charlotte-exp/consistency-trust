@@ -411,7 +411,7 @@ class ReceiverChoice(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 0.5 * 60
+            return 2 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -445,95 +445,101 @@ class ResultsWaitPage(WaitPage):
         elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
             return True
 
-
-class Results(Page):
-
-    @staticmethod
-    def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        else:
-            return True
-
     def vars_for_template(player: Player):
-        """  """
-        me = player
-        partner = get_partner(me)
-        if me.participant.role == 'Receiver':
-            return dict(
-                choice=me.choice,
-                payoff=me.payoff,
-                role=me.participant.role,
+            """  """
+            me = player
+            partner = get_partner(me)
+            return dict(role=me.participant.role)
 
-                player=player.id_in_group,
-                partner=partner.id_in_group,
-            )
-        else:
-            return dict(
-                choice=partner.choice,
-                payoff=me.payoff,
-                role=me.participant.role,
+# no round results!
+# class Results(Page):
+#
+#     @staticmethod
+#     def is_displayed(player):
+#         if player.left_hanging == 1 or player.left_hanging == 2:
+#             return False
+#         else:
+#             return True
+#
+#     def vars_for_template(player: Player):
+#         """  """
+#         me = player
+#         partner = get_partner(me)
+#         if me.participant.role == 'Receiver':
+#             return dict(
+#                 choice=me.choice,
+#                 payoff=me.payoff,
+#                 role=me.participant.role,
+#
+#                 player=player.id_in_group,
+#                 partner=partner.id_in_group,
+#             )
+#         else:
+#             return dict(
+#                 choice=partner.choice,
+#                 payoff=me.payoff,
+#                 role=me.participant.role,
+#
+#                 player=player.id_in_group,
+#                 partner=partner.id_in_group,
+#             )
+#
+#     # only need this if it is repeated rounds
+#     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+#     timeout_seconds = 12 * 60
 
-                player=player.id_in_group,
-                partner=partner.id_in_group,
-            )
 
-    # only need this if it is repeated rounds
-    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
-
-
-class LeftHanging(Page):
-    """
-    This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
-    and decision page that redirect them to this page. Here depending on who left and who was left hanging,
-    they get a different message (based on their left_hanging value).
-    The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
-    """
-
-    @staticmethod
-    def is_displayed(player):
-        """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return True
-
-    @staticmethod
-    def get_timeout_seconds(player):
-        participant = player.participant
-
-        if participant.is_dropout:
-            return 0.5 * 60  # quick timeout so doesn't hold the others too long
-        else:
-            return 2 * 60
-
-    def vars_for_template(player: Player):
-        """  """
-        me = player
-        partner = get_partner(me)
-        if me.participant.role == 'Receiver':
-            return dict(
-                call_missing_bonus=player.get_missing_bonus(),
-
-                payoff=me.payoff,
-                role=me.participant.role,
-                left_hanging=player.left_hanging,
-                missing_bonus=player.missing_bonus,
-
-                player=player.id_in_group,
-                partner=partner.id_in_group,
-            )
-        else:
-            return dict(
-                call_missing_bonus=player.get_missing_bonus(),
-
-                payoff=me.payoff,
-                role=me.participant.role,
-                left_hanging=player.left_hanging,
-                missing_bonus=player.missing_bonus,
-
-                player=player.id_in_group,
-                partner=partner.id_in_group,
-            )
+# class LeftHanging(Page):
+#     """
+#     This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
+#     and decision page that redirect them to this page. Here depending on who left and who was left hanging,
+#     they get a different message (based on their left_hanging value).
+#     The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
+#     """
+#
+#     @staticmethod
+#     def is_displayed(player):
+#         """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
+#         if player.left_hanging == 1 or player.left_hanging == 2:
+#             return True
+#
+#     @staticmethod
+#     def get_timeout_seconds(player):
+#         participant = player.participant
+#
+#         if participant.is_dropout:
+#             return 0.5 * 60  # quick timeout so doesn't hold the others too long
+#         else:
+#             return 2 * 60
+#
+#     def vars_for_template(player: Player):
+#         """  """
+#         me = player
+#         partner = get_partner(me)
+#         if me.participant.role == 'Receiver':
+#             return dict(
+#                 call_missing_bonus=player.get_missing_bonus(),
+#
+#                 payoff=me.payoff,
+#                 role=me.participant.role,
+#                 left_hanging=player.left_hanging,
+#                 missing_bonus=player.missing_bonus,
+#
+#                 player=player.id_in_group,
+#                 partner=partner.id_in_group,
+#             )
+#         else:
+#             return dict(
+#                 call_missing_bonus=player.get_missing_bonus(),
+#
+#                 payoff=me.payoff,
+#                 role=me.participant.role,
+#                 left_hanging=player.left_hanging,
+#                 missing_bonus=player.missing_bonus,
+#
+#                 player=player.id_in_group,
+#                 partner=partner.id_in_group,
+#             )
 
 
 # only need this if it is repeated rounds
@@ -659,8 +665,8 @@ page_sequence = [PairingWaitPage,
                  MessageWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
-                 Results,
-                 LeftHanging,
+                 # Results,
+                 # LeftHanging,
                  End,
                  # Demographics,
                  # Comprehension,
