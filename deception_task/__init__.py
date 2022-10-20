@@ -62,7 +62,8 @@ class Player(BasePlayer):
     # stake = models.StringField()
 
     treatment = models.StringField()
-    partner = models.IntegerField()
+    # partner = models.IntegerField()
+    partner_in_this_round = models.IntegerField()
     left_hanging = models.IntegerField(initial=0)
     missing_bonus = models.CurrencyField(initial=0)
 
@@ -214,22 +215,22 @@ def get_partner(player: Player):
         for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
     elif player.round_number == 2:
         for partner_id in matches_round2[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
     elif player.round_number == 3:
         for partner_id in matches_round3[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
 
 
@@ -298,6 +299,13 @@ class StakesWaitPage(WaitPage):
     template_name = 'deception_task/StakesWaitPage.html'
     # body_text = "Please wait for the Receiver to make their choice."
 
+    def vars_for_template(player: Player):
+            """  """
+            participant = player.participant
+            return dict(
+                is_dropout=participant.is_dropout,
+            )
+
 
 class SenderMessage(Page):
     form_model = 'player'
@@ -305,9 +313,7 @@ class SenderMessage(Page):
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Sender':
+        if player.participant.role == 'Sender':
             return True
 
     def vars_for_template(player: Player):
@@ -315,7 +321,6 @@ class SenderMessage(Page):
         me = player
         partner = get_partner(me)
         return dict(
-            # role=player.role,
             sender_optionA=player.optionA_sender,
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
@@ -332,7 +337,6 @@ class SenderMessage(Page):
     @staticmethod
     def get_timeout_seconds(player):
         participant = player.participant
-
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
@@ -352,7 +356,7 @@ class SenderMessage(Page):
             print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
-            me.message = 'None'
+            me.message = 'Option A'
 
 
 class MessageWaitPage(WaitPage):
@@ -362,7 +366,8 @@ class MessageWaitPage(WaitPage):
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
+        participant = player.participant
+        if participant.is_dropout:
             return False
         elif player.participant.role == 'Receiver':
             return True
@@ -374,9 +379,7 @@ class ReceiverChoice(Page):
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Receiver':
+        if player.participant.role == 'Receiver':
             return True
 
     def vars_for_template(player: Player):
@@ -411,7 +414,7 @@ class ReceiverChoice(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 0.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -438,18 +441,25 @@ class ResultsWaitPage(WaitPage):
 
     # body_text = "Please wait for the Receiver to make their choice."
 
-    @staticmethod
-    def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
-            return True
+    # @staticmethod
+    # def is_displayed(player):
+    #     participant = player.participant
+    #     if participant.is_dropout:
+    #         return False
+    #     elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
+    #         return True
 
     def vars_for_template(player: Player):
             """  """
             me = player
             partner = get_partner(me)
-            return dict(role=me.participant.role)
+            participant = player.participant
+            return dict(
+                role=me.participant.role,
+                is_dropout=participant.is_dropout,
+                round_number=player.round_number,
+                call_missing_bonus=player.get_missing_bonus(),
+            )
 
 # no round results!
 # class Results(Page):
@@ -500,7 +510,8 @@ class ResultsWaitPage(WaitPage):
 #     @staticmethod
 #     def is_displayed(player):
 #         """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-#         if player.left_hanging == 1 or player.left_hanging == 2:
+#         participant = player.participant
+#         if participant.is_dropout:
 #             return True
 #
 #     @staticmethod
@@ -557,7 +568,7 @@ class End(Page):
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
             left_hanging_score=sum([p.left_hanging for p in player.in_all_rounds()]),
-            missing_bonus=player.missing_bonus,
+            missing_bonus=sum([p.missing_bonus for p in player.in_all_rounds()]),
         )
 
 
