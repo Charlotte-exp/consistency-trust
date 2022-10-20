@@ -178,9 +178,13 @@ class Player(BasePlayer):
             if player.set_round_stakes() == 'high':
                 player.missing_bonus = C.optionA_receiver_high
                 player.payoff = player.missing_bonus
+                print('missing bonus', player.missing_bonus)
+                print('payoff', player.payoff)
             else:
                 player.missing_bonus = C.optionA_receiver_low
                 player.payoff = player.missing_bonus
+                print('missing bonus', player.missing_bonus)
+                print('payoff', player.payoff)
 
 
 ########  Functions #######
@@ -353,7 +357,7 @@ class SenderMessage(Page):
         partner = get_partner(me)
         if timeout_happened:
             me.participant.is_dropout = True
-            print(me.participant.is_dropout)
+            # print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
             me.message = 'Option A'
@@ -451,11 +455,9 @@ class ResultsWaitPage(WaitPage):
 
     def vars_for_template(player: Player):
             """  """
-            me = player
-            partner = get_partner(me)
             participant = player.participant
             return dict(
-                role=me.participant.role,
+                role=player.participant.role,
                 is_dropout=participant.is_dropout,
                 round_number=player.round_number,
                 call_missing_bonus=player.get_missing_bonus(),
