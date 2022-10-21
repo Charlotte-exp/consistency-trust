@@ -264,26 +264,26 @@ def set_payoffs(group: Group):
 def get_payoffs(player: Player):
     me = player
     partner = get_partner(me)
-    if me.participant.role == 'Receiver':
+    if me.left_hanging == 1:
+        # partner.payoff = cu(0)
+        me.payoff = me.missing_bonus
+    elif me.left_hanging == 2:
+        me.payoff = cu(0)
+        # partner.payoff = partner.missing_bonus
+    elif me.participant.role == 'Receiver':
         if me.choice == 'Option A':
             partner.payoff = partner.optionA_sender
             me.payoff = me.optionA_receiver
         elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
-        elif me.left_hanging == 1:
-            partner.payoff = cu(0)
-            me.payoff = me.missing_bonus
-    else:
+    elif me.participant.role == 'Sender':
         if partner.choice == 'Option A':
             me.payoff = me.optionA_sender
             partner.payoff = partner.optionA_receiver
         elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
-        elif me.left_hanging == 1:
-            partner.payoff = cu(0)
-            me.payoff = me.missing_bonus
 
 
 ######  PAGES  #########
