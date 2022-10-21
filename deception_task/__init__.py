@@ -186,6 +186,24 @@ class Player(BasePlayer):
                 print('missing bonus', player.missing_bonus)
                 print('payoff', player.payoff)
 
+    def get_round_of_missing_bonus(player):
+        rounds_dict = {}
+        if player.round_number == 1 and player.left_hanging == 1:
+            rounds_dict["which_round"] = player.round_number
+            rounds_dict["which_bonus"] = player.missing_bonus
+            print(rounds_dict)
+            return rounds_dict
+        if player.round_number == 2 and player.left_hanging == 1:
+            rounds_dict["which_round"] = player.round_number
+            rounds_dict["which_bonus"] = player.missing_bonus
+            print(rounds_dict)
+            return rounds_dict
+        if player.round_number == 3 and player.left_hanging == 1:
+            rounds_dict["which_round"] = player.round_number
+            rounds_dict["which_bonus"] = player.missing_bonus
+            print(rounds_dict)
+            return rounds_dict
+
 
 ########  Functions #######
 
@@ -461,6 +479,7 @@ class ResultsWaitPage(WaitPage):
                 is_dropout=participant.is_dropout,
                 round_number=player.round_number,
                 call_missing_bonus=player.get_missing_bonus(),
+                call_dict=player.get_round_of_missing_bonus(),
             )
 
 # no round results!
