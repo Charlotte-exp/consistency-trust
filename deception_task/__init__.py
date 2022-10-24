@@ -172,14 +172,18 @@ class Player(BasePlayer):
         else:
             return 0
 
-    def get_missing_bonus(player):
+    def set_missing_bonus(player):
         if player.left_hanging == 1:
             if player.set_round_stakes() == 'high':
                 player.missing_bonus = C.optionA_receiver_high
                 player.payoff = player.missing_bonus
+                print('missing bonus', player.missing_bonus)
+                print('payoff', player.payoff)
             else:
                 player.missing_bonus = C.optionA_receiver_low
                 player.payoff = player.missing_bonus
+                print('missing bonus', player.missing_bonus)
+                print('payoff', player.payoff)
 
 
 ########  Functions #######
@@ -214,22 +218,22 @@ def get_partner(player: Player):
         for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner = partner_id
                     return partner
     elif player.round_number == 2:
         for partner_id in matches_round2[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner = partner_id
                     return partner
     elif player.round_number == 3:
         for partner_id in matches_round3[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner = partner_id
                     return partner
 
 
@@ -259,26 +263,26 @@ def set_payoffs(group: Group):
 def get_payoffs(player: Player):
     me = player
     partner = get_partner(me)
-    if me.participant.role == 'Receiver':
+    if me.left_hanging == 1:
+        # partner.payoff = cu(0)
+        me.payoff = me.missing_bonus
+    elif me.left_hanging == 2:
+        me.payoff = cu(0)
+        # partner.payoff = partner.missing_bonus
+    elif me.participant.role == 'Receiver':
         if me.choice == 'Option A':
             partner.payoff = partner.optionA_sender
             me.payoff = me.optionA_receiver
         elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
-        elif me.left_hanging == 1:
-            partner.payoff = cu(0)
-            me.payoff = me.missing_bonus
-    else:
+    elif me.participant.role == 'Sender':
         if partner.choice == 'Option A':
             me.payoff = me.optionA_sender
             partner.payoff = partner.optionA_receiver
         elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
-        elif me.left_hanging == 1:
-            partner.payoff = cu(0)
-            me.payoff = me.missing_bonus
 
 
 ######  PAGES  #########
@@ -461,6 +465,7 @@ class Results(Page):
         partner = get_partner(me)
         if me.participant.role == 'Receiver':
             return dict(
+
                 choice=me.choice,
                 payoff=me.payoff,
                 role=me.participant.role,
@@ -470,6 +475,7 @@ class Results(Page):
             )
         else:
             return dict(
+
                 choice=partner.choice,
                 payoff=me.payoff,
                 role=me.participant.role,
@@ -512,7 +518,7 @@ class LeftHanging(Page):
         partner = get_partner(me)
         if me.participant.role == 'Receiver':
             return dict(
-                call_missing_bonus=player.get_missing_bonus(),
+                call_missing_bonus=player.set_missing_bonus(),
 
                 payoff=me.payoff,
                 role=me.participant.role,
@@ -524,7 +530,7 @@ class LeftHanging(Page):
             )
         else:
             return dict(
-                call_missing_bonus=player.get_missing_bonus(),
+                call_missing_bonus=player.set_missing_bonus(),
 
                 payoff=me.payoff,
                 role=me.participant.role,
