@@ -465,6 +465,8 @@ class Results(Page):
         partner = get_partner(me)
         if me.participant.role == 'Receiver':
             return dict(
+                left_hanging=player.left_hanging,
+                missing_bonus=player.missing_bonus,
 
                 choice=me.choice,
                 payoff=me.payoff,
@@ -475,6 +477,8 @@ class Results(Page):
             )
         else:
             return dict(
+                left_hanging=player.left_hanging,
+                missing_bonus=player.missing_bonus,
 
                 choice=partner.choice,
                 payoff=me.payoff,
@@ -500,7 +504,7 @@ class LeftHanging(Page):
     @staticmethod
     def is_displayed(player):
         """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-        if player.left_hanging == 1 or player.left_hanging == 2:
+        if player.left_hanging == 2:
             return True
 
     @staticmethod
