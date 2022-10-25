@@ -65,7 +65,6 @@ class Player(BasePlayer):
     # partner = models.IntegerField()
     partner_in_this_round = models.IntegerField()
     left_hanging = models.IntegerField(initial=0)
-    missing_bonus = models.CurrencyField(initial=0)
 
     message = models.StringField(
         initial='',
@@ -173,37 +172,6 @@ class Player(BasePlayer):
         else:
             return 0
 
-    def get_missing_bonus(player):
-        if player.left_hanging == 1:
-            if player.set_round_stakes() == 'high':
-                player.missing_bonus = C.optionA_receiver_high
-                player.payoff = player.missing_bonus
-                print('missing bonus', player.missing_bonus)
-                print('payoff', player.payoff)
-            else:
-                player.missing_bonus = C.optionA_receiver_low
-                player.payoff = player.missing_bonus
-                print('missing bonus', player.missing_bonus)
-                print('payoff', player.payoff)
-
-    def get_round_of_missing_bonus(player):
-        rounds_dict = {}
-        if player.round_number == 1 and player.left_hanging == 1:
-            rounds_dict["which_round"] = player.round_number
-            rounds_dict["which_bonus"] = player.missing_bonus
-            print(rounds_dict)
-            return rounds_dict
-        if player.round_number == 2 and player.left_hanging == 1:
-            rounds_dict["which_round"] = player.round_number
-            rounds_dict["which_bonus"] = player.missing_bonus
-            print(rounds_dict)
-            return rounds_dict
-        if player.round_number == 3 and player.left_hanging == 1:
-            rounds_dict["which_round"] = player.round_number
-            rounds_dict["which_bonus"] = player.missing_bonus
-            print(rounds_dict)
-            return rounds_dict
-
 
 ########  Functions #######
 
@@ -277,31 +245,48 @@ def get_options(player: Player):
 def set_payoffs(group: Group):
     for p in group.get_players():
         get_payoffs(p)
+        get_round_of_missing_bonus(p)
+        print_fuck(p)
 
 
 def get_payoffs(player: Player):
     me = player
     partner = get_partner(me)
-    if me.left_hanging == 1:
-        # partner.payoff = cu(0)
-        me.payoff = me.missing_bonus
-    elif me.left_hanging == 2:
-        me.payoff = cu(0)
-        # partner.payoff = partner.missing_bonus
-    elif me.participant.role == 'Receiver':
-        if me.choice == 'Option A':
+    if me.participant.role == 'Receiver':
+        if me.left_hanging == 1:
+            me.payoff = me.optionB_sender
+        elif me.left_hanging == 2:
+            me.payoff = cu(0)
+        elif me.choice == 'Option A':
             partner.payoff = partner.optionA_sender
             me.payoff = me.optionA_receiver
         elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
     elif me.participant.role == 'Sender':
-        if partner.choice == 'Option A':
+        if me.left_hanging == 1:
+            me.payoff = me.optionA_sender
+        elif me.left_hanging == 2:
+            me.payoff = cu(0)
+        elif partner.choice == 'Option A':
             me.payoff = me.optionA_sender
             partner.payoff = partner.optionA_receiver
         elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
+
+
+def get_round_of_missing_bonus(player: Player):
+    rounds_left_hanging = []
+    if player.left_hanging == 1:
+        rounds_left_hanging.append(player.round_number)
+        print(rounds_left_hanging)
+        return rounds_left_hanging
+
+
+def print_fuck(player: Player):
+    if player.left_hanging == 1:
+        print("Fuck")
 
 
 ######  PAGES  #########
@@ -449,7 +434,7 @@ class ReceiverChoice(Page):
         partner = get_partner(me)
         if timeout_happened:
             me.participant.is_dropout = True
-            print(me.participant.is_dropout)
+            # print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
             me.choice = 'None'
@@ -478,8 +463,7 @@ class ResultsWaitPage(WaitPage):
                 role=player.participant.role,
                 is_dropout=participant.is_dropout,
                 round_number=player.round_number,
-                call_missing_bonus=player.get_missing_bonus(),
-                call_dict=player.get_round_of_missing_bonus(),
+                # call_dict=player.get_round_of_missing_bonus(),
             )
 
 # no round results!
@@ -585,11 +569,23 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
+        me = player
+        round_of_missing_bonus = get_round_of_missing_bonus(me)
+        message = """Yo note that some co-player(s) left <br>"""
+        for round_ in range(1, 4):
+            me = player.in_round(round_)
+            if me.left_hanging == 1:
+                message += f"Your co-player in round {round_} left and you received the payoff {me.payoff} <br>"
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
             left_hanging_score=sum([p.left_hanging for p in player.in_all_rounds()]),
-            missing_bonus=sum([p.missing_bonus for p in player.in_all_rounds()]),
+
+            # player_in_left_hanging_rounds=player.in_round(*round_of_missing_bonus),
+            # missing_bonus=[p.payoff for p in player.in_round(get_round_of_missing_bonus(player))],
+            # rounds_left_hanging=player.in_rounds(get_round_of_missing_bonus(player))
+
+            message=message,
         )
 
 
