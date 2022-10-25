@@ -569,22 +569,15 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
-        me = player
-        round_of_missing_bonus = get_round_of_missing_bonus(me)
-        message = """Yo note that some co-player(s) left <br>"""
+        message = """"""
         for round_ in range(1, 4):
             me = player.in_round(round_)
             if me.left_hanging == 1:
-                message += f"Your co-player in round {round_} left and you received the payoff {me.payoff} <br>"
+                message += f"For task {round_} your bonus is {me.payoff} <br>"
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
             left_hanging_score=sum([p.left_hanging for p in player.in_all_rounds()]),
-
-            # player_in_left_hanging_rounds=player.in_round(*round_of_missing_bonus),
-            # missing_bonus=[p.payoff for p in player.in_round(get_round_of_missing_bonus(player))],
-            # rounds_left_hanging=player.in_rounds(get_round_of_missing_bonus(player))
-
             message=message,
         )
 
