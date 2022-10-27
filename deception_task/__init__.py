@@ -112,10 +112,10 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, 'Yes'],
-            [2, 'No']
+            [1, '1, the same in each task'],
+            [2, '3, one per task']
         ],
-        verbose_name='Did both player know that the Receiver would never learn the bonuses from the option not chosen?',
+        verbose_name='With how many different partner did each participant interact?',
         widget=widgets.RadioSelect
     )
 
@@ -130,10 +130,11 @@ class Player(BasePlayer):
 
     q3 = models.IntegerField(
         choices=[
-            [1, 'Yes'],
-            [2, 'No']
+            [1, 'Only their own final bonus and not the one of the Sender'],
+            [2, "Both their own and the Sender's final bonus"],
+            [3, "Both their own and the Sender's final bonus, as well as the bonus of the option not chosen"],
         ],
-        verbose_name='Did the bonuses from each option have to be the same for both participant?',
+        verbose_name='What did the Receiver know about the bonuses in the end?',
         widget=widgets.RadioSelect
     )
 
@@ -459,97 +460,6 @@ class ResultsWaitPage(WaitPage):
                 round_number=player.round_number,
             )
 
-# no round results!
-# class Results(Page):
-#
-#     @staticmethod
-#     def is_displayed(player):
-#         if player.left_hanging == 1 or player.left_hanging == 2:
-#             return False
-#         else:
-#             return True
-#
-#     def vars_for_template(player: Player):
-#         """  """
-#         me = player
-#         partner = get_partner(me)
-#         if me.participant.role == 'Receiver':
-#             return dict(
-#                 choice=me.choice,
-#                 payoff=me.payoff,
-#                 role=me.participant.role,
-#
-#                 player=player.id_in_group,
-#                 partner=partner.id_in_group,
-#             )
-#         else:
-#             return dict(
-#                 choice=partner.choice,
-#                 payoff=me.payoff,
-#                 role=me.participant.role,
-#
-#                 player=player.id_in_group,
-#                 partner=partner.id_in_group,
-#             )
-#
-#     # only need this if it is repeated rounds
-#     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-#     timeout_seconds = 12 * 60
-
-
-# class LeftHanging(Page):
-#     """
-#     This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
-#     and decision page that redirect them to this page. Here depending on who left and who was left hanging,
-#     they get a different message (based on their left_hanging value).
-#     The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
-#     """
-#
-#     @staticmethod
-#     def is_displayed(player):
-#         """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-#         participant = player.participant
-#         if participant.is_dropout:
-#             return True
-#
-#     @staticmethod
-#     def get_timeout_seconds(player):
-#         participant = player.participant
-#
-#         if participant.is_dropout:
-#             return 0.5 * 60  # quick timeout so doesn't hold the others too long
-#         else:
-#             return 2 * 60
-#
-#     def vars_for_template(player: Player):
-#         """  """
-#         me = player
-#         partner = get_partner(me)
-#         if me.participant.role == 'Receiver':
-#             return dict(
-#                 call_missing_bonus=player.get_missing_bonus(),
-#
-#                 payoff=me.payoff,
-#                 role=me.participant.role,
-#                 left_hanging=player.left_hanging,
-#                 missing_bonus=player.missing_bonus,
-#
-#                 player=player.id_in_group,
-#                 partner=partner.id_in_group,
-#             )
-#         else:
-#             return dict(
-#                 call_missing_bonus=player.get_missing_bonus(),
-#
-#                 payoff=me.payoff,
-#                 role=me.participant.role,
-#                 left_hanging=player.left_hanging,
-#                 missing_bonus=player.missing_bonus,
-#
-#                 player=player.id_in_group,
-#                 partner=partner.id_in_group,
-#             )
-
 
 # only need this if it is repeated rounds
 class End(Page):
@@ -683,7 +593,7 @@ page_sequence = [PairingWaitPage,
                  # LeftHanging,
                  End,
                  # Demographics,
-                 # Comprehension,
-                 # CommentBox,
+                 Comprehension,
+                 CommentBox,
                  Payment,
                  ProlificLink]
