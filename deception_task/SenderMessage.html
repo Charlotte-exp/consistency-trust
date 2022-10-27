@@ -40,12 +40,12 @@ Message
 {{ block content }}
 
 <p>
-    Below are the bonuses for both you and the Receiver based on which option the Receiver choses later.
-</p>
-<p>
+    Below are the two bonus payment options for both you and the Receiver for this task.
     Remember that the Receiver does not know the bonuses attached to each options
-    and will only learn what they earned themselves based on their choice.
-    They will not know what the other option was nor what you earned from their choice.
+    and that the only information they will have is your message.
+    <br>
+    They will only know the final payoff at the end of the experiment,
+    never what the other option was nor what you earned from their choice.
 </p>
 
 <div class="card-body">
@@ -90,10 +90,10 @@ Message
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus than Option A</button>
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus than Option B</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus than Option B</button>
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus than Option A</button>
             </div>
         </div>
     </div>

@@ -11,7 +11,7 @@ multi treatment
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'deception_task'
+    NAME_IN_URL = 'Task'
     PLAYERS_PER_GROUP = 6
     NUM_ROUNDS = 3
 
@@ -245,7 +245,6 @@ def get_options(player: Player):
 def set_payoffs(group: Group):
     for p in group.get_players():
         get_payoffs(p)
-        get_round_of_missing_bonus(p)
         print_fuck(p)
 
 
@@ -254,7 +253,7 @@ def get_payoffs(player: Player):
     partner = get_partner(me)
     if me.participant.role == 'Receiver':
         if me.left_hanging == 1:
-            me.payoff = me.optionB_sender
+            me.payoff = me.optionA_receiver
         elif me.left_hanging == 2:
             me.payoff = cu(0)
         elif me.choice == 'Option A':
@@ -265,7 +264,7 @@ def get_payoffs(player: Player):
             me.payoff = me.optionB_receiver
     elif me.participant.role == 'Sender':
         if me.left_hanging == 1:
-            me.payoff = me.optionA_sender
+            me.payoff = me.optionB_sender
         elif me.left_hanging == 2:
             me.payoff = cu(0)
         elif partner.choice == 'Option A':
@@ -276,15 +275,10 @@ def get_payoffs(player: Player):
             partner.payoff = me.optionB_receiver
 
 
-def get_round_of_missing_bonus(player: Player):
-    rounds_left_hanging = []
-    if player.left_hanging == 1:
-        rounds_left_hanging.append(player.round_number)
-        print(rounds_left_hanging)
-        return rounds_left_hanging
-
-
 def print_fuck(player: Player):
+    """
+    Just to test how to call multiple functions through set_payoffs and after_all_players_arrive. It does!
+    """
     if player.left_hanging == 1:
         print("Fuck")
 
@@ -347,7 +341,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 0.5 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -421,7 +415,7 @@ class ReceiverChoice(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 0.5 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -463,7 +457,6 @@ class ResultsWaitPage(WaitPage):
                 role=player.participant.role,
                 is_dropout=participant.is_dropout,
                 round_number=player.round_number,
-                # call_dict=player.get_round_of_missing_bonus(),
             )
 
 # no round results!
