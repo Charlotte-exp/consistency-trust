@@ -1,3 +1,4 @@
+{{ block title }}
 Instructions
 {{ endblock }}
 
@@ -11,32 +12,68 @@ Instructions
         Neither of you will ever know the identity of the other.
     </p>
     <p>
-        Two possible bonuses are available to you and your counterpart in the experiment.
+        The experiment is made of one task repeated three times, each time with a new counterpart.
+        The task is a choice between two options: A and B.
+        These options determine your and your counterpart's bonus.
+        The task is made of two steps:
+        First, you see the bonuses assigned to each option and send a message to your counterpart about the options.
+        Second, your counterpart sees the message and chooses one of the two options.
     </p>
-
+    <p>
+        The bonuses for each options might be different in each repetition of the task or all the same.
+        Which amounts you get for your pair is random for each round.
+        The bonuses of all three rounds will be summed up and paid to you through Prolific.
+    </p>
+    <p>
+        You will be the one seeing the options and sending the message.
+        You will have the same role and choice in each task.
+        Here is an example of one set of two options:
+    </p>
 </div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
         The two payment options are:
-    </p>
-    <ul>
-        <li>
-            Option A: $5 to you and $6 to the other student
-        </li>
-        <li>
-            Option B: $6 to you and $5 to the other student
-        </li>
-    </ul>
+        </p>
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
     </div>
 </div>
 
 <div>
+    <p></p>
     <p>
-        The choice rests with the other student who will have to choose either option A or option B.
+        The choice rests with the other student who will have to choose either Option A or Option B in the second part of the task.
         The only information your counterpart will have is information sent by you in a message.
-        That is, he or she will not know the monetary payments associated with each choice.
+        That is, they will not know the bonuses associated with each option.
+        Here is an example of the two possible messages you can send:
     </p>
 </div>
 
@@ -47,35 +84,32 @@ Instructions
     </p>
     <ul>
         <li>
-            Message 1: “Option A will earn you more money than option B.”
+            Message 1: “Option A will earn you more money than Option B.”
         </li>
         <li>
-            Message 2: “Option B will earn you more money than option A.”
+            Message 2: “Option B will earn you more money than Option A.”
         </li>
     </ul>
     </div>
 </div>
 
 <div>
+    <p></p>
     <p>
-        We will show the other student your message, and ask him or her to choose either A or B.
-        To repeat, your counterpart’s choice will determine the bonuses in the experiment.
-        However, your counterpart will never know what sums were actually offered in the option not chosen
-        (that is, he or she will never know whether your message was true or not).
-        Moreover, he or she will never know the sums to be paid to you according to the different options.
+        In the second part, your counterpart will see your message, and then choose either Option A or Option B.
+        Your counterpart decision will determine both your bonuses, regardless of whether or not they followed your suggestion.
+        However, your counterpart will never know what amounts were actually offered in the option not chosen
+        (that is, they will never know whether your message was true or not).
+        Moreover, they will never know the amounts to be paid to you according to the different options.
     </p>
     <p>
         We will pay the bonus to the two of you according to the choice made by your counterpart.
     </p>
-</div>
-
-<p></p>
-
-<div>
     <p>
         After you press the "Next" button,
-        you will be redirected to a waitroom to be paired with another player who you will send the message to.
+        you will be redirected to a waitroom to be paired with your first counterpart.
         Once you are paired, the task will start immediately.
+        Once the first task is finished, you will come back to the waitroom to be paired with a new counterpart.
     </p>
 </div>
 

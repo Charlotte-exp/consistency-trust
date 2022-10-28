@@ -7,62 +7,72 @@ Instructions
 
 <div>
     <p>
+        This is a short experiment in decision-making.
+        In this experiment you will be matched with another participant from Prolific.
+        Neither of you will ever know the identity of the other.
+    </p>
+    <p>
         There are two players in this task: a <b>Sender</b> and a <b>Receiver</b>.
     </p>
     <p>
-        The task is a choice between two options: A and B.
-        The options determine a bonus each for the Sender and the Receiver.
-        The option chosen dictates which bonus both players get.
+        The experiment is made of one task repeated three times, each time with another participant.
+        Your role, either Sender or Receiver, is fixed across all three repeats of the task.
+        The task is a choice between two bonus payment options: A and B.
+        Each option determines a monetary bonus for both participants.
     </p>
     <p>
-        The Receiver makes the choice, but they do not know the bonuses from the options.
-        The Sender does not make the choice, but they do know the bonuses from the options.
-    </p>
-        The task is made of two steps.
-        First, the Sender has the opportunity to send a message to the Receiver recommending one option over the other.
-        Then the Receiver sees that message and can chose one of the two options.
+        There are two possible sets of payment options.
+        On each round you can face either of the two with 50% probability.
+        The bonuses of all three rounds will be summed up and paid to you through Prolific.
     </p>
     <p>
-        The Receiver is free to chose whichever option they wish, regardless of what the message is.
-        Whether the Receiver follows the message or not has no impact on the bonus of either player.
-        The amounts from the option chosen by the Receiver are the bonus that both will receive.
-        They are not necessarily the same for each player.
+        The task is made of two steps:
+        First, the Sender is informed of the bonuses attached to each option
+        and then sends a message to the Receiver about these options.
+        Second, the Receiver sees this message and chooses one of the two options.
+    </p>
+    <p>
+        The Receiver makes the choice, but they do not know the bonuses attached to each options.
+        The Sender does not make the choice, but they do know the bonuses attached to each options.
     </p>
 </div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            In this task, you have been assigned the role of: <b>{{ player.role }}</b>
+            For all three repetitions of the task, you have been assigned the role of: <b>{{ player.role }}</b>
         </p>
 
         {{ if player.role == C.RECEIVER_ROLE }}
         <p>
-            You are the one choosing between option A and option B.
-            Before you do so, you will receive a message from the Sender who themselves know what the bonuses attached to each option are.
+            You are the one choosing between Option A and Option B.
+            In the first step, the Sender saw the bonuses attached to each option and chose which message to send you.
         </p>
         <p>
             The message you receive will be either of:
             <ul>
                 <li>
-                    Option A will earn you a bigger bonus that Option B.
+                    Option A will earn you a bigger bonus than Option B.
                 </li>
                 <li>
-                    Option B will earn you a bigger bonus that Option A.
+                    Option B will earn you a bigger bonus than Option A.
                 </li>
             </ul>
         </p>
         <p>
-            You will never know what bonuses were actually offered in the option not chosen
-            (that is, if the message sent by the Sender was true or not).
-            Moreover, you will never know the bonus the Sender could have earned with the other option.
+            For the second step, once you have the message, it is your turn to choose either option A or option B.
             The message is not binding: in the end, it only depends on your choice.
-            Your choice will decide both yours and the Sender's bonus.
+            Your decision will determine both of your bonuses,
+            regardless of whether or not your followed the Sender's suggestion.
+            However, you will never know what bonuses were actually offered in the option not chosen
+            (that is, if the message sent by the Sender was true or not).
+            Moreover, you will never know the bonus the Sender could be paid with the other option.
         </p>
+
         {{ else }}
         <p>
             You are the one who knows what the bonuses from each option are.
-            You have a choice between two messages to send to the Receiver to influence their choice.
+            In the first step, you have a choice between two messages to send to the Receiver to influence their choice.
         </p>
         <p>
             The message you send can be either of:
@@ -76,8 +86,10 @@ Instructions
             </ul>
         </p>
         <p>
-            The Receiver can choose whether or not to use this information when deciding which option to pick.
-            Their decision will determine both of your bonuses, regardless of whether or not they followed your suggestion.
+            For the second step, the Receiver will see your message, and then choose either Option A or Option B.
+            The message is not binding: in the end, it only depends on the Receiver's choice.
+            Their decision will determine both of your bonuses,
+            regardless of whether or not they followed your suggestion.
             However, the Receiver will never know what bonuses were actually offered in the option not chosen
             (that is,they will never know whether your message was true or not).
             Moreover, they will never know the bonuses that you could have earned according to the different options.
@@ -91,9 +103,10 @@ Instructions
 <div>
     <p>
         After you press the "Next" button,
-        you will be redirected to a waitroom to be paired with another player who will be the
+        you will be redirected to a wait room to be paired with another player who will be the
         {{ if player.role == C.RECEIVER_ROLE }}Sender{{ else }}Receiver{{ endif }}.
         Once you are paired, the task will start immediately.
+        Once the first task is finished, you will come back to the wait room to be paired with a new participant.
     </p>
 </div>
 

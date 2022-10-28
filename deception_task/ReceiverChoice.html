@@ -40,18 +40,18 @@ Choice
 {{ block content }}
 
 <p>
-    Here are the two options with your bonuses inside.
+    Here are the two options you can choose from.
+    Remember, each option has a different set of bonus payment for you and the Sender.
+    <br>
+    The Sender knows the bonus payments for each option are.
 </p>
 
 <p>
-    The Sender knows the bonuses inside the options. <br>
     Their message is:
     <b>{{ best_option }} will earn you more money than {{ worst_option}}</b>
 </p>
 
-<div>
-    {{ player }}, {{ other_player }}
-</div>
+{{ if button == 1 }}
 
 <div class="card bg-light instructions">
     <div class="card-body">
@@ -69,5 +69,24 @@ Choice
     </div>
 </div>
 
+{{ else }}
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ endif }}
 
 {{ endblock }}

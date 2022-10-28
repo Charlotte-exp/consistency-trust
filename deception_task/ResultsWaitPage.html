@@ -8,14 +8,49 @@
 
 {% block content %}
 
-<div>
-    <p>
-        Please wait while the other participant makes their choice.
-    </p>
-    <p>
-        If the waiting time is too long the study will assume the other player dropped out
-        and you will be redirected to Prolific.
-    </p>
-</div>
+{{ if is_dropout }}
+
+    <div>
+        <p>You were inactive too long and the program assumed you dropped out. Thus the game was ended.</p>
+   </div>
+
+{{ else }}
+
+    {{ if role == 'Receiver' }}
+
+        {{ if round_number == 3 }}
+            <div>
+                <p>
+                    This was the last task.
+                    Once all the other participants in your session are finished you will proceed to the end of the experiment.
+                </p>
+                <p>
+                    This might take a couple minutes.
+                </p>
+            </div>
+
+        {{ else }}
+        <div>
+            <p>
+                Please wait to be paired with a new participant for the next task.
+                This might take a couple of minutes while the other participants finishes the previous task.
+            </p>
+        </div>
+
+        {{ endif }}
+
+    {{ else }}
+
+    <div>
+        <p>
+            Please wait while the other participant makes their choice.
+        </p>
+        <p>
+            This might take a couple of minutes.
+        </p>
+    </div>
+
+    {{ endif }}
+{{ endif }}
 
 {% endblock %}>

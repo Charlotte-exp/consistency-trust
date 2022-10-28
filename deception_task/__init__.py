@@ -11,7 +11,7 @@ multi treatment
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'deception_task'
+    NAME_IN_URL = 'Task'
     PLAYERS_PER_GROUP = 6
     NUM_ROUNDS = 3
 
@@ -55,7 +55,6 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-
     optionA_sender = models.CurrencyField()
     optionA_receiver = models.CurrencyField()
     optionB_sender = models.CurrencyField()
@@ -63,7 +62,8 @@ class Player(BasePlayer):
     # stake = models.StringField()
 
     treatment = models.StringField()
-    partner = models.IntegerField()
+    # partner = models.IntegerField()
+    partner_in_this_round = models.IntegerField()
     left_hanging = models.IntegerField(initial=0)
 
     message = models.StringField(
@@ -112,10 +112,10 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, 'Yes'],
-            [2, 'No']
+            [1, '1, the same in each task'],
+            [2, '3, one per task']
         ],
-        verbose_name='Did both player know that the Receiver would never learn the bonuses from the option not chosen?',
+        verbose_name='With how many different partner did each participant interact?',
         widget=widgets.RadioSelect
     )
 
@@ -130,10 +130,11 @@ class Player(BasePlayer):
 
     q3 = models.IntegerField(
         choices=[
-            [1, 'Yes'],
-            [2, 'No']
+            [1, 'Only their own final bonus and not the one of the Sender'],
+            [2, "Both their own and the Sender's final bonus"],
+            [3, "Both their own and the Sender's final bonus, as well as the bonus of the option not chosen"],
         ],
-        verbose_name='Did the bonuses from each option have to be the same for both participant?',
+        verbose_name='What did the Receiver know about the bonuses in the end?',
         widget=widgets.RadioSelect
     )
 
@@ -166,6 +167,12 @@ class Player(BasePlayer):
         # print(round_stake)
         return round_stake
 
+    def get_button_order(player):
+        if random.random() > 0.5:
+            return 1
+        else:
+            return 0
+
 
 ########  Functions #######
 
@@ -194,27 +201,27 @@ def get_partner(player: Player):
     matches_round2 = {1: [4], 2: [5], 3: [6], 4: [1], 5: [2], 6: [3]}
     matches_round3 = {1: [6], 2: [3], 3: [2], 4: [5], 5: [4], 6: [1]}
     list_partners = player.get_others_in_group()
-    print(player.id_in_group)
+    # print(player.id_in_group)
     if player.round_number == 1:
         for partner_id in matches_round1[player.id_in_group]:  # picks the two partners from the matches dict
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
     elif player.round_number == 2:
         for partner_id in matches_round2[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
     elif player.round_number == 3:
         for partner_id in matches_round3[player.id_in_group]:
             for partner in list_partners:
                 if partner.id_in_group == partner_id:
-                    print(partner.id_in_group)
-                    # player.partner = partner
+                    # print(partner.id_in_group)
+                    player.partner_in_this_round = partner_id
                     return partner
 
 
@@ -239,25 +246,42 @@ def get_options(player: Player):
 def set_payoffs(group: Group):
     for p in group.get_players():
         get_payoffs(p)
+        print_fuck(p)
 
 
 def get_payoffs(player: Player):
     me = player
     partner = get_partner(me)
     if me.participant.role == 'Receiver':
-        if me.choice == 'Option A':
+        if me.left_hanging == 1:
+            me.payoff = me.optionA_receiver
+        elif me.left_hanging == 2:
+            me.payoff = cu(0)
+        elif me.choice == 'Option A':
             partner.payoff = partner.optionA_sender
             me.payoff = me.optionA_receiver
-        else:
+        elif me.choice == 'Option B':
             partner.payoff = partner.optionB_sender
             me.payoff = me.optionB_receiver
-    else:
-        if partner.choice == 'Option A':
+    elif me.participant.role == 'Sender':
+        if me.left_hanging == 1:
+            me.payoff = me.optionB_sender
+        elif me.left_hanging == 2:
+            me.payoff = cu(0)
+        elif partner.choice == 'Option A':
             me.payoff = me.optionA_sender
             partner.payoff = partner.optionA_receiver
-        else:
+        elif me.choice == 'Option B':
             me.payoff = partner.optionB_sender
             partner.payoff = me.optionB_receiver
+
+
+def print_fuck(player: Player):
+    """
+    Just to test how to call multiple functions through set_payoffs and after_all_players_arrive. It does!
+    """
+    if player.left_hanging == 1:
+        print("Fuck")
 
 
 ######  PAGES  #########
@@ -274,8 +298,15 @@ class PairingWaitPage(WaitPage):
 class StakesWaitPage(WaitPage):
     after_all_players_arrive = set_options
 
-    template_name = 'deception_task/ResultsWaitPage.html'
+    template_name = 'deception_task/StakesWaitPage.html'
     # body_text = "Please wait for the Receiver to make their choice."
+
+    def vars_for_template(player: Player):
+            """  """
+            participant = player.participant
+            return dict(
+                is_dropout=participant.is_dropout,
+            )
 
 
 class SenderMessage(Page):
@@ -284,9 +315,7 @@ class SenderMessage(Page):
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Sender':
+        if player.participant.role == 'Sender':
             return True
 
     def vars_for_template(player: Player):
@@ -294,7 +323,6 @@ class SenderMessage(Page):
         me = player
         partner = get_partner(me)
         return dict(
-            # role=player.role,
             sender_optionA=player.optionA_sender,
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
@@ -307,7 +335,14 @@ class SenderMessage(Page):
         )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+        if participant.is_dropout:
+            return 1  # instant timeout, 1 second
+        else:
+            return 2 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -319,19 +354,22 @@ class SenderMessage(Page):
         me = player
         partner = get_partner(me)
         if timeout_happened:
+            me.participant.is_dropout = True
+            # print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
-            me.message = 'None'
+            me.message = 'Option A'
 
 
 class MessageWaitPage(WaitPage):
-
     template_name = 'deception_task/MessageWaitPage.html'
+
     # body_text = "Please wait for the Sender to send his message."
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
+        participant = player.participant
+        if participant.is_dropout:
             return False
         elif player.participant.role == 'Receiver':
             return True
@@ -343,9 +381,7 @@ class ReceiverChoice(Page):
 
     @staticmethod
     def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Receiver':
+        if player.participant.role == 'Receiver':
             return True
 
     def vars_for_template(player: Player):
@@ -357,18 +393,30 @@ class ReceiverChoice(Page):
                 other_player=partner.id_in_group,
                 player=player.id_in_group,
                 best_option='Option A',
-                worst_option='Option B'
+                worst_option='Option B',
+
+                button=player.get_button_order(),
             )
         else:
             return dict(
                 other_player=partner.id_in_group,
                 player=player.id_in_group,
                 best_option='Option B',
-                worst_option='Option A'
+                worst_option='Option A',
+
+                button=player.get_button_order(),
             )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
+
+    @staticmethod
+    def get_timeout_seconds(player):
+        participant = player.participant
+
+        if participant.is_dropout:
+            return 1  # instant timeout, 1 second
+        else:
+            return 2 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -380,6 +428,8 @@ class ReceiverChoice(Page):
         me = player
         partner = get_partner(me)
         if timeout_happened:
+            me.participant.is_dropout = True
+            # print(me.participant.is_dropout)
             partner.left_hanging = 1
             me.left_hanging = 2
             me.choice = 'None'
@@ -390,88 +440,25 @@ class ResultsWaitPage(WaitPage):
     after_all_players_arrive = set_payoffs
 
     template_name = 'deception_task/ResultsWaitPage.html'
+
     # body_text = "Please wait for the Receiver to make their choice."
 
-    @staticmethod
-    def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
-            return True
-
-
-class Results(Page):
-
-    @staticmethod
-    def is_displayed(player):
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return False
-        else:
-            return True
+    # @staticmethod
+    # def is_displayed(player):
+    #     participant = player.participant
+    #     if participant.is_dropout:
+    #         return False
+    #     elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
+    #         return True
 
     def vars_for_template(player: Player):
-        """  """
-        me = player
-        partner = get_partner(me)
-        if me.participant.role == 'Receiver':
+            """  """
+            participant = player.participant
             return dict(
-                choice=me.choice,
-                payoff=me.payoff,
-                role=me.participant.role,
-
-                player=player.id_in_group,
-                partner=partner.id_in_group,
+                role=player.participant.role,
+                is_dropout=participant.is_dropout,
+                round_number=player.round_number,
             )
-        else:
-            return dict(
-                choice=partner.choice,
-                payoff=me.payoff,
-                role=me.participant.role,
-
-                player=player.id_in_group,
-                partner=partner.id_in_group,
-            )
-
-
-# If choice is group field
-    # def vars_for_template(player: Player):
-    #     """  """
-    #     me = player
-    #     partner = other_player(me)
-    #     if player.participant.role == 'Receiver':
-    #         if player.choice == 'Option A':
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=group.choice,
-    #                 sender_payoff=C.optionA_sender_high,
-    #                 receiver_payoff=C.optionA_receiver_high,
-    #             )
-    #         else:
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=player.choice,
-    #                 sender_payoff=C.optionB_sender_high,
-    #                 receiver_payoff=C.optionB_receiver_high,
-    #             )
-    #     else:
-    #         if partner.choice == 'Option A':
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=partner.choice,
-    #                 sender_payoff=C.optionA_sender_low,
-    #                 receiver_payoff=C.optionA_receiver_low,
-    #             )
-    #         else:
-    #             return dict(
-    #                 # role=player.role,
-    #                 choice=partner.choice,
-    #                 sender_payoff=C.optionB_sender_low,
-    #                 receiver_payoff=C.optionB_receiver_low,
-    #             )
-
-    # only need this if it is repeated rounds
-    timer_text = 'If you stay inactive for too long you will be considered a dropout:'
-    timeout_seconds = 12 * 60
 
 
 # only need this if it is repeated rounds
@@ -479,13 +466,22 @@ class End(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
+        message = """"""
+        for round_ in range(1, 4):
+            me = player.in_round(round_)
+            if me.left_hanging == 1:
+                message += f"For task {round_} your bonus is {me.payoff} <br>"
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+            left_hanging_score=sum([p.left_hanging for p in player.in_all_rounds()]),
+            message=message,
         )
 
 
@@ -496,7 +492,9 @@ class Demographics(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
 
@@ -506,7 +504,9 @@ class Comprehension(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     # @staticmethod
@@ -545,7 +545,9 @@ class CommentBox(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
 
@@ -553,7 +555,9 @@ class Payment(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == C.NUM_ROUNDS:
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -566,31 +570,17 @@ class Payment(Page):
         )
 
 
-class LeftHanging(Page):
-    """
-    This page is for dropouts. If a participant quits after the waitroom there is a timer on the results
-    and decision page that redirect them to this page. Here depending on who left and who was left hanging,
-    they get a different message (based on their left_hanging value).
-    The left-hanging pp get a link to go back to Prolific (don't forget to paste the correct link!).
-    """
-
-    @staticmethod
-    def is_displayed(player):
-        """ This page is displayed only if the player is either left hanging (1) or a dropout (2)."""
-        if player.left_hanging == 1 or player.left_hanging == 2:
-            return True
-
-
 class ProlificLink(Page):
     """
     This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
     There is a short text and the link in case it is not automatic.
     """
-
     @staticmethod
     def is_displayed(player: Player):
-        """ This page only appears on the last round. It's after LeftHanging so no need to hide it from dropouts."""
-        return player.round_number == C.NUM_ROUNDS
+        if player.participant.is_dropout:
+            return False
+        elif player.round_number == C.NUM_ROUNDS:
+            return True
 
 
 page_sequence = [PairingWaitPage,
@@ -599,11 +589,11 @@ page_sequence = [PairingWaitPage,
                  MessageWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
-                 Results,
-                 LeftHanging,
+                 # Results,
+                 # LeftHanging,
                  End,
-                 Demographics,
-                 # Comprehension,
-                 # CommentBox,
+                 # Demographics,
+                 Comprehension,
+                 CommentBox,
                  Payment,
                  ProlificLink]
