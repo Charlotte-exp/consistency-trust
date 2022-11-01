@@ -115,7 +115,8 @@ class Player(BasePlayer):
             [1, '1, the same in each task'],
             [2, '3, one per task']
         ],
-        verbose_name='With how many different partner did each participant interact?',
+        verbose_name='With how many different partner did each participant interact '
+                     '(regardless of whether a partner dropped out)?',
         widget=widgets.RadioSelect
     )
 
@@ -327,6 +328,7 @@ class SenderMessage(Page):
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
             receiver_optionB=player.optionB_receiver,
+            round_number=player.round_number,
 
             player=player.id_in_group,
             partner=partner.id_in_group,
@@ -342,7 +344,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -395,6 +397,8 @@ class ReceiverChoice(Page):
                 best_option='Option A',
                 worst_option='Option B',
 
+                round_number=player.round_number,
+
                 button=player.get_button_order(),
             )
         else:
@@ -403,6 +407,9 @@ class ReceiverChoice(Page):
                 player=player.id_in_group,
                 best_option='Option B',
                 worst_option='Option A',
+
+
+                round_number=player.round_number,
 
                 button=player.get_button_order(),
             )
@@ -416,7 +423,7 @@ class ReceiverChoice(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
