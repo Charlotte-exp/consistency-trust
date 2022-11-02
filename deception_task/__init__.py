@@ -344,7 +344,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 12 * 60
+            return 1.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
@@ -423,7 +423,7 @@ class ReceiverChoice(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 12 * 60
+            return 1.5 * 60
 
     def before_next_page(player, timeout_happened):
         """
