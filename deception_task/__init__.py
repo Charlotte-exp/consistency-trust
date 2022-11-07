@@ -112,11 +112,11 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, '1, the same in each task'],
-            [2, '3, one per task']
+            [1, '1 partner, the same in each task'],
+            [2, '3 partners, one per task']
         ],
         verbose_name='With how many different partner did each participant interact '
-                     '(regardless of whether a partner dropped out)?',
+                     '(regardless of whether some partner dropped out)?',
         widget=widgets.RadioSelect
     )
 
