@@ -303,10 +303,11 @@ class StakesWaitPage(WaitPage):
     # body_text = "Please wait for the Receiver to make their choice."
 
     def vars_for_template(player: Player):
-            """  """
             participant = player.participant
             return dict(
                 is_dropout=participant.is_dropout,
+                round_number=player.round_number,
+
             )
 
 
@@ -440,7 +441,6 @@ class ReceiverChoice(Page):
             partner.left_hanging = 1
             me.left_hanging = 2
             me.choice = 'None'
-            partner.choice = 'None'
 
 
 class ResultsWaitPage(WaitPage):
