@@ -29,8 +29,13 @@ class C(BaseConstants):
 class Subsession(BaseSubsession):
 
     def get_treatments(self):
-        items = [1, 2, 3, 4]
-        random_item = random.choice(items)
+        treatments = ["high_high_high", 'high_high_low', 'high_low_high', 'high_low_low',
+                      "low_high_high", 'low_high_low', 'low_low_high', 'low_low_low', ]
+        treatment = random.choice(treatments)
+        print(treatment)
+        return treatment
+        # items = [1, 2, 3, 4]
+        # random_item = random.choice(items)
         # if random_item == 1:
         #     return 'high_high_high'
         # elif random_item == 2:
@@ -39,14 +44,14 @@ class Subsession(BaseSubsession):
         #     return 'high_low_high'
         # elif random_item == 4:
         #     return 'high_low_low'
-        if random_item == 1:
-            return 'low_high_high'
-        elif random_item == 2:
-            return 'low_high_low'
-        elif random_item == 3:
-            return 'low_low_high'
-        elif random_item == 4:
-            return 'low_low_low'
+        # if random_item == 1:
+        #     return 'low_high_high'
+        # elif random_item == 2:
+        #     return 'low_high_low'
+        # elif random_item == 3:
+        #     return 'low_low_high'
+        # elif random_item == 4:
+        #     return 'low_low_low'
 
 
 class Group(BaseGroup):
