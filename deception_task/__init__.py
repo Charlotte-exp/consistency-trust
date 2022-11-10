@@ -29,8 +29,7 @@ class C(BaseConstants):
 class Subsession(BaseSubsession):
 
     def get_treatments(self):
-        treatments = ["high_high_high", 'high_high_low', 'high_low_high', 'high_low_low',
-                      "low_high_high", 'low_high_low', 'low_low_high', 'low_low_low', ]
+        treatments = ["high_high_high", 'high_low_low', 'low_high_low', 'low_low_high']
         treatment = random.choice(treatments)
         # print(treatment)
         return treatment
