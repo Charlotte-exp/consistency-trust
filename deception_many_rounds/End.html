@@ -1,0 +1,31 @@
+{{ block title }}Final bonuses{{ endblock }}
+
+{{ block content }}
+<p>
+    This was the last task.
+</p>
+<p>
+    Here are your final results: <br>
+    In total across all tasks, you got a bonus of <b>{{total_payoff}}</b>.
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Task</th>
+            <th>Bonus</th>
+            <th>Total</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.payoff }}</td>
+        {{ endfor }}
+            <td>{{ total_payoff }}</td>
+        </tr>
+    </table>
+
+    <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+    </div>
+
+{{ endblock }}

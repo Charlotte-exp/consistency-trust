@@ -1,0 +1,40 @@
+{% extends 'otree/WaitPage.html' %}
+{% load otree static %}
+
+
+{% block title %}
+    Wait Page
+{% endblock %}
+
+{% block content %}
+
+{{ if is_dropout }}
+
+    <div>
+        <p>You were inactive too long and the program assumed you dropped out. Thus the game was ended.</p>
+   </div>
+
+{{ else }}
+
+{{ if round_number == 1 }}
+
+<div>
+    <p>
+        You have been paired up! Please bare with us, sometimes the first task takes a few seconds to load.
+    </p>
+</div>
+
+{{ else }}
+
+<div>
+    <p>
+        Please wait to be paired with a new participant for the next task.
+        This might take a couple of minutes while the other participants finishes the previous task.
+    </p>
+</div>
+
+{{ endif }}
+
+{{ endif }}
+
+{% endblock %}>
