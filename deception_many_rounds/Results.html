@@ -24,23 +24,9 @@
 {{ endblock }}
 
 {{ block content }}
-    <p>
-        {{ if role == 'Receiver' }}
-        You chose <b>{{ choice }}</b>.
-        {{ else }}
-        The Receiver chose <b>{{ choice }}</b>.
-        {{ endif }}
-    </p>
 
-    <p>
-        The bonus you earned from {{ choice }} is {{ payoff }}.
-    </p>
 
-    <p>
-        <div style="display: flex; justify-content: flex-end">
-        {{ next_button }}
-        </div>
-    </p>
+<p style="color:white;">{{ call_payoff }}</p>
 
 {{ endblock }}
 

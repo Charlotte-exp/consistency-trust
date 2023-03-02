@@ -24,8 +24,16 @@
         </tr>
     </table>
 
+<p>
+    The round randomly selected for payment is {{ random_round }}. <br>
+    You payoff on that round is {{ payment }} and you will be paid that amount as your bonus.
+</p>
+
     <div style="display: flex; justify-content: flex-end">
         {% next_button %}
     </div>
+
+
+<p style="color:white;">{{ call_payment }}</p>
 
 {{ endblock }}

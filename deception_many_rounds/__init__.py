@@ -33,11 +33,14 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    optionA_sender = models.CurrencyField()
-    optionA_receiver = models.CurrencyField()
-    optionB_sender = models.CurrencyField()
-    optionB_receiver = models.CurrencyField()
+    optionA_sender = models.CurrencyField(initial=cu(0))
+    optionA_receiver = models.CurrencyField(initial=cu(0))
+    optionB_sender = models.CurrencyField(initial=cu(0))
+    optionB_receiver = models.CurrencyField(initial=cu(0))
     stake = models.StringField(initial='')
+
+    random_round = models.IntegerField()
+    random_payment = models.CurrencyField()
 
     message = models.StringField(
         initial='',
@@ -125,9 +128,28 @@ class Player(BasePlayer):
 
     def get_stake(player):
         if random.random() > 0.5:
-            return player.stake == "high"
+            print("stake high")
+            player.stake = "high"
+            round_stake = player.stake
         else:
-            return player.stake == "low"
+            print("stake low")
+            player.stake = "low"
+            round_stake = player.stake
+        return round_stake
+
+    def set_options(player):
+        if player.get_stake() == 'high':
+            player.optionA_sender = C.optionA_sender_high
+            player.optionA_receiver = C.optionA_receiver_high
+            player.optionB_sender = C.optionB_sender_high
+            player.optionB_receiver = C.optionB_receiver_high
+            print("options high")
+        elif player.get_stake() == 'low':
+            player.optionA_sender = C.optionA_sender_low
+            player.optionA_receiver = C.optionA_receiver_low
+            player.optionB_sender = C.optionB_sender_low
+            player.optionB_receiver = C.optionB_receiver_low
+            print("options low")
 
     def get_button_order(player):
         if random.random() > 0.5:
@@ -138,82 +160,61 @@ class Player(BasePlayer):
 
 ########  Functions #######
 
-def set_options(group: Group):
-    for p in group.get_players():
-        get_options(p)
+def set_payoff(player: Player):
+    if player.message == 'Option A':
+        player.payoff = player.optionA_sender
+    elif player.message == 'Option B':
+        player.payoff = player.optionB_sender
+    print('payoff is', player.payoff)
 
+def random_payment(player: Player):
+    # random_payoff = random.choice([p.payoff for p in player.in_all_rounds()])
+    #
+    # player.random_payoff = random_payoff
+    # print([p.payoff for p in player.in_all_rounds()])
+    print("fuck")
+    random_round_number = random.randint(1, C.NUM_ROUNDS)
+    for round_ in range(1, C.NUM_ROUNDS):
+        me = player.in_round(round_)
+        if random_round_number == round_:
+            random_payoff = me.payoff
+            player.random_payment = random_payoff
+            random_round = round_
+            player.random_round = random_round
 
-def get_options(player: Player):
-    if player.get_stake() == 'high':
-        player.optionA_sender = C.optionA_sender_high
-        player.optionA_receiver = C.optionA_receiver_high
-        player.optionB_sender = C.optionB_sender_high
-        player.optionB_receiver = C.optionB_receiver_high
-    else:
-        player.optionA_sender = C.optionA_sender_low
-        player.optionA_receiver = C.optionA_receiver_low
-        player.optionB_sender = C.optionB_sender_low
-        player.optionB_receiver = C.optionB_receiver_low
-
-
-def set_payoffs(group: Group):
-    for p in group.get_players():
-        get_payoffs(p)
-        # print_fuck(p)
-
-
-def get_payoffs(player: Player):
-    me = player
-    if me.choice == 'Option A':
-        me.payoff = me.optionA_sender
-    elif me.choice == 'Option B':
-        me.payoff = me.optionB_sender
-
-
-def print_fuck(player: Player):
-    """
-    Just to test how to call multiple functions through set_payoffs and after_all_players_arrive. It does!
-    """
-    if player.left_hanging == 1:
-        print("Fuck")
+    print('payment is', player.random_payment)
 
 
 ######  PAGES  #########
 
-class StakesWaitPage(WaitPage):
-    after_all_players_arrive = set_options
+class StakesPage(Page):
 
-    template_name = 'deception_many_rounds/StakesWaitPage.html'
-    # body_text = "Please wait for the Receiver to make their choice."
+    timeout_seconds = 2  # instant timeout
 
     def vars_for_template(player: Player):
-            participant = player.participant
-            return dict(
-                is_dropout=participant.is_dropout,
-                round_number=player.round_number,
-            )
+        participant = player.participant
+        return dict(
+            is_dropout=participant.is_dropout,
+            round_number=player.round_number,
+
+            # call_stake=player.set_options(),
+        )
 
 
 class SenderMessage(Page):
     form_model = 'player'
     form_fields = ['message']
 
-    @staticmethod
-    def is_displayed(player):
-        if player.participant.role == 'Sender':
-            return True
-
     def vars_for_template(player: Player):
         """  """
-        me = player
         return dict(
+            call_stake=player.set_options(),
+
             sender_optionA=player.optionA_sender,
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
             receiver_optionB=player.optionB_receiver,
             round_number=player.round_number,
-
-            call_stakes=player.get_stake(),
         )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
@@ -239,29 +240,19 @@ class SenderMessage(Page):
             me.message = 'dropout'
 
 
-class ResultsWaitPage(WaitPage):
-    after_all_players_arrive = set_payoffs
+class Results(Page):
 
-    template_name = 'deception_many_rounds/ResultsWaitPage.html'
-
-    # body_text = "Please wait for the Receiver to make their choice."
-
-    # @staticmethod
-    # def is_displayed(player):
-    #     participant = player.participant
-    #     if participant.is_dropout:
-    #         return False
-    #     elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
-    #         return True
+    timeout_seconds = 2  # instant timeout
 
     def vars_for_template(player: Player):
-            """  """
-            participant = player.participant
-            return dict(
-                role=player.participant.role,
-                is_dropout=participant.is_dropout,
-                round_number=player.round_number,
-            )
+        participant = player.participant
+        return dict(
+            is_dropout=participant.is_dropout,
+            round_number=player.round_number,
+
+            call_payoff=set_payoff(player),
+        )
+
 
 
 # only need this if it is repeated rounds
@@ -278,6 +269,11 @@ class End(Page):
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+
+            random_round=player.random_round,
+            payment=player.random_payment,
+
+            call_payment=random_payment(player),
         )
 
 
@@ -360,7 +356,7 @@ class Payment(Page):
         participant = player.participant
         session = player.session
         return dict(
-            bonus=participant.payoff.to_real_world_currency(session),
+            bonus=player.random_payment.to_real_world_currency(session),
             participation_fee=session.config['participation_fee'],
             final_payment=participant.payoff_plus_participation_fee(),
         )
@@ -379,10 +375,9 @@ class ProlificLink(Page):
             return True
 
 
-page_sequence = [StakesWaitPage,
+page_sequence = [StakesPage,
                  SenderMessage,
-                 ResultsWaitPage,
-                 # Results,
+                 Results,
                  End,
                  # Demographics,
                  Comprehension,
