@@ -15,6 +15,17 @@ Your Message
     );
     </script>
 
+    <style>
+
+        .red_box {
+        padding: 4px;
+        border: 2px solid red;
+        border-radius: 4px;
+        color: black;
+        }
+
+    </style>
+
 {{ endblock }}
 
 {{ block scripts }}
@@ -53,7 +64,7 @@ Your Message
                         <b>{{ sender_optionA }}</b> for you.
                     </li>
                     <li>
-                        <b>{{ receiver_optionA }}</b> for the Receiver.
+                        <b class="red_box">{{ receiver_optionA }}</b> for the Receiver.
                     </li>
                 </ul>
             </p>
@@ -63,7 +74,7 @@ Your Message
                 <font color="blue">Option B</font>:
                 <ul>
                     <li>
-                        <b>{{ sender_optionB }}</b> for you.
+                        <b class="red_box">{{ sender_optionB }}</b> for you.
                     </li>
                     <li>
                         <b>{{ receiver_optionB }}</b> for the Receiver.
@@ -72,6 +83,13 @@ Your Message
             </p>
         </div>
     </div>
+    <br>
+    <p>
+        <font color="red">The bonuses in red can be different in each task!</font>
+    </p>
+    <p>
+        {{ formfield player.saliency }}
+    </p>
     <br>
     <p>
         Remember that the Receiver does not know the bonuses attached to each options

@@ -47,12 +47,10 @@ class Player(BasePlayer):
         choices=['Option A', 'Option B'],
     )
 
-    choice = models.StringField(
-        initial='',
+    saliency = models.StringField(
         choices=['Option A', 'Option B'],
-        doc="""This player's decision""",
-        verbose_name='Your choice:',
-        widget=widgets.RadioSelect
+        verbose_name='Which Option is better for YOU?',
+        widget=widgets.RadioSelect,
     )
 
     age = models.IntegerField(
@@ -167,6 +165,7 @@ def set_payoff(player: Player):
         player.payoff = player.optionB_sender
     print('payoff is', player.payoff)
 
+
 def random_payment(player: Player):
     # random_payoff = random.choice([p.payoff for p in player.in_all_rounds()])
     #
@@ -203,7 +202,7 @@ class StakesPage(Page):
 
 class SenderMessage(Page):
     form_model = 'player'
-    form_fields = ['message']
+    form_fields = ['message', 'saliency']
 
     def vars_for_template(player: Player):
         """  """
@@ -225,7 +224,7 @@ class SenderMessage(Page):
         if participant.is_dropout:
             return 1  # instant timeout, 1 second
         else:
-            return 2 * 60
+            return 12 * 60
 
     def before_next_page(player, timeout_happened):
         """
