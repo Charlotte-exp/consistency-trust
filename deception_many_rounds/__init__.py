@@ -47,8 +47,8 @@ class Player(BasePlayer):
     optionB_receiver = models.CurrencyField(initial=cu(0))
     stake = models.StringField(initial='')
 
-    random_round = models.IntegerField()
-    random_payment = models.CurrencyField()
+    random_round = models.IntegerField(initial=0)
+    random_payment = models.CurrencyField(initial=cu(0))
 
     message = models.StringField(
         initial='',
@@ -278,7 +278,7 @@ class SenderMessage(Page):
 
 class Results(Page):
 
-    timeout_seconds = 2  # instant timeout
+    timeout_seconds = 1  # instant timeout
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -288,7 +288,6 @@ class Results(Page):
 
             call_payoff=set_payoff(player),
         )
-
 
 
 # only need this if it is repeated rounds
@@ -394,7 +393,7 @@ class Payment(Page):
         return dict(
             bonus=player.random_payment.to_real_world_currency(session),
             participation_fee=session.config['participation_fee'],
-            final_payment=participant.payoff_plus_participation_fee(),
+            final_payment=player.random_payment.to_real_world_currency(session) + session.config['participation_fee'],
         )
 
 
