@@ -28,6 +28,14 @@ class Subsession(BaseSubsession):
     pass
 
 
+def creating_session(subsession: Subsession):
+    for p in subsession.get_players():
+        p.participant.role = p.role
+        # print('roles', p.role, p.participant.role)
+        p.participant.is_dropout = False
+        # print(p.participant.is_dropout)
+
+
 class Group(BaseGroup):
     pass
 
@@ -185,6 +193,35 @@ def random_payment(player: Player):
 
 
 ######  PAGES  #########
+
+class Consent(Page):
+
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+
+    def vars_for_template(player: Player):
+        return {
+            'participation_fee': player.session.config['participation_fee'],
+        }
+
+
+class Instructions(Page):
+
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+
+    def vars_for_template(player: Player):
+        """  """
+        return dict(
+            # role=player.role,
+            sender_optionA=C.optionA_sender_high,
+            receiver_optionA=C.optionA_receiver_high,
+            sender_optionB=C.optionB_sender_high,
+            receiver_optionB=C.optionB_receiver_high,
+        )
+
 
 class StakesPage(Page):
 
@@ -374,7 +411,9 @@ class ProlificLink(Page):
             return True
 
 
-page_sequence = [StakesPage,
+page_sequence = [Consent,
+                 Instructions,
+                 StakesPage,
                  SenderMessage,
                  Results,
                  End,
