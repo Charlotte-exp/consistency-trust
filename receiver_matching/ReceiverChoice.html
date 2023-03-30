@@ -1,0 +1,96 @@
+{{ block title }}
+
+Your Choice
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <script>
+        setTimeout(
+        function () {
+            alert("Please make your decision soon.");
+        },
+        90*1000 // 90 seconds
+    );
+    </script>
+
+{{ endblock }}
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    Here is the message from <b>Sender {{ round_number }}</b>:
+</p>
+
+<div class="card-body">
+     <b>"{{ best_option }} will earn you more money than {{ worst_option}}"</b>
+</div>
+
+<p>
+    <br>
+    Below the two options you can choose from.
+    Remember, each option has a different set of bonus payment for you and Sender {{ round_number }}.
+    <br>
+    The Sender knows what the bonus payments in each options are.
+</p>
+
+{{ if button == 1 }}
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ else }}
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ endif }}
+
+{{ endblock }}

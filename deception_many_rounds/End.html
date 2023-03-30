@@ -1,4 +1,8 @@
-{{ block title }}Final bonuses{{ endblock }}
+{{ block title }}
+
+Selected Round
+
+{{ endblock }}
 
 {{ block content }}
 
@@ -12,19 +16,17 @@
     <table class="table">
         <tr>
             <th>Task</th>
-            <th>Bonus</th>
         </tr>
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
-            <td>{{ p.payoff }}</td>
         {{ endfor }}
         </tr>
     </table>
 
 <p>
     The round randomly selected for payment is <b>{{ random_round }}</b>. <br>
-    You payoff on that round is <b>{{ payment }}</b> and you will be paid that amount as your bonus.
+    You message on that round is <b>{{ message }}</b> and this it message the Receiver matched with you will get.
 </p>
 
     <div style="display: flex; justify-content: flex-end">

@@ -28,12 +28,12 @@ class Subsession(BaseSubsession):
     pass
 
 
-def creating_session(subsession: Subsession):
-    for p in subsession.get_players():
-        p.participant.role = p.role
-        # print('roles', p.role, p.participant.role)
-        p.participant.is_dropout = False
-        # print(p.participant.is_dropout)
+# def creating_session(subsession: Subsession):
+#     for p in subsession.get_players():
+#         p.participant.role = p.role
+#         # print('roles', p.role, p.participant.role)
+#         p.participant.is_dropout = False
+#         # print(p.participant.is_dropout)
 
 
 class Group(BaseGroup):
@@ -47,8 +47,9 @@ class Player(BasePlayer):
     optionB_receiver = models.CurrencyField(initial=cu(0))
     stake = models.StringField(initial='')
 
-    random_round = models.IntegerField(initial=0)
-    random_payment = models.CurrencyField(initial=cu(0))
+    randomly_selected_round = models.IntegerField(initial=0)
+    randomly_selected_stake = models.StringField(initial='')
+    randomly_selected_message = models.StringField(initial='')
 
     message = models.StringField(
         initial='',
@@ -184,48 +185,62 @@ def random_payment(player: Player):
     for round_ in range(1, C.NUM_ROUNDS):
         me = player.in_round(round_)
         if random_round_number == round_:
-            random_payoff = me.payoff
-            player.random_payment = random_payoff
-            random_round = round_
-            player.random_round = random_round
+            randomly_selected_round = round_
+            player.randomly_selected_round = randomly_selected_round
+            player.participant.randomly_selected_round = randomly_selected_round
+            randomly_selected_stake = me.stake
+            player.randomly_selected_stake = randomly_selected_stake
+            player.participant.randomly_selected_stake = randomly_selected_stake
+            randomly_selected_message = me.message
+            player.randomly_selected_message = randomly_selected_message
+            player.participant.randomly_selected_message = randomly_selected_message
+
 
     print('payment is', player.random_payment)
 
 
 ######  PAGES  #########
 
-class Consent(Page):
-
-    def is_displayed(player: Player):
-        if player.round_number == 1:
-            return True
-
-    def vars_for_template(player: Player):
-        return {
-            'participation_fee': player.session.config['participation_fee'],
-        }
-
-
-class Instructions(Page):
-
-    def is_displayed(player: Player):
-        if player.round_number == 1:
-            return True
-
-    def vars_for_template(player: Player):
-        """  """
-        return dict(
-            # role=player.role,
-            sender_optionA=C.optionA_sender_high,
-            receiver_optionA=C.optionA_receiver_high,
-            sender_optionB=C.optionB_sender_high,
-            receiver_optionB=C.optionB_receiver_high,
-        )
+# class Consent(Page):
+#
+#     def is_displayed(player: Player):
+#         if player.round_number == 1:
+#             return True
+#
+#     def vars_for_template(player: Player):
+#         return {
+#             'participation_fee': player.session.config['participation_fee'],
+#         }
+#
+#
+# class Instructions(Page):
+#
+#     def is_displayed(player: Player):
+#         if player.round_number == 1:
+#             return True
+#
+#     def vars_for_template(player: Player):
+#         """  """
+#         return dict(
+#             # role=player.role,
+#             sender_optionA=C.optionA_sender_high,
+#             receiver_optionA=C.optionA_receiver_high,
+#             sender_optionB=C.optionB_sender_high,
+#             receiver_optionB=C.optionB_receiver_high,
+#         )
 
 
 class StakesPage(Page):
 
     timeout_seconds = 2  # instant timeout
+
+    @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        if participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -241,6 +256,14 @@ class SenderMessage(Page):
     form_model = 'player'
     form_fields = ['message', 'saliency']
 
+    @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        if participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
+
     def vars_for_template(player: Player):
         """  """
         return dict(
@@ -255,30 +278,38 @@ class SenderMessage(Page):
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
 
-    @staticmethod
-    def get_timeout_seconds(player):
-        participant = player.participant
-        if participant.is_dropout:
-            return 1  # instant timeout, 1 second
-        else:
-            return 12 * 60
-
-    def before_next_page(player, timeout_happened):
-        """
-        Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
-        and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
-        a different text (left_hanging = 2).
-        Decisions for the missed round are automatically filled to avoid an NONE type error.
-        """
-        me = player
-        if timeout_happened:
-            me.participant.is_dropout = True
-            me.message = 'dropout'
+    # @staticmethod
+    # def get_timeout_seconds(player):
+    #     participant = player.participant
+    #     if participant.is_dropout:
+    #         return 1  # instant timeout, 1 second
+    #     else:
+    #         return 12 * 60
+    #
+    # def before_next_page(player, timeout_happened):
+    #     """
+    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
+    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
+    #     a different text (left_hanging = 2).
+    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
+    #     """
+    #     me = player
+    #     if timeout_happened:
+    #         me.participant.is_dropout = True
+    #         me.message = 'dropout'
 
 
 class Results(Page):
 
     timeout_seconds = 1  # instant timeout
+
+    @staticmethod
+    def is_displayed(player):
+        participant = player.participant
+        if participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -297,7 +328,7 @@ class End(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -305,8 +336,7 @@ class End(Page):
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
 
-            random_round=player.random_round,
-            payment=player.random_payment,
+            random_round=player.randomly_selected_round,
 
             call_payment=random_payment(player),
         )
@@ -321,7 +351,7 @@ class Demographics(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
             return True
 
 
@@ -333,7 +363,7 @@ class Comprehension(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
             return True
 
     # @staticmethod
@@ -374,50 +404,20 @@ class CommentBox(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
             return True
 
 
-class Payment(Page):
-
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.round_number == C.NUM_ROUNDS:
-            return True
-
-    def vars_for_template(player: Player):
-        participant = player.participant
-        session = player.session
-        return dict(
-            bonus=player.random_payment.to_real_world_currency(session),
-            participation_fee=session.config['participation_fee'],
-            final_payment=player.random_payment.to_real_world_currency(session) + session.config['participation_fee'],
-        )
-
-
-class ProlificLink(Page):
-    """
-    This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
-    There is a short text and the link in case it is not automatic.
-    """
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.round_number == C.NUM_ROUNDS:
-            return True
-
-
-page_sequence = [Consent,
-                 Instructions,
-                 StakesPage,
-                 SenderMessage,
-                 Results,
-                 End,
-                 # Demographics,
-                 Comprehension,
-                 CommentBox,
-                 Payment,
-                 ProlificLink]
+page_sequence = [
+    # Consent,
+    # Instructions,
+    StakesPage,
+    SenderMessage,
+    Results,
+    End,
+    # Demographics,
+    Comprehension,
+    CommentBox,
+    # Payment,
+    # ProlificLink
+]

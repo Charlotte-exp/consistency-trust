@@ -1,0 +1,45 @@
+{{ block title }}
+    Results
+{{ endblock }}
+
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+    {{ if role == 'Sender' }}
+    <p>
+        Based on the choice of the Receiver, your bonus will be: {{ payoff }}.
+    </p>
+    {{ else }}
+    <p>
+        Based on your choice, your bonus will be: {{ payoff }}.
+    </p>
+    {{ endif }}
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+
+{{ endblock }}
+
+
