@@ -1,5 +1,6 @@
 from otree.api import *
 
+import random
 
 doc = """
 Your app description
@@ -10,6 +11,16 @@ class C(BaseConstants):
     NAME_IN_URL = 'matching'
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
+
+    optionA_sender_high = cu(0.5)
+    optionA_receiver_high = cu(1.5)
+    optionB_sender_high = cu(1.5)
+    optionB_receiver_high = cu(0.5)
+
+    optionA_sender_low = cu(0.5)
+    optionA_receiver_low = cu(0.6)
+    optionB_sender_low = cu(0.6)
+    optionB_receiver_low = cu(0.5)
 
 
 class Subsession(BaseSubsession):
@@ -59,6 +70,12 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    def get_button_order(player):
+        if random.random() > 0.5:
+            return 1
+        else:
+            return 0
+
 
 ##### FUNCTIONS #####
 
@@ -72,6 +89,95 @@ def group_by_arrival_time_method(subsession, waiting_players):
         #     p.participant.treatment = treatment
         #     p.treatment = p.participant.treatment
         return players
+
+
+def other_player(player: Player):
+    return player.get_others_in_group()[0]
+
+
+def get_sender_bonus(player: Player):
+    me = player
+    partner = other_player(me)
+    if me.participant.role == 'Sender':
+        if me.participant.randomly_selected_stake == 'high':
+            if partner.choice == 'Option A':
+                sender_bonus = C.optionA_sender_high
+            else:
+                sender_bonus = C.optionB_sender_high
+        else:
+            if partner.choice == 'Option A':
+                sender_bonus = C.optionA_sender_low
+            else:
+                sender_bonus = C.optionB_sender_low
+        return sender_bonus
+
+
+def get_receiver_bonus(player: Player):
+    me = player
+    partner = other_player(me)
+    if me.participant.role == 'Receiver':
+        if partner.participant.randomly_selected_stake == 'high':
+            if me.choice == 'Option A':
+                receiver_bonus = C.optionA_sender_high
+            else:
+                receiver_bonus = C.optionB_sender_high
+        else:
+            if me.choice == 'Option A':
+                receiver_bonus = C.optionA_sender_low
+            else:
+                receiver_bonus = C.optionB_sender_low
+        return receiver_bonus
+
+
+def get_payoffs(player: Player):
+    me = player
+    partner = other_player(me)
+    if me.participant.role == 'Receiver':
+        me.payoff = get_receiver_bonus(me)
+        partner.payoff = get_sender_bonus(me)
+    elif me.participant.role == 'Sender':
+        me.payoff = get_sender_bonus(me)
+        partner.payoff = get_receiver_bonus(me)
+
+
+# def get_payoffs(player: Player):
+#     me = player
+#     partner = other_player(me)
+#     if me.participant.role == 'Receiver':
+#         if me.left_hanging == 1:
+#             me.payoff = me.optionA_receiver
+#         elif me.left_hanging == 2:
+#             me.payoff = cu(0)
+#         elif me.choice == 'Option A':
+#             partner.payoff = partner.optionA_sender
+#             me.payoff = me.optionA_receiver
+#         elif me.choice == 'Option B':
+#             partner.payoff = partner.optionB_sender
+#             me.payoff = me.optionB_receiver
+#     elif me.participant.role == 'Sender':
+#         if me.left_hanging == 1:
+#             me.payoff = me.optionB_sender
+#         elif me.left_hanging == 2:
+#             me.payoff = cu(0)
+#         elif partner.choice == 'Option A':
+#             me.payoff = me.optionA_sender
+#             partner.payoff = partner.optionA_receiver
+#         elif me.choice == 'Option B':
+#             me.payoff = partner.optionB_sender
+#             partner.payoff = me.optionB_receiver
+
+
+def set_payoffs(group: Group):
+    for p in group.get_players():
+        get_payoffs(p)
+        print_fuck(p)
+
+
+def print_fuck(player: Player):
+    """
+    Just to test how to call multiple functions through set_payoffs and after_all_players_arrive. It does!
+    """
+    print("Fuck")
 
 
 ###### PAGES #######
@@ -106,8 +212,8 @@ class ReceiverChoice(Page):
     def vars_for_template(player: Player):
         """  """
         me = player
-        partner = get_partner(me)
-        if partner.message == 'Option A':
+        partner = other_player(me)
+        if partner.participant.randomly_selected_message == 'Option A':
             return dict(
                 other_player=partner.id_in_group,
                 player=player.id_in_group,
@@ -149,7 +255,7 @@ class ReceiverChoice(Page):
         Decisions for the missed round are automatically filled to avoid an NONE type error.
         """
         me = player
-        partner = get_partner(me)
+        partner = other_player(me)
         if timeout_happened:
             me.participant.is_dropout = True
             # print(me.participant.is_dropout)
@@ -199,6 +305,7 @@ class Results(Page):
             role=player.participant.role,
             is_dropout=participant.is_dropout,
             round_number=player.round_number,
+            payoff=player.payoff,
         )
 
 
@@ -215,9 +322,9 @@ class Payment(Page):
         participant = player.participant
         session = player.session
         return dict(
-            bonus=player.random_payment.to_real_world_currency(session),
+            bonus=player.payoff.to_real_world_currency(session),
             participation_fee=session.config['participation_fee'],
-            final_payment=player.random_payment.to_real_world_currency(session) + session.config['participation_fee'],
+            final_payment=player.payoff.to_real_world_currency(session) + session.config['participation_fee'],
         )
 
 
@@ -234,5 +341,9 @@ class ProlificLink(Page):
             return True
 
 
-
-page_sequence = [MyPage, ResultsWaitPage, Results]
+page_sequence = [PairingWaitPage,
+                 ReceiverChoice,
+                 ResultsWaitPage,
+                 Results,
+                 Payment,
+                 ProlificLink]

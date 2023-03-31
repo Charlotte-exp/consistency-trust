@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
     dict(
         name='deception_many_rounds',
         display_name="otree5 deception many rounds",
-        app_sequence=['deception_many_rounds'],
+        app_sequence=['intro_many_rounds', 'deception_many_rounds', 'receiver_matching'],
         num_demo_participants=6,
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
@@ -44,7 +44,8 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 SESSION_FIELDS = []
-PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout']
+PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout',
+                      'randomly_selected_round', 'randomly_selected_stake', 'randomly_selected_message']
 
 
 # ISO-639 code

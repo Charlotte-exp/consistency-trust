@@ -7,7 +7,7 @@ Selected Round
 {{ block content }}
 
 <p>
-    This was the last task.
+    This was the last round.
 </p>
 <p>
     Here are your final results: <br>
@@ -15,18 +15,20 @@ Selected Round
 
     <table class="table">
         <tr>
-            <th>Task</th>
+            <th>Round</th>
+            <th>Message</th>
         </tr>
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
+            <td>{{ p.message }}</td>
         {{ endfor }}
         </tr>
     </table>
 
 <p>
     The round randomly selected for payment is <b>{{ random_round }}</b>. <br>
-    You message on that round is <b>{{ message }}</b> and this it message the Receiver matched with you will get.
+    Your message on that round is <b>{{ message }}</b> and this it message the Receiver matched with you will get.
 </p>
 
     <div style="display: flex; justify-content: flex-end">

@@ -194,9 +194,9 @@ def random_payment(player: Player):
             randomly_selected_message = me.message
             player.randomly_selected_message = randomly_selected_message
             player.participant.randomly_selected_message = randomly_selected_message
-
-
-    print('payment is', player.random_payment)
+    print('round is', randomly_selected_round)
+    print('stake is', randomly_selected_stake)
+    print('message is', randomly_selected_message)
 
 
 ######  PAGES  #########
@@ -337,6 +337,7 @@ class End(Page):
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
 
             random_round=player.randomly_selected_round,
+            message=player.randomly_selected_message,
 
             call_payment=random_payment(player),
         )
