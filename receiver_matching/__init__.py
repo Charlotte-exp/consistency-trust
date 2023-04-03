@@ -41,6 +41,37 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    age = models.IntegerField(
+        verbose_name='What is your age?',
+        min=18, max=100)
+
+    gender = models.StringField(
+        choices=['Female', 'Male', 'Other'],
+        verbose_name='What gender do you identify as?',
+        widget=widgets.RadioSelect)
+
+    income = models.StringField(
+        choices=['£9.999 or below', '£10.000 - £29.999', '£30.000 - £49.999',
+                 '£50.000 - £69.999', '£70.000 - £89.999', '£90.000 or over', 'Prefer not to say'],
+        verbose_name='What is the total combined income of your household?',
+        widget=widgets.RadioSelect)
+
+    education = models.StringField(
+        choices=['No formal education', 'GCSE or equivalent', 'A-Levels or equivalent', 'Vocational training',
+                 'Undergraduate degree', 'Postgraduate degree', 'Prefer not to say'],
+        verbose_name='What is the highest level of education you have completed?',
+        widget=widgets.RadioSelect)
+
+    ethnicity = models.StringField(
+        choices=['Asian/Asian British', 'Black/African/Caribbean/Black British', 'Mixed/Multiple Ethnic groups',
+                 'White', 'Other'],
+        verbose_name='What is your ethnicity?',
+        widget=widgets.RadioSelect)
+
+    comment_box = models.LongStringField(
+        verbose_name=''
+    )
+
     q1 = models.IntegerField(
         choices=[
             [1, '1 partner, the same in each task'],
@@ -67,6 +98,17 @@ class Player(BasePlayer):
             [3, "Both their own and the Sender's final bonus, as well as the bonus of the option not chosen"],
         ],
         verbose_name='What did the Receiver know about the bonuses in the end?',
+        widget=widgets.RadioSelect
+    )
+
+    q4 = models.IntegerField(
+        choices=[
+            [1, 'There is no bonus possible in this study.'],
+            [2, 'My bonus payment depends on luck.'],
+            [3, 'My bonus payment depends on the decision taken by '
+                'the active player.']
+        ],
+        verbose_name='...?',
         widget=widgets.RadioSelect
     )
 
@@ -309,6 +351,72 @@ class Results(Page):
         )
 
 
+class Demographics(Page):
+    """ This page displays survey box to record participants' demographics. it's just made of simple form fields. """
+    form_model = 'player'
+    form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
+
+
+class Comprehension(Page):
+    form_model = 'player'
+    form_fields = ['q1', 'q2', 'q3']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
+
+    # @staticmethod
+    # def error_message(player: Player, values):
+    #     # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+    #     # but if you have many similar fields, this is more efficient.
+    #     solutions = dict(q1=2, q2=3, q3=1, q4=3)
+    #
+    #     # error_message can return a dict whose keys are field names and whose
+    #     # values are error messages
+    #     errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+    #     # print('errors is', errors)
+    #     if errors:
+    #         player.num_failed_attempts += 1
+    #         return errors
+
+    # @staticmethod
+    # def error_message(player: Player, values):
+    #     if values['q1'] != 2:
+    #         player.q1_failed_attempts += 1
+    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q2'] != 3:
+    #         player.q2_failed_attempts += 1
+    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q3'] != 1:
+    #         player.q3_failed_attempts += 1
+    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
+    #     if values['q4'] != 3:
+    #         player.q4_failed_attempts += 1
+    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
+
+
+class CommentBox(Page):
+    form_model = 'player'
+    form_fields = ['comment_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.participant.is_dropout:
+            return False
+        elif player.participant.role == 'Sender':
+            return True
+
+
 class Payment(Page):
 
     @staticmethod
@@ -345,5 +453,8 @@ page_sequence = [PairingWaitPage,
                  ReceiverChoice,
                  ResultsWaitPage,
                  Results,
+                 # Demographics,
+                 Comprehension,
+                 CommentBox,
                  Payment,
                  ProlificLink]

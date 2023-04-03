@@ -1,6 +1,6 @@
 {{ block title }}
 
-End of stage 1
+End of Stage 1
 
 {{ endblock }}
 
@@ -26,19 +26,15 @@ End of stage 1
         </tr>
     </table>
 
-<p> </p>
+<p style="color:white;">{{ call_payment }}</p>
 
 <p>
-    The round randomly selected for payment is <b>{{ random_round }}</b>. <br>
-    Your message on that round is <b>{{ message }}</b> and this it message the Receiver matched with you will get.
+    When you press the randomiser button, one round will be randomly selected.
+    The message you chose on that round will be sent to the Receiver you are matched with in stage 2.
 </p>
 <p>
-    When you press the next button, you will be redirected to a waitpage where you will be matched with a Receiver.
+    <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
 </p>
-
-    <div style="display: flex; justify-content: flex-end">
-        {% next_button %}
-    </div>
 
 
 

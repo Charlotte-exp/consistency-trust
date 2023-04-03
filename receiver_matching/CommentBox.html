@@ -1,0 +1,19 @@
+{% block title %}
+    Quick Survey
+{% endblock %}
+
+{% block content %}
+<div class="card-body">
+    We appreciate feedback.
+    If you have any comments on the implementation of this study, the clarity of the task, or on the user interface, please write it down below.
+
+    {% formfield player.comment_box label='' %}
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{% endblock %}
