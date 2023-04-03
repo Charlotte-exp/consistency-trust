@@ -137,76 +137,34 @@ def other_player(player: Player):
     return player.get_others_in_group()[0]
 
 
-def get_sender_bonus(player: Player):
+def get_payoffs(player: Player):
     me = player
     partner = other_player(me)
     if me.participant.role == 'Sender':
         if me.participant.randomly_selected_stake == 'high':
             if partner.choice == 'Option A':
-                sender_bonus = C.optionA_sender_high
+                me.payoff = C.optionA_sender_high
             else:
-                sender_bonus = C.optionB_sender_high
+                me.payoff = C.optionB_sender_high
         else:
-            if partner.choice == 'Option A':
-                sender_bonus = C.optionA_sender_low
+            if me.choice == 'Option A':
+                me.payoff = C.optionA_sender_low
             else:
-                sender_bonus = C.optionB_sender_low
-        return sender_bonus
-
-
-def get_receiver_bonus(player: Player):
-    me = player
-    partner = other_player(me)
-    if me.participant.role == 'Receiver':
+                me.payoff = C.optionB_sender_low
+        print('sender bonus is', me.payoff)
+    elif me.participant.role == 'Receiver':
         if partner.participant.randomly_selected_stake == 'high':
             if me.choice == 'Option A':
-                receiver_bonus = C.optionA_sender_high
+                me.payoff = C.optionA_receiver_high
             else:
-                receiver_bonus = C.optionB_sender_high
+                me.payoff = C.optionB_receiver_high
         else:
             if me.choice == 'Option A':
-                receiver_bonus = C.optionA_sender_low
+                me.payoff = C.optionA_receiver_low
             else:
-                receiver_bonus = C.optionB_sender_low
-        return receiver_bonus
-
-
-def get_payoffs(player: Player):
-    me = player
-    partner = other_player(me)
-    if me.participant.role == 'Receiver':
-        me.payoff = get_receiver_bonus(me)
-        partner.payoff = get_sender_bonus(me)
-    elif me.participant.role == 'Sender':
-        me.payoff = get_sender_bonus(me)
-        partner.payoff = get_receiver_bonus(me)
-
-
-# def get_payoffs(player: Player):
-#     me = player
-#     partner = other_player(me)
-#     if me.participant.role == 'Receiver':
-#         if me.left_hanging == 1:
-#             me.payoff = me.optionA_receiver
-#         elif me.left_hanging == 2:
-#             me.payoff = cu(0)
-#         elif me.choice == 'Option A':
-#             partner.payoff = partner.optionA_sender
-#             me.payoff = me.optionA_receiver
-#         elif me.choice == 'Option B':
-#             partner.payoff = partner.optionB_sender
-#             me.payoff = me.optionB_receiver
-#     elif me.participant.role == 'Sender':
-#         if me.left_hanging == 1:
-#             me.payoff = me.optionB_sender
-#         elif me.left_hanging == 2:
-#             me.payoff = cu(0)
-#         elif partner.choice == 'Option A':
-#             me.payoff = me.optionA_sender
-#             partner.payoff = partner.optionA_receiver
-#         elif me.choice == 'Option B':
-#             me.payoff = partner.optionB_sender
-#             partner.payoff = me.optionB_receiver
+                me.payoff = C.optionB_receiver_low
+        print('receiver bonus is', me.payoff)
+    # print('my payoff', me.payoff)
 
 
 def set_payoffs(group: Group):

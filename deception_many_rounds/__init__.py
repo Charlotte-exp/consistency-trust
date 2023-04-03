@@ -76,14 +76,13 @@ class Player(BasePlayer):
     )
 
     def get_stake(player):
-        if random.random() > 0.5:
-            print("stake high")
+        if random.random() >= 0.5:
             player.stake = "high"
             round_stake = player.stake
         else:
-            print("stake low")
             player.stake = "low"
             round_stake = player.stake
+        print("stake is", player.stake)
         return round_stake
 
     def set_options(player):
@@ -109,14 +108,6 @@ class Player(BasePlayer):
 
 ########  Functions #######
 
-def set_payoff(player: Player):
-    if player.message == 'Option A':
-        player.payoff = player.optionA_sender
-    elif player.message == 'Option B':
-        player.payoff = player.optionB_sender
-    print('payoff is', player.payoff)
-
-
 def random_payment(player: Player):
     # random_payoff = random.choice([p.payoff for p in player.in_all_rounds()])
     #
@@ -136,40 +127,12 @@ def random_payment(player: Player):
             randomly_selected_message = me.message
             player.randomly_selected_message = randomly_selected_message
             player.participant.randomly_selected_message = randomly_selected_message
-    print('round is', randomly_selected_round)
-    print('stake is', randomly_selected_stake)
-    print('message is', randomly_selected_message)
+            print('round is', randomly_selected_round)
+            print('stake is', randomly_selected_stake)
+            print('message is', randomly_selected_message)
 
 
 ######  PAGES  #########
-
-# class Consent(Page):
-#
-#     def is_displayed(player: Player):
-#         if player.round_number == 1:
-#             return True
-#
-#     def vars_for_template(player: Player):
-#         return {
-#             'participation_fee': player.session.config['participation_fee'],
-#         }
-#
-#
-# class Instructions(Page):
-#
-#     def is_displayed(player: Player):
-#         if player.round_number == 1:
-#             return True
-#
-#     def vars_for_template(player: Player):
-#         """  """
-#         return dict(
-#             # role=player.role,
-#             sender_optionA=C.optionA_sender_high,
-#             receiver_optionA=C.optionA_receiver_high,
-#             sender_optionB=C.optionB_sender_high,
-#             receiver_optionB=C.optionB_receiver_high,
-#         )
 
 
 class StakesPage(Page):
@@ -190,8 +153,13 @@ class StakesPage(Page):
             is_dropout=participant.is_dropout,
             round_number=player.round_number,
 
-            # call_stake=player.set_options(),
+            call_stake=player.set_options(),
         )
+
+    # def before_next_page(player, timeout_happened):
+    #     me = player
+    #     if timeout_happened:
+    #         player.set_options()
 
 
 class SenderMessage(Page):
@@ -209,8 +177,6 @@ class SenderMessage(Page):
     def vars_for_template(player: Player):
         """  """
         return dict(
-            call_stake=player.set_options(),
-
             sender_optionA=player.optionA_sender,
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
@@ -255,26 +221,26 @@ class SenderMessage(Page):
     #         me.message = 'dropout'
 
 
-class Results(Page):
-
-    timeout_seconds = 1  # instant timeout
-
-    @staticmethod
-    def is_displayed(player):
-        participant = player.participant
-        if participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-
-    def vars_for_template(player: Player):
-        participant = player.participant
-        return dict(
-            is_dropout=participant.is_dropout,
-            round_number=player.round_number,
-
-            call_payoff=set_payoff(player),
-        )
+# class Results(Page):
+#
+#     timeout_seconds = 1  # instant timeout
+#
+#     @staticmethod
+#     def is_displayed(player):
+#         participant = player.participant
+#         if participant.is_dropout:
+#             return False
+#         elif player.participant.role == 'Sender':
+#             return True
+#
+#     def vars_for_template(player: Player):
+#         participant = player.participant
+#         return dict(
+#             is_dropout=participant.is_dropout,
+#             round_number=player.round_number,
+#
+#             # call_payoff=set_payoff(player),
+#         )
 
 
 class RandomSelection(Page):
@@ -325,7 +291,7 @@ page_sequence = [
     # Instructions,
     StakesPage,
     SenderMessage,
-    Results,
+    # Results,
     RandomSelection,
     End,
     # Payment,
