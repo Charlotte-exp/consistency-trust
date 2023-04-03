@@ -1,6 +1,14 @@
 {{ block title }}
 
-Next Round:
+    {{ if player.round_number == 1 }}
+
+    First round:
+
+    {{ else }}
+
+    Next Round:
+
+    {{ endif }}
 
 {{ endblock }}
 

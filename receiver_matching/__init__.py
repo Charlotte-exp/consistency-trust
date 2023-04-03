@@ -33,7 +33,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    left_hanging = models.BooleanField()
+    left_hanging = models.BooleanField(initial=False)
 
     choice = models.StringField(
         initial='',
@@ -248,20 +248,20 @@ class ReceiverChoice(Page):
         else:
             return 2 * 60
 
-    def before_next_page(player, timeout_happened):
-        """
-        Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
-        and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
-        a different text (left_hanging = 2).
-        Decisions for the missed round are automatically filled to avoid an NONE type error.
-        """
-        me = player
-        partner = other_player(me)
-        if timeout_happened:
-            me.participant.is_dropout = True
-            partner.left_hanging = True
-            # print(me.participant.is_dropout)
-            me.choice = random.choice(['Option A', 'Option B'])
+    # def before_next_page(player, timeout_happened):
+    #     """
+    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
+    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
+    #     a different text (left_hanging = 2).
+    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
+    #     """
+    #     me = player
+    #     partner = other_player(me)
+    #     if timeout_happened:
+    #         me.participant.is_dropout = True
+    #         partner.left_hanging = True
+    #         # print(me.participant.is_dropout)
+    #         me.choice = random.choice(['Option A', 'Option B'])
 
 
 class ResultsWaitPage(WaitPage):
@@ -289,14 +289,14 @@ class ResultsWaitPage(WaitPage):
 
 class Results(Page):
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-        if player.left_hanging:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.participant.role == 'Sender':
+    #     #     return True
+    #     # elif player.left_hanging:
+    #     #     return True
 
     def vars_for_template(player: Player):
         """  """
@@ -315,24 +315,24 @@ class Demographics(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        if player.left_hanging:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.left_hanging:
+    #     #     return True
 
 
 class Comprehension(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3']
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.left_hanging:
+    #     #     return True
 
     # @staticmethod
     # def error_message(player: Player, values):
@@ -368,26 +368,22 @@ class CommentBox(Page):
     form_model = 'player'
     form_fields = ['comment_box']
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-        elif player.left_hanging:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.left_hanging:
+    #     #     return True
 
 
 class Payment(Page):
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-        elif player.left_hanging:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.left_hanging:
+    #     #     return True
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -404,14 +400,12 @@ class ProlificLink(Page):
     This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
     There is a short text and the link in case it is not automatic.
     """
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-        elif player.left_hanging:
-            return True
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.participant.is_dropout:
+    #         return False
+    #     # elif player.left_hanging:
+    #     #     return True
 
 
 page_sequence = [PairingWaitPage,
