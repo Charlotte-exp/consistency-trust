@@ -86,13 +86,14 @@ class Player(BasePlayer):
         return round_stake
 
     def set_options(player):
-        if player.get_stake() == 'high':
+        stake = player.get_stake()
+        if stake == 'high':
             player.optionA_sender = C.optionA_sender_high
             player.optionA_receiver = C.optionA_receiver_high
             player.optionB_sender = C.optionB_sender_high
             player.optionB_receiver = C.optionB_receiver_high
             print("options high")
-        elif player.get_stake() == 'low':
+        elif stake == 'low':
             player.optionA_sender = C.optionA_sender_low
             player.optionA_receiver = C.optionA_receiver_low
             player.optionB_sender = C.optionB_sender_low
