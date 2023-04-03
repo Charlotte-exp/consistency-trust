@@ -24,6 +24,16 @@
 {{ endblock }}
 
 {{ block content }}
+
+{{ if player.left_hanging }}
+
+    <p>
+        It looks like the Receiver left the experiment before making a choice. <br>
+        Instead the computer chose an option at random and you bonus will be: {{ payoff }}.
+    </p>
+
+{{ else }}
+
     {{ if role == 'Sender' }}
     <p>
         Based on the choice of the Receiver, your bonus will be: {{ payoff }}.
@@ -33,6 +43,8 @@
         Based on your choice, your bonus will be: {{ payoff }}.
     </p>
     {{ endif }}
+
+{{ endif }}
 
     <p>
         <div style="display: flex; justify-content: flex-end">

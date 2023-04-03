@@ -33,6 +33,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
+    left_hanging = models.BooleanField()
+
     choice = models.StringField(
         initial='',
         choices=['Option A', 'Option B'],
@@ -74,11 +76,10 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, '1 partner, the same in each task'],
-            [2, '3 partners, one per task']
+            [1, 'A randomly selected one'],
+            [2, 'all of them']
         ],
-        verbose_name='With how many different partner did each participant interact '
-                     '(regardless of whether some partner dropped out)?',
+        verbose_name='Which message(s) was sent to the Receiver?',
         widget=widgets.RadioSelect
     )
 
@@ -258,10 +259,9 @@ class ReceiverChoice(Page):
         partner = other_player(me)
         if timeout_happened:
             me.participant.is_dropout = True
+            partner.left_hanging = True
             # print(me.participant.is_dropout)
-            partner.left_hanging = 1
-            me.left_hanging = 2
-            me.choice = 'None'
+            me.choice = random.choice(['Option A', 'Option B'])
 
 
 class ResultsWaitPage(WaitPage):
@@ -274,10 +274,8 @@ class ResultsWaitPage(WaitPage):
     # @staticmethod
     # def is_displayed(player):
     #     participant = player.participant
-    #     if participant.is_dropout:
+    #     if participant.is_dropout or player.left_hanging:
     #         return False
-    #     elif player.participant.role == 'Sender' or player.participant.role == 'Receiver':
-    #         return True
 
     def vars_for_template(player: Player):
             """  """
@@ -295,7 +293,9 @@ class Results(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender':
+            return True
+        if player.left_hanging:
             return True
 
     def vars_for_template(player: Player):
@@ -304,6 +304,7 @@ class Results(Page):
         return dict(
             role=player.participant.role,
             is_dropout=participant.is_dropout,
+            left_hanging=player.left_hanging,
             round_number=player.round_number,
             payoff=player.payoff,
         )
@@ -318,7 +319,7 @@ class Demographics(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.participant.role == 'Sender':
+        if player.left_hanging:
             return True
 
 
@@ -373,6 +374,8 @@ class CommentBox(Page):
             return False
         elif player.participant.role == 'Sender':
             return True
+        elif player.left_hanging:
+            return True
 
 
 class Payment(Page):
@@ -381,7 +384,9 @@ class Payment(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender':
+            return True
+        elif player.left_hanging:
             return True
 
     def vars_for_template(player: Player):
@@ -403,7 +408,9 @@ class ProlificLink(Page):
     def is_displayed(player: Player):
         if player.participant.is_dropout:
             return False
-        elif player.round_number == C.NUM_ROUNDS:
+        elif player.participant.role == 'Sender':
+            return True
+        elif player.left_hanging:
             return True
 
 

@@ -1,6 +1,6 @@
 {{ block title }}
 
-End of stage 1
+End of Stage 1
 
 {{ endblock }}
 
@@ -21,20 +21,31 @@ End of stage 1
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
-            <td>{{ p.message }}</td>
+            <td>{{ p.message }} will earn the Receiver a bigger bonus</td>
         {{ endfor }}
         </tr>
     </table>
 
 <p> </p>
 
-<p>
-    The round randomly selected for payment is <b>{{ random_round }}</b>. <br>
-    Your message on that round is <b>{{ message }}</b> and this it message the Receiver matched with you will get.
-</p>
-<p>
-    When you press the next button, you will be redirected to a waitpage where you will be matched with a Receiver.
-</p>
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your message on that round is:
+
+            <div class="card-body">
+                <b>"{{ best_option }} will earn you more money than {{ worst_option}}"</b>
+            </div>
+            and this it message the Receiver matched with you will get.
+        </p>
+    </div>
+</div>
+
+<p></p>
+    <p>
+        When you press the next button, you will be redirected to a waitpage where you will be matched with a Receiver.
+    </p>
 
     <div style="display: flex; justify-content: flex-end">
         {% next_button %}

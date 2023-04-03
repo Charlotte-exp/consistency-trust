@@ -137,7 +137,7 @@ def random_payment(player: Player):
 
 class StakesPage(Page):
 
-    timeout_seconds = 2  # instant timeout
+    timeout_seconds = 1  # instant timeout
 
     @staticmethod
     def is_displayed(player):
@@ -277,13 +277,26 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
-        return dict(
-            player_in_all_rounds=player.in_all_rounds(),
-            total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+        if player.participant.randomly_selected_message == 'Option A':
+            return dict(
+                player_in_all_rounds=player.in_all_rounds(),
+                total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+                best_option='Option A',
+                worst_option='Option B',
 
-            random_round=player.randomly_selected_round,
-            message=player.randomly_selected_message,
-        )
+                random_round=player.randomly_selected_round,
+                message=player.randomly_selected_message,
+            )
+        else:
+            return dict(
+                player_in_all_rounds=player.in_all_rounds(),
+                total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+                best_option='Option B',
+                worst_option='Option A',
+
+                random_round=player.randomly_selected_round,
+                message=player.randomly_selected_message,
+            )
 
 
 page_sequence = [
