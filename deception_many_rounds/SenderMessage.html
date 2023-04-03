@@ -50,9 +50,10 @@ Round {{ player.round_number}}
 
 {{ block content }}
 
+{{ if player.stake == 'high' }}
 <p>
     Below are the two bonus payment options for both you and the Receiver for round {{ round_number }}. <br>
-    Pay attention, they can be different for each new round!
+    <font color="red">The bigger bonus is higher in this round!</font>
 </p>
 
 <div class="card-body">
@@ -85,9 +86,10 @@ Round {{ player.round_number}}
         </div>
     </div>
     <br>
-    <p>
+    <p style="text-align:center">
         {{ formfield player.better4you }}
         {{ formfield player.better4receiver }}
+        {{ formfield player.what_receiver_knows }}
     </p>
     <br>
     <p>
@@ -97,6 +99,61 @@ Round {{ player.round_number}}
         <b>never what the other option was nor what you earned from their choice.</b>
     </p>
 </div>
+
+{{ else }}
+
+<p>
+    Below are the two bonus payment options for both you and the Receiver for round {{ round_number }}. <br>
+    Pay attention, they can be different for each new round!
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <br>
+    <p style="text-align:center">
+        {{ formfield player.better4you }}
+        {{ formfield player.better4receiver }}
+        {{ formfield player.what_receiver_knows }}
+    </p>
+    <br>
+    <p>
+        Remember that the Receiver does not know the bonuses attached to each options
+        and that the only information they will have is your message.
+        They will only know the final payoff at the end of the experiment,
+        <b>never what the other option was nor what you earned from their choice.</b>
+    </p>
+</div>
+
+
+
+{{ endif }}
 
 <div class="card bg-light instructions">
     <div class="card-body">

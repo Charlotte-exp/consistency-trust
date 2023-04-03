@@ -70,6 +70,12 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect,
     )
 
+    what_receiver_knows = models.StringField(
+        choices=['Nothing', 'That one is worse for the Receiver', 'What the amounts are but not in which option'],
+        verbose_name='What does the Receiver know about the Options?',
+        widget=widgets.RadioSelect,
+    )
+
     random_selection = models.StringField(
         initial='',
         choices=['randomise', 'whatever'],
@@ -165,7 +171,7 @@ class StakesPage(Page):
 
 class SenderMessage(Page):
     form_model = 'player'
-    form_fields = ['message', 'better4you', 'better4receiver']
+    form_fields = ['message', 'better4you', 'better4receiver', 'what_receiver_knows']
 
     @staticmethod
     def is_displayed(player):
@@ -191,13 +197,13 @@ class SenderMessage(Page):
     def error_message(player: Player, values):
         # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
         # but if you have many similar fields, this is more efficient.
-        solutions = dict(better4you='Option B', better4receiver='Option A')
+        solutions = dict(better4you='Option B', better4receiver='Option A', what_receiver_knows='Nothing')
 
         # error_message can return a dict whose keys are field names and whose
         # values are error messages
         errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
         # print('errors is', errors)
-        if errors and player.round_number == 1:
+        if errors:
             player.num_failed_attempts += 1
             return errors
 
