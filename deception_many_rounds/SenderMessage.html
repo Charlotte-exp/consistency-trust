@@ -86,7 +86,8 @@ Round {{ player.round_number}}
     </div>
     <br>
     <p>
-        {{ formfield player.saliency }}
+        {{ formfield player.better4you }}
+        {{ formfield player.better4receiver }}
     </p>
     <br>
     <p>
@@ -104,10 +105,10 @@ Round {{ player.round_number}}
         </p>
         <div class="row">
             <div class="col" style="text-align:center">
-                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn you a bigger bonus than Option B</button>
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn the Receiver a bigger bonus than Option B</button>
             </div>
             <div class="col" style="text-align:center">
-                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn you a bigger bonus than Option A</button>
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn the Receiver a bigger bonus than Option A</button>
             </div>
         </div>
     </div>

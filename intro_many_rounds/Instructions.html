@@ -12,24 +12,25 @@ Instructions
         Neither of you will ever know the identity of the other.
     </p>
     <p>
-        There are two players in this task: a <b>Sender</b> and a <b>Receiver</b>.
+        There are two players in this experiment: a <b>Sender</b> and a <b>Receiver</b>.
     </p>
     <p>
-        The experiment is made of <b>one task repeated several times</b>, each time with another participant.
-        Your role, either Sender or Receiver, is fixed across all repeats of the task.
-        The task is a choice between two bonus payment options: A and B.
+        The experiment is made of two stages:
+        The first stage is made of many rounds of the same task.
+        In each, the Sender learns about two bonus payment options: A and B.
         Each option determines a monetary bonus for both participants.
-    </p>
-    <p>
         There are two possible sets of payment options.
-        On each round you can face either of the two with 50% probability.
-        At the end of the study, one task will be selected at random and you will be paid only the bonus from this task.
+        On each round the Sender can face either of the two with 50% probability.
+        With this information, the Sender sends a message about those options to the Receiver.
+        This action repeats on each round.
     </p>
     <p>
-        The task is made of two steps:
-        First, the Sender is informed of the bonuses attached to each option
-        and then sends a message to the Receiver about these options.
-        Second, the Receiver sees this message and chooses one of the two options.
+        After the last round, one round is selected at random
+        and the message chosen in this round only is sent to the Receiver.
+        the sender makes a repeated decision over many rounds.
+        In the second stage, the Receiver receives this message and chooses between Option A and Option B.
+        The message is the only information about the bonuses that the Receiver has.
+        The bonus of both players is determined by the choice of the Receiver.
     </p>
     <p>
         The Receiver makes the choice, but they do not know the bonuses attached to each options.
@@ -40,27 +41,31 @@ Instructions
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            For all repetitions of the task, you have been assigned the role of: <b>{{ player.role }}</b>
+            You have been assigned the role of: <b>{{ player.role }}</b>
         </p>
 
-        {{ if player.role == C.RECEIVER_ROLE }}
+        {{ if player.role == C.SENDER_ROLE }}
         <p>
             You are the one who knows what the bonuses from each option are.
-            In the first step, you have a choice between two messages to send to the Receiver to influence their choice.
+            In the first stage, you have a choice between two messages to send to the Receiver to influence their choice.
         </p>
         <p>
             The message you send can be either of:
             <ul>
                 <li>
-                    Option A will earn you a bigger bonus that Option B.
+                    Option A will earn the Receiver a bigger bonus that Option B.
                 </li>
                 <li>
-                    Option B will earn you a bigger bonus that Option A.
+                    Option B will earn the Receiver a bigger bonus that Option A.
                 </li>
             </ul>
         </p>
         <p>
-            For the second step, one task will be chosen at random and your decision from that task will be implemented.
+            You will make this choice many times over multiple rounds.
+            The monetary values of each Option can change in each round, so pay attention.
+        </p>
+        <p>
+            For the second stage, one round will be chosen at random and your decision from that round will be implemented.
             The Receiver will see your message, and then choose either Option A or Option B.
             The message is not binding: in the end, it only depends on the Receiver's choice.
             Their decision will determine both of your bonuses,
@@ -69,25 +74,29 @@ Instructions
             (that is, they will never know whether your message was true or not).
             Moreover, they will never know the bonuses that you could have earned according to the different options.
         </p>
+        <p>
+            After you press the "Next" button,
+            you will immediately start with the first round of stage 1.
+        </p>
 
         {{ else }}
         <p>
-            You are the one who knows what the bonuses from each option are.
-            In the first step, you have a choice between two messages to send to the Receiver to influence their choice.
+            You are the one who receives the message and chooses the Option.
+            In the first stage, you must simply wait to be matched with a Sender that has finished stage 1.
         </p>
         <p>
             The message you send can be either of:
             <ul>
                 <li>
-                    Option A will earn you a bigger bonus that Option B.
+                    Option A will earn the Receiver a bigger bonus that Option B.
                 </li>
                 <li>
-                    Option B will earn you a bigger bonus that Option A.
+                    Option B will earn the Receiver a bigger bonus that Option A.
                 </li>
             </ul>
         </p>
         <p>
-            For the second step, the Receiver will see your message, and then choose either Option A or Option B.
+            For the second stage, you will be , and then choose either Option A or Option B.
             The message is not binding: in the end, it only depends on the Receiver's choice.
             Their decision will determine both of your bonuses,
             regardless of whether or not they followed your suggestion.
@@ -95,21 +104,16 @@ Instructions
             (that is, they will never know whether your message was true or not).
             Moreover, they will never know the bonuses that you could have earned according to the different options.
         </p>
+        <p>
+            After you press the "Next" button,
+            you will be redirected to a wait room to be paired with the first available Sender.
+            Once you are paired, you will start stage 2 immediately.
+        </p>
         {{ endif }}
     </div>
 </div>
 
 <p></p>
-
-<div>
-    <p>
-        After you press the "Next" button,
-        you will be redirected to a wait room to be paired with another player who will be the
-        {{ if player.role == C.RECEIVER_ROLE }}Sender{{ else }}Receiver{{ endif }}.
-        Once you are paired, the task will start immediately.
-        Once the first task is finished, you will come back to the wait room to be paired with a new participant.
-    </p>
-</div>
 
     <p>
         <div style="display: flex; justify-content: flex-end">

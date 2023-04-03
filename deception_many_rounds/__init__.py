@@ -45,7 +45,9 @@ class Player(BasePlayer):
     optionA_receiver = models.CurrencyField(initial=cu(0))
     optionB_sender = models.CurrencyField(initial=cu(0))
     optionB_receiver = models.CurrencyField(initial=cu(0))
+
     stake = models.StringField(initial='')
+    num_failed_attempts = models.IntegerField(initial=0)
 
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_stake = models.StringField(initial='')
@@ -56,9 +58,15 @@ class Player(BasePlayer):
         choices=['Option A', 'Option B'],
     )
 
-    saliency = models.StringField(
+    better4you = models.StringField(
         choices=['Option A', 'Option B'],
         verbose_name='Which Option is better for YOU?',
+        widget=widgets.RadioSelect,
+    )
+
+    better4receiver = models.StringField(
+        choices=['Option A', 'Option B'],
+        verbose_name='Which Option is better for the RECEIVER?',
         widget=widgets.RadioSelect,
     )
 
@@ -254,7 +262,7 @@ class StakesPage(Page):
 
 class SenderMessage(Page):
     form_model = 'player'
-    form_fields = ['message', 'saliency']
+    form_fields = ['message', 'better4you', 'better4receiver']
 
     @staticmethod
     def is_displayed(player):
@@ -277,6 +285,20 @@ class SenderMessage(Page):
         )
 
     timer_text = 'If you stay inactive for too long you will be considered a dropout:'
+
+    @staticmethod
+    def error_message(player: Player, values):
+        # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+        # but if you have many similar fields, this is more efficient.
+        solutions = dict(better4you='Option B', better4receiver='Option A')
+
+        # error_message can return a dict whose keys are field names and whose
+        # values are error messages
+        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+        # print('errors is', errors)
+        if errors and player.round_number == 1:
+            player.num_failed_attempts += 1
+            return errors
 
     # @staticmethod
     # def get_timeout_seconds(player):
