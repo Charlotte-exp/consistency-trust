@@ -86,19 +86,21 @@ Round {{ player.round_number}}
         </div>
     </div>
     <br>
-    <p style="text-align:center">
-        {{ formfield player.better4you }}
-        {{ formfield player.better4receiver }}
-        {{ formfield player.what_receiver_knows }}
-    </p>
-    <br>
     <p>
         Remember that the Receiver does not know the bonuses attached to each options
         and that the only information they will have is your message.
         They will only know the final payoff at the end of the experiment,
         <b>never what the other option was nor what you earned from their choice.</b>
     </p>
+    <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+            {{ formfield player.better4you }}
+            {{ formfield player.better4receiver }}
+            {{ formfield player.what_receiver_knows }}
+        </div>
+    </div>
 </div>
+
 
 {{ else }}
 
@@ -137,18 +139,19 @@ Round {{ player.round_number}}
         </div>
     </div>
     <br>
-    <p style="text-align:center">
-        {{ formfield player.better4you }}
-        {{ formfield player.better4receiver }}
-        {{ formfield player.what_receiver_knows }}
-    </p>
-    <br>
     <p>
         Remember that the Receiver does not know the bonuses attached to each options
         and that the only information they will have is your message.
         They will only know the final payoff at the end of the experiment,
         <b>never what the other option was nor what you earned from their choice.</b>
     </p>
+        <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+            {{ formfield player.better4you }}
+            {{ formfield player.better4receiver }}
+            {{ formfield player.what_receiver_knows }}
+        </div>
+    </div>
 </div>
 
 

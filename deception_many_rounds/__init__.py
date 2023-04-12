@@ -82,7 +82,7 @@ class Player(BasePlayer):
     )
 
     def get_stake(player):
-        if random.random() >= 0.5:
+        if random.random() >= 0.75:
             player.stake = "high"
             round_stake = player.stake
         else:
