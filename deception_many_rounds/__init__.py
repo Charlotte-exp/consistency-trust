@@ -88,7 +88,7 @@ class Player(BasePlayer):
         else:
             player.stake = "low"
             round_stake = player.stake
-        print("stake is", player.stake)
+        # print("stake is", player.stake)
         return round_stake
 
     def set_options(player):
@@ -98,13 +98,13 @@ class Player(BasePlayer):
             player.optionA_receiver = C.optionA_receiver_high
             player.optionB_sender = C.optionB_sender_high
             player.optionB_receiver = C.optionB_receiver_high
-            print("options high")
+            # print("options high")
         elif stake == 'low':
             player.optionA_sender = C.optionA_sender_low
             player.optionA_receiver = C.optionA_receiver_low
             player.optionB_sender = C.optionB_sender_low
             player.optionB_receiver = C.optionB_receiver_low
-            print("options low")
+            # print("options low")
 
     def get_button_order(player):
         if random.random() > 0.5:
@@ -116,13 +116,8 @@ class Player(BasePlayer):
 ########  Functions #######
 
 def random_payment(player: Player):
-    # random_payoff = random.choice([p.payoff for p in player.in_all_rounds()])
-    #
-    # player.random_payoff = random_payoff
-    # print([p.payoff for p in player.in_all_rounds()])
-    print("fuck")
     randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
-    print("chosen round", randomly_selected_round)
+    # print("chosen round", randomly_selected_round)
     me = player.in_round(randomly_selected_round)
     player.randomly_selected_round = randomly_selected_round
     player.participant.randomly_selected_round = randomly_selected_round
@@ -132,9 +127,9 @@ def random_payment(player: Player):
     randomly_selected_message = me.message
     player.randomly_selected_message = randomly_selected_message
     player.participant.randomly_selected_message = randomly_selected_message
-    print('round is', randomly_selected_round)
-    print('stake is', randomly_selected_stake)
-    print('message is', randomly_selected_message)
+    # print('round is', randomly_selected_round)
+    # print('stake is', randomly_selected_stake)
+    # print('message is', randomly_selected_message)
 
 
 ######  PAGES  #########
@@ -213,17 +208,6 @@ class SenderMessage(Page):
     #     else:
     #         return 12 * 60
     #
-    # def before_next_page(player, timeout_happened):
-    #     """
-    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
-    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
-    #     a different text (left_hanging = 2).
-    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
-    #     """
-    #     me = player
-    #     if timeout_happened:
-    #         me.participant.is_dropout = True
-    #         me.message = 'dropout'
 
 
 # class Results(Page):
@@ -263,9 +247,6 @@ class RandomSelection(Page):
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
-            #
-            # random_round=player.randomly_selected_round,
-            # message=player.randomly_selected_message,
 
             call_payment=random_payment(player),
         )

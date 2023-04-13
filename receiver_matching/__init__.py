@@ -248,20 +248,20 @@ class ReceiverChoice(Page):
         else:
             return 2 * 60
 
-    # def before_next_page(player, timeout_happened):
-    #     """
-    #     Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
-    #     and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
-    #     a different text (left_hanging = 2).
-    #     Decisions for the missed round are automatically filled to avoid an NONE type error.
-    #     """
-    #     me = player
-    #     partner = other_player(me)
-    #     if timeout_happened:
-    #         me.participant.is_dropout = True
-    #         partner.left_hanging = True
-    #         # print(me.participant.is_dropout)
-    #         me.choice = random.choice(['Option A', 'Option B'])
+    def before_next_page(player, timeout_happened):
+        """
+        Dropout check code! If the timer set above runs out, all the other players in the group become left_hanging = 1
+        and are jumped to the leftHanging page with a link to Prolific. The dropout also goes to that page but gets
+        a different text (left_hanging = 2).
+        Decisions for the missed round are automatically filled to avoid an NONE type error.
+        """
+        me = player
+        partner = other_player(me)
+        if timeout_happened:
+            me.participant.is_dropout = True
+            partner.left_hanging = True
+            print("is dropout?", me.participant.is_dropout)
+            me.choice = random.choice(['Option A', 'Option B'])
 
 
 class ResultsWaitPage(WaitPage):
@@ -333,35 +333,6 @@ class Comprehension(Page):
     #         return False
     #     # elif player.left_hanging:
     #     #     return True
-
-    # @staticmethod
-    # def error_message(player: Player, values):
-    #     # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
-    #     # but if you have many similar fields, this is more efficient.
-    #     solutions = dict(q1=2, q2=3, q3=1, q4=3)
-    #
-    #     # error_message can return a dict whose keys are field names and whose
-    #     # values are error messages
-    #     errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
-    #     # print('errors is', errors)
-    #     if errors:
-    #         player.num_failed_attempts += 1
-    #         return errors
-
-    # @staticmethod
-    # def error_message(player: Player, values):
-    #     if values['q1'] != 2:
-    #         player.q1_failed_attempts += 1
-    #         return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q2'] != 3:
-    #         player.q2_failed_attempts += 1
-    #         return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q3'] != 1:
-    #         player.q3_failed_attempts += 1
-    #         return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
-    #     if values['q4'] != 3:
-    #         player.q4_failed_attempts += 1
-    #         return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
 
 class CommentBox(Page):
