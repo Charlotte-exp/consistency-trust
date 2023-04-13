@@ -16,34 +16,21 @@
 
 {{ else }}
 
-    {{ if role == 'Receiver' }}
-
-        {{ if round_number == 3 }}
-            <div>
-                <p>
-                    This was the last task.
-                    Once all the other participants in your session are finished you will proceed to the end of the experiment.
-                </p>
-                <p>
-                    This might take a couple minutes.
-                </p>
-            </div>
-
-        {{ else }}
-        <div>
-            <p>
-                Please wait to be paired with a new participant for the next task.
-                This might take a couple of minutes while the other participants finishes the previous task.
-            </p>
-        </div>
-
-        {{ endif }}
+    {{ if role == 'Sender' }}
+    <div>
+        <p>
+            Please wait while the Receiver makes their choice.
+        </p>
+        <p>
+            This will not take more than 2 minutes.
+        </p>
+    </div>
 
     {{ else }}
 
     <div>
         <p>
-            Please wait while the other participant makes their choice.
+            Please wait while the Sender makes their choice.
         </p>
         <p>
             This will not take more than 2 minutes.

@@ -40,12 +40,21 @@
     </div>
 
        <div id="newText" style="display:none">
-           <p>Looks like there was no Receiver to be matched with you. We're really sorry about that. </p>
-            <p>Please use the following link to receive the show-up fee and a small bonus:  <b><a href="https://app.prolific.co/submissions/complete?cc=CIJSBAPH">
-                https://app.prolific.co/submissions/complete?cc=CIJSBAPH </a></b>
-        .</p>
+           {{ if role == 'Sender' }}
+           <p>
+               Looks like there was no Receiver to be matched with you. We're really sorry about that.
+           </p>
+           {{ else }}
+           <p>
+               Looks like there was no Sender to be matched with you. We're really sorry about that.
+           </p>
+           {{ endif }}
+            <p>
+                Please use the following link to receive the show-up fee and a small bonus:
+                <b><a href="https://app.prolific.co/submissions/complete?cc=CIJSBAPH">
+                    https://app.prolific.co/submissions/complete?cc=CIJSBAPH</a></b>.
+            </p>
        </div>
-    <br>
 
 {% endblock %}
 

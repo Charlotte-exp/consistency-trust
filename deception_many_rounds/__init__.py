@@ -11,7 +11,7 @@ not interactive - just the sender
 class C(BaseConstants):
     NAME_IN_URL = 'Task_01'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 3
 
     optionA_sender_high = cu(0.5)
     optionA_receiver_high = cu(1.5)
@@ -82,7 +82,7 @@ class Player(BasePlayer):
     )
 
     def get_stake(player):
-        if random.random() >= 0.75:
+        if random.random() >= 0.5:
             player.stake = "high"
             round_stake = player.stake
         else:
@@ -121,22 +121,20 @@ def random_payment(player: Player):
     # player.random_payoff = random_payoff
     # print([p.payoff for p in player.in_all_rounds()])
     print("fuck")
-    random_round_number = random.randint(1, C.NUM_ROUNDS)
-    for round_ in range(1, C.NUM_ROUNDS):
-        me = player.in_round(round_)
-        if random_round_number == round_:
-            randomly_selected_round = round_
-            player.randomly_selected_round = randomly_selected_round
-            player.participant.randomly_selected_round = randomly_selected_round
-            randomly_selected_stake = me.stake
-            player.randomly_selected_stake = randomly_selected_stake
-            player.participant.randomly_selected_stake = randomly_selected_stake
-            randomly_selected_message = me.message
-            player.randomly_selected_message = randomly_selected_message
-            player.participant.randomly_selected_message = randomly_selected_message
-            print('round is', randomly_selected_round)
-            print('stake is', randomly_selected_stake)
-            print('message is', randomly_selected_message)
+    randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
+    print("chosen round", randomly_selected_round)
+    me = player.in_round(randomly_selected_round)
+    player.randomly_selected_round = randomly_selected_round
+    player.participant.randomly_selected_round = randomly_selected_round
+    randomly_selected_stake = me.stake
+    player.randomly_selected_stake = randomly_selected_stake
+    player.participant.randomly_selected_stake = randomly_selected_stake
+    randomly_selected_message = me.message
+    player.randomly_selected_message = randomly_selected_message
+    player.participant.randomly_selected_message = randomly_selected_message
+    print('round is', randomly_selected_round)
+    print('stake is', randomly_selected_stake)
+    print('message is', randomly_selected_message)
 
 
 ######  PAGES  #########
