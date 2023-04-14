@@ -32,6 +32,12 @@
         Instead the computer chose an option at random and you bonus will be: {{ payoff }}.
     </p>
 
+{{ elif player.participant.is_dropout }}
+
+    <div>
+        <p>You were inactive too long and the program assumed you dropped out. Thus the experiment was ended.</p>
+   </div>
+
 {{ else }}
 
     {{ if role == 'Sender' }}
@@ -46,11 +52,13 @@
 
 {{ endif }}
 
+{{ if not player.participant.is_dropout }}
     <p>
         <div style="display: flex; justify-content: flex-end">
         {{ next_button }}
         </div>
     </p>
+{{ endif }}
 
 {{ endblock }}
 

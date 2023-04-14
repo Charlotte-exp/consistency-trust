@@ -208,6 +208,7 @@ class ReceiverChoice(Page):
     @staticmethod
     def is_displayed(player):
         if player.participant.role == 'Receiver':
+            print('is dropout?', player.participant.is_dropout)
             return True
 
     def vars_for_template(player: Player):
@@ -259,8 +260,10 @@ class ReceiverChoice(Page):
         partner = other_player(me)
         if timeout_happened:
             me.participant.is_dropout = True
+            partner.participant.is_dropout = False
             partner.left_hanging = True
-            print("is dropout?", me.participant.is_dropout)
+            print("me is dropout?", me.participant.is_dropout)
+            print(" partner is dropout?", partner.participant.is_dropout)
             me.choice = random.choice(['Option A', 'Option B'])
 
 
@@ -303,7 +306,7 @@ class Results(Page):
         participant = player.participant
         return dict(
             role=player.participant.role,
-            is_dropout=participant.is_dropout,
+            is_dropout=player.participant.is_dropout,
             left_hanging=player.left_hanging,
             round_number=player.round_number,
             payoff=player.payoff,
@@ -315,46 +318,54 @@ class Demographics(Page):
     form_model = 'player'
     form_fields = ['age', 'gender', 'income', 'education', 'ethnicity']
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.participant.is_dropout:
-    #         return False
-    #     # elif player.left_hanging:
-    #     #     return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.left_hanging:
+            return True
+        elif not player.participant.is_dropout:
+            return True
+        else:
+            return False
 
 
 class Comprehension(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3']
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.participant.is_dropout:
-    #         return False
-    #     # elif player.left_hanging:
-    #     #     return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.left_hanging:
+            return True
+        elif not player.participant.is_dropout:
+            return True
+        else:
+            return False
 
 
 class CommentBox(Page):
     form_model = 'player'
     form_fields = ['comment_box']
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.participant.is_dropout:
-    #         return False
-    #     # elif player.left_hanging:
-    #     #     return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.left_hanging:
+            return True
+        elif not player.participant.is_dropout:
+            return True
+        else:
+            return False
 
 
 class Payment(Page):
 
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.participant.is_dropout:
-    #         return False
-    #     # elif player.left_hanging:
-    #     #     return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.left_hanging:
+            return True
+        elif not player.participant.is_dropout:
+            return True
+        else:
+            return False
 
     def vars_for_template(player: Player):
         participant = player.participant
@@ -371,12 +382,14 @@ class ProlificLink(Page):
     This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
     There is a short text and the link in case it is not automatic.
     """
-    # @staticmethod
-    # def is_displayed(player: Player):
-    #     if player.participant.is_dropout:
-    #         return False
-    #     # elif player.left_hanging:
-    #     #     return True
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.left_hanging:
+            return True
+        elif not player.participant.is_dropout:
+            return True
+        else:
+            return False
 
 
 page_sequence = [PairingWaitPage,
