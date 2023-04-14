@@ -11,7 +11,9 @@ not interactive - just the sender
 class C(BaseConstants):
     NAME_IN_URL = 'Task_01'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 10
+
+    proba_low_stake = 0.75
 
     optionA_sender_high = cu(0.5)
     optionA_receiver_high = cu(1.5)
@@ -82,7 +84,7 @@ class Player(BasePlayer):
     )
 
     def get_stake(player):
-        if random.random() >= 0.5:
+        if random.random() >= C.proba_low_stake:
             player.stake = "high"
             round_stake = player.stake
         else:

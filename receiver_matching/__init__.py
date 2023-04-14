@@ -148,7 +148,7 @@ def get_payoffs(player: Player):
             else:
                 me.payoff = C.optionB_sender_high
         else:
-            if me.choice == 'Option A':
+            if partner.choice == 'Option A':
                 me.payoff = C.optionA_sender_low
             else:
                 me.payoff = C.optionB_sender_low

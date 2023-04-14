@@ -9,9 +9,11 @@ class PlayerBot(Bot):
         if self.participant.role == "Sender":
             if self.round_number <= C.NUM_ROUNDS:
                 yield StakesPage
-                yield SenderMessage, dict(message=random.choice(['Option A', 'Option B']))
-                yield Results
+                yield SenderMessage, dict(message=random.choice(['Option A', 'Option B']),
+                                          better4you='Option B', better4receiver='Option A',
+                                          what_receiver_knows='Nothing')
+                # yield Results
             if self.round_number == C.NUM_ROUNDS:
-                yield RandomSelection, dict(message=['randomise'])
+                yield RandomSelection, dict(random_selection='randomise')
                 yield End
 
