@@ -134,6 +134,14 @@ def random_payment(player: Player):
     # print('message is', randomly_selected_message)
 
 
+def get_payoff(player: Player):
+    if player.randomly_selected_stake == 'high':
+        player.payoff = C.optionB_sender_high
+    else:
+        player.payoff = C.optionB_sender_low
+
+
+
 ######  PAGES  #########
 
 
@@ -141,18 +149,9 @@ class StakesPage(Page):
 
     timeout_seconds = 1  # instant timeout
 
-    @staticmethod
-    def is_displayed(player):
-        participant = player.participant
-        if participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
-
     def vars_for_template(player: Player):
         participant = player.participant
         return dict(
-            is_dropout=participant.is_dropout,
             round_number=player.round_number,
 
             call_stake=player.set_options(),
@@ -167,14 +166,6 @@ class StakesPage(Page):
 class SenderMessage(Page):
     form_model = 'player'
     form_fields = ['message', 'better4you', 'better4receiver', 'what_receiver_knows']
-
-    @staticmethod
-    def is_displayed(player):
-        participant = player.participant
-        if participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender':
-            return True
 
     def vars_for_template(player: Player):
         """  """
@@ -212,37 +203,13 @@ class SenderMessage(Page):
     #
 
 
-# class Results(Page):
-#
-#     timeout_seconds = 1  # instant timeout
-#
-#     @staticmethod
-#     def is_displayed(player):
-#         participant = player.participant
-#         if participant.is_dropout:
-#             return False
-#         elif player.participant.role == 'Sender':
-#             return True
-#
-#     def vars_for_template(player: Player):
-#         participant = player.participant
-#         return dict(
-#             is_dropout=participant.is_dropout,
-#             round_number=player.round_number,
-#
-#             # call_payoff=set_payoff(player),
-#         )
-
-
 class RandomSelection(Page):
     form_model = 'player'
     form_fields = ['random_selection']
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
+        if player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -251,6 +218,7 @@ class RandomSelection(Page):
             total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
 
             call_payment=random_payment(player),
+            call_payoff=get_payoff(player),
         )
 
 
@@ -259,9 +227,7 @@ class End(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.participant.is_dropout:
-            return False
-        elif player.participant.role == 'Sender' and player.round_number == C.NUM_ROUNDS:
+        if player.round_number == C.NUM_ROUNDS:
             return True
 
     def vars_for_template(player: Player):
@@ -287,6 +253,34 @@ class End(Page):
             )
 
 
+class Payment(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+    def vars_for_template(player: Player):
+        participant = player.participant
+        session = player.session
+        return dict(
+            bonus=player.payoff.to_real_world_currency(session),
+            participation_fee=session.config['participation_fee'],
+            final_payment=player.payoff.to_real_world_currency(session) + session.config['participation_fee'],
+        )
+
+
+class ProlificLink(Page):
+    """
+    This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
+    There is a short text and the link in case it is not automatic.
+    """
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+
 page_sequence = [
     # Consent,
     # Instructions,
@@ -295,6 +289,6 @@ page_sequence = [
     # Results,
     RandomSelection,
     End,
-    # Payment,
-    # ProlificLink
+    Payment,
+    ProlificLink
 ]

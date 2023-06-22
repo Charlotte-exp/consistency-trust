@@ -29,12 +29,12 @@ class Subsession(BaseSubsession):
     pass
 
 
-def creating_session(subsession: Subsession):
-    for p in subsession.get_players():
-        p.participant.role = p.role
-        # print('roles', p.role, p.participant.role)
-        p.participant.is_dropout = False
-        # print(p.participant.is_dropout)
+# def creating_session(subsession: Subsession):
+#     for p in subsession.get_players():
+#         p.participant.role = p.role
+#         # print('roles', p.role, p.participant.role)
+#         p.participant.is_dropout = False
+#         # print(p.participant.is_dropout)
 
 
 class Group(BaseGroup):

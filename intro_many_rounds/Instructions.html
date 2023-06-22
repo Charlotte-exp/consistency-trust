@@ -41,8 +41,6 @@ Instructions
         <p>
             You have been assigned the role of: <b>{{ player.role }}</b>
         </p>
-
-        {{ if player.role == C.SENDER_ROLE }}
         <p>
             You are the one who knows what the bonuses from each option are.
             In the first stage, you have a choice between two messages to send to the Receiver to influence their choice.
@@ -72,36 +70,6 @@ Instructions
             After you press the "Next" button,
             you will immediately start with the first round of stage 1.
         </p>
-
-        {{ else }}
-        <p>
-            You are the one who receives the message and chooses the Option.
-            In the first stage, you must simply wait to be matched with a Sender that has finished stage 1.
-            When you are matched with a Sender,
-            you will immediately start stage 2 and see the message from the Sender.
-        </p>
-        <p>
-            The message you receive will look like this:
-        </p>
-        <div style="text-align:center">
-            <img src="{{ static 'intro_many_rounds/receiver_message.png'}}" width="auto" height="100"/>
-        </div>
-        <p></p>
-        <p>
-            For the second stage, you will be , and then choose either Option A or Option B.
-            The message is not binding: in the end, it only depends on the Receiver's choice.
-            Their decision will determine both of your bonuses,
-            regardless of whether or not they followed your suggestion.
-            However, <b>the Receiver will never know what bonuses were actually offered in the option not chosen</b>
-            (that is, they will never know whether your message was true or not).
-            Moreover, they will never know the bonuses that you could have earned according to the different options.
-        </p>
-        <p>
-            After you press the "Next" button,
-            you will be redirected to a wait room to be paired with the first available Sender.
-            Once you are paired, you will start stage 2 immediately.
-        </p>
-        {{ endif }}
     </div>
 </div>
 

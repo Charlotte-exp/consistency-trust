@@ -5,8 +5,8 @@ from os import popen
 SESSION_CONFIGS = [
     dict(
         name='deception_many_rounds',
-        display_name="otree5 deception many rounds",
-        app_sequence=['intro_many_rounds', 'deception_many_rounds', 'receiver_matching'],
+        display_name="otree5 deception many rounds - no receivers",
+        app_sequence=['intro_many_rounds', 'deception_many_rounds'],
         num_demo_participants=6,
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
