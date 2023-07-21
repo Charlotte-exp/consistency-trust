@@ -1,0 +1,22 @@
+{{ block title }}
+Attention checks
+{{ endblock }}
+
+
+{{ block content }}
+
+
+<div class="card-body">
+    <h4>Please answer these short questions before starting the experiment:</h4>
+    {{ formfields }}
+</div>
+
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+
+{{ endblock }}

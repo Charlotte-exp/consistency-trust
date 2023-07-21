@@ -43,10 +43,45 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
+    num_failed_attempts = models.IntegerField(initial=0)
+
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
     q3_failed_attempts = models.IntegerField(initial=0)
     q4_failed_attempts = models.IntegerField(initial=0)
+
+    a1 = models.IntegerField(
+        choices=[
+            [1, '112'],
+            [2, '911'],
+            [3, '000'],
+            [4, '999'],
+        ],
+        verbose_name='Which of these phone numbers connects you to emergency services?',
+        widget=widgets.RadioSelect
+    )
+
+    a2 = models.IntegerField(
+        choices=[
+            [1, 'Eggs'],
+            [2, 'Muesli'],
+            [3, 'Bakes beans'],
+            [4, 'Sausages']
+        ],
+        verbose_name='Which ingredient is not part of a typical full English breakfast?',
+        widget=widgets.RadioSelect
+    )
+
+    a3 = models.IntegerField(
+        choices=[
+            [1, 'Lei-che-ster'],
+            [2, 'Lei-ce-ster'],
+            [3, 'Le-ster'],
+            [4, 'Le-zter']
+        ],
+        verbose_name='What is the correct pronunciation of the City of Leicester?',
+        widget=widgets.RadioSelect
+    )
 
     q1 = models.IntegerField(
         choices=[
@@ -86,7 +121,6 @@ class Player(BasePlayer):
     )
 
 
-
 # PAGES
 class Consent(Page):
 
@@ -96,30 +130,23 @@ class Consent(Page):
         }
 
 
-class InstruSender(Page):
+class AttentionChecks(Page):
+    form_model = 'player'
+    form_fields = ['a1', 'a2', 'a3']
 
-    def vars_for_template(player: Player):
-        """  """
-        return dict(
-            # role=player.role,
-            sender_optionA=C.optionA_sender_high,
-            receiver_optionA=C.optionA_receiver_high,
-            sender_optionB=C.optionB_sender_high,
-            receiver_optionB=C.optionB_receiver_high,
-        )
+    @staticmethod
+    def error_message(player: Player, values):
+        # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+        # but if you have many similar fields, this is more efficient.
+        solutions = dict(a1=4, a2=2, a3=3)
 
-
-class InstruReceiver(Page):
-
-    def vars_for_template(player: Player):
-        """  """
-        return dict(
-            # role=player.role,
-            sender_optionA=C.optionA_sender_high,
-            receiver_optionA=C.optionA_receiver_high,
-            sender_optionB=C.optionB_sender_high,
-            receiver_optionB=C.optionB_receiver_high,
-        )
+        # error_message can return a dict whose keys are field names and whose
+        # values are error messages
+        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+        # print('errors is', errors)
+        if errors:
+            player.num_failed_attempts += 1
+            return errors
 
 
 class Instructions(Page):
@@ -179,5 +206,6 @@ class Comprehension(Page):
 
 
 page_sequence = [Consent,
+                 AttentionChecks,
                  Instructions,
                  Comprehension]
