@@ -7,12 +7,11 @@ Instructions
 
 <div>
     <p>
-        This is a short experiment on decision-making.
         In this experiment you will be matched with another participant from Prolific.
         Neither of you will ever know the identity of the other.
     </p>
     <p>
-        There are two players in this experiment: a <b>Sender</b> and a <b>Receiver</b>.
+        One of you will be the <b>Sender</b> and the other the <b>Receiver</b>.
     </p>
     <p>
         The experiment is made of two stages:
@@ -23,12 +22,14 @@ Instructions
         There are two possible sets of bonus payment options.
         On each round, the Sender can face either one or the other and send the message accordingly.
     </p>
+        <div class='frame' style="text-align:center">
+            <img src="{{ static 'intro_many_rounds/options_1.png'}}" width="auto" height="120"/>
+            <img src="{{ static 'intro_many_rounds/options_2.png'}}" width="auto" height="110"/>
+        </div>
     <p>
-        After the last round is done, one round is selected at random
-        and parameters of that round will be those used in the second stage (bonus options and message).
-        In the second stage, the Receiver receives this message and chooses between Option A and Option B.
-        The message is the only information about the bonuses that the Receiver has.
-        The bonus of both players is determined by the choice of the Receiver.
+        In the second stage, the Receiver receives the message from one randomly selected round.
+        With only this information, the Receiver must choose between Option A and Option B.
+        The bonus of both players is determined by the choice of the Receiver and which round was randomly selected.
     </p>
     <p>
         The Receiver makes the choice, but they do not know the bonuses attached to each options.
@@ -39,7 +40,7 @@ Instructions
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            You have been assigned the role of: <b>{{ player.role }}</b>
+            You have been assigned the role of: <b>Sender</b>
         </p>
         <p>
             You are the one who knows what the bonuses from each option are.
@@ -66,14 +67,15 @@ Instructions
             (that is, they will never know whether your message was true or not).
             Moreover, they will never know the bonuses that you could have earned according to the different options.
         </p>
-        <p>
-            After you press the "Next" button,
-            you will immediately start with the first round of stage 1.
-        </p>
     </div>
 </div>
 
 <p></p>
+
+    <p>
+        After you press the "Next" button,
+        you will immediately start with the first round of stage 1.
+    </p>
 
     <p>
         <div style="display: flex; justify-content: flex-end">
