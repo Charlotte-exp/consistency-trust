@@ -1,5 +1,7 @@
 from otree.api import *
 
+import itertools
+
 
 doc = """
 Your app description
@@ -29,6 +31,19 @@ class Subsession(BaseSubsession):
     pass
 
 
+def creating_session(subsession: Subsession):
+    """
+    AWe use itertools to assign treatment regularly to make sure there is a somewhat equal amount of each in the
+    session but also that is it equally distributed in the sample. (So pp don't have to wait to long get matched
+    in a pair. It simply cycles through the list of treatments (high & low) and that's saved in the participant vars.
+    """
+    treatments = itertools.cycle(['2nd', '9th', 'none'])
+    for p in subsession.get_players():
+        p.treatment = next(treatments)
+        p.participant.treatment = p.treatment
+        # print('treatment is', p.treatment)
+        # print('vars treatment is', p.participant.treatment)
+
 # def creating_session(subsession: Subsession):
 #     for p in subsession.get_players():
 #         p.participant.role = p.role
@@ -43,6 +58,7 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
+    treatment = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
 
     q1_failed_attempts = models.IntegerField(initial=0)

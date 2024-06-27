@@ -84,14 +84,44 @@ class Player(BasePlayer):
     )
 
     def get_stake(player):
-        if random.random() >= C.proba_low_stake:
-            player.stake = "high"
-            round_stake = player.stake
-        else:
-            player.stake = "low"
-            round_stake = player.stake
-        # print("stake is", player.stake)
+        """
+            This functions attributes the correct stake on the correct round.
+            It is a deterministic system for set treatments.
+            For each treatment I list exactly which stake I want on each round (list_round_stakes)
+            The function selects the correct list based on participant treatment (attributed in the intro)
+            The function is called every round ont he StakesPage.
+            It returns the stake on the list that is a index round-1
+        """
+        list_round_stakes = []
+        if player.participant.treatment == '2nd':
+            list_round_stakes = ['low', 'high', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low']
+        elif player.participant.treatment == '9th':
+            list_round_stakes = ['low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'high', 'low']
+        elif player.participant.treatment == 'none':
+            list_round_stakes = ['low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low', 'low']
+
+        round_stake = list_round_stakes[player.round_number - 1]
+        player.stake = round_stake
+        # print(player.participant.treatment)
+        # print(list_round_stakes)
+        # print(round_stake)
         return round_stake
+
+    # def get_stake(player):
+    #         """
+    #             This functions randomly attributes stakes on each round.
+    #             The system is binary and the probability can be changed under proba_low_stake
+    #             The function compares the chosen probability to a randomly generated number
+    #             Then it attributes either a high or low stake on that round
+    #         """
+    #     if random.random() >= C.proba_low_stake:
+    #         player.stake = "high"
+    #         round_stake = player.stake
+    #     else:
+    #         player.stake = "low"
+    #         round_stake = player.stake
+    #     # print("stake is", player.stake)
+    #     return round_stake
 
     def set_options(player):
         stake = player.get_stake()
