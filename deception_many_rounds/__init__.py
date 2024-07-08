@@ -83,6 +83,14 @@ class Player(BasePlayer):
         choices=['randomise', 'whatever'],
     )
 
+    comment_box = models.LongStringField(
+        verbose_name=''
+    )
+
+    strategy_box = models.LongStringField(
+        verbose_name=''
+    )
+
     def get_stake(player):
         """
             This functions attributes the correct stake on the correct round.
@@ -283,6 +291,16 @@ class End(Page):
             )
 
 
+class CommentBox(Page):
+    form_model = 'player'
+    form_fields = ['comment_box', 'strategy_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+
 class Payment(Page):
 
     @staticmethod
@@ -319,6 +337,7 @@ page_sequence = [
     # Results,
     RandomSelection,
     End,
+    CommentBox,
     Payment,
     ProlificLink
 ]
