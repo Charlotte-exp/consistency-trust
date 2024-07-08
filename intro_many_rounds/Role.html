@@ -1,0 +1,59 @@
+{{ block title }}
+Roles
+{{ endblock }}
+
+
+{{ block content }}
+
+
+        <p>
+            You have been assigned the role of: <b>Sender</b>
+        </p>
+        <p>
+            You are the one who knows what the bonuses from each option are.
+            <u>In the first stage</u>, you have a choice between two messages to send to the Receiver to influence their choice.
+        </p>
+        <p>
+            You can see below how the choice will look like.
+        </p>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+            <div class='frame' style="text-align:center">
+                <img src="{{ static 'intro_many_rounds/options_1.png'}}" width="auto" height="120"/>
+                <img src="{{ static 'intro_many_rounds/sender_message.png'}}" width="auto" height="180"/>
+            </div>
+    </div>
+</div>
+        <p></p>
+        <p>
+            You will make this choice many times over multiple rounds.
+            <font color="red">The monetary values of each Option can change in each round, so pay attention.</font>
+        </p>
+        <p>
+            <u>For the second stage</u>, one round will be chosen at random and your decision from that round will be implemented.
+            The Receiver will see your message, and then choose either Option A or Option B.
+            The message is not binding: in the end, it only depends on the Receiver's choice.
+            Their decision will determine both of your bonuses,
+            regardless of whether or not they followed your suggestion.
+            However, <b>the Receiver will never know what bonuses were actually offered in the option not chosen</b>
+            (that is, they will never know whether your message was true or not).
+            Moreover, they will never know the bonuses that you could have earned according to the different options.
+        </p>
+
+
+<p></p>
+
+    <p>
+        After you press the "Next" button,
+        you will immediately start with the first round of stage 1.
+    </p>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+
+{{ endblock }}

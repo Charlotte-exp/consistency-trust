@@ -187,6 +187,28 @@ class Instructions(Page):
             )
 
 
+class Role(Page):
+
+    def vars_for_template(player: Player):
+        """  """
+        if player.role == C.RECEIVER_ROLE:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+
+
 class Comprehension(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
@@ -224,4 +246,5 @@ class Comprehension(Page):
 page_sequence = [Consent,
                  AttentionChecks,
                  Instructions,
+                 Role,
                  Comprehension]
