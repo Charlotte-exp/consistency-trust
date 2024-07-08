@@ -152,6 +152,11 @@ class AttentionChecks(Page):
 
     @staticmethod
     def error_message(player: Player, values):
+        """
+        function from oTree
+        I removed the "return errors" so that participant do not know if they did it right or wrong
+        I also record whether they got at least one Q wrong per page submission, not how many wrong.
+        """
         # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
         # but if you have many similar fields, this is more efficient.
         solutions = dict(a1=4, a2=2, a3=3)
@@ -162,7 +167,7 @@ class AttentionChecks(Page):
         # print('errors is', errors)
         if errors:
             player.num_failed_attempts += 1
-            return errors
+            #return errors
 
 
 class Instructions(Page):
@@ -229,6 +234,11 @@ class Comprehension(Page):
 
     @staticmethod
     def error_message(player: Player, values):
+        """
+        function from oTree
+        I record for each questions how many times they got it wrong and tell the participants when they got it wrong.
+        They can only continue when all are correct
+        """
         if values['q1'] != 2:
             player.q1_failed_attempts += 1
             return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
