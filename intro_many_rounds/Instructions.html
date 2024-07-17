@@ -2,7 +2,6 @@
 Instructions
 {{ endblock }}
 
-
 {{ block content }}
 
 <div>
@@ -11,48 +10,68 @@ Instructions
         Neither of you will ever know the identity of the other.
     </p>
     <p>
-        One of you will be the <b>Sender</b> and the other the <b>Receiver</b>.
-    </p>
-
-    <p></p>
-
-    <p>
-        <h5>The experiment is made of <b>two stages:</b></h5>
-    <u>The first stage</u> is made of many rounds of the same task.
-        In each round, the Sender learns about two bonus payment options: A and B.
-        Each option determines a monetary bonus for both participants,
-        which will be paid to you in addition to the participation payment.
-        With this information, the Sender sends a message about those options to the Receiver.
-        There are two possible sets of bonus payment options.
-        On each round, the Sender can face either one or the other and send the message accordingly.
-    </p>
-        <div class='frame' style="text-align:center">
-            <img src="{{ static 'intro_many_rounds/options_1.png'}}" width="auto" height="120"/>
-            <img src="{{ static 'intro_many_rounds/options_2.png'}}" width="auto" height="110"/>
-        </div>
-    <p>
-        <u>In the second stage</u>, the Receiver receives the message from one randomly selected round.
-        With only this information, the Receiver must choose between Option A and Option B.
-        The bonus of both players is determined by the choice of the Receiver and which round was randomly selected.
+        There are two roles in this study: The <b>Sender</b> and the <b>Receiver</b>.
     </p>
     <p>
-        The Receiver makes the choice, but they do not know the bonuses attached to each options.
-        The Sender does not make the choice, but they do know the bonuses attached to each options.
+        Both of you can receive a bonus payment depending on your decisions. There are two possible set of bonuses.
+        It looks as follows:
     </p>
 </div>
 
-<p></p>
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            <div class='frame' style="text-align:center">
+                <img src="{{ static 'intro_many_rounds/step1.jpg'}}" width="auto" height="120"/>
+        </div>
+    </div>
+        <p style="text-align:center">
+            First the Sender learns what the possible bonuses are, Option A and Option B.
+        </p>
+</div>
 
-    <p>
-        After you press the "Next" button,
-        you will be assigned your role.
-    </p>
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            <div class='frame' style="text-align:center">
+                <img src="{{ static 'intro_many_rounds/step2.jpg'}}" width="auto" height="120"/>
+        </div>
+    </div>
+        <p style="text-align:center">
+            Then the choose between two possible messages to send to the receiver
+        </p>
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+            <div class='frame' style="text-align:center">
+                <img src="{{ static 'intro_many_rounds/step3.jpg'}}" width="auto" height="120"/>
+        </div>
+    </div>
+        <p style="text-align:center">
+            The receiver reads the message.
+        </p>
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <div class='frame' style="text-align:center">
+            <img src="{{ static 'intro_many_rounds/step4.jpg'}}" width="auto" height="120"/>
+        </div>
+    </div>
+        <p style="text-align:center">
+            The receiver chooses between Option A and Option B with the message as the only information they have.
+        </p>
+</div>
+
+
+
+
 
     <p>
         <div style="display: flex; justify-content: flex-end">
         {% next_button %}
         </div>
     </p>
-
 
 {{ endblock }}

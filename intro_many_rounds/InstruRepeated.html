@@ -1,0 +1,41 @@
+{{ block title }}
+Repetition over multiple rounds
+{{ endblock }}
+
+{{ block content }}
+
+<div>
+    <p>
+        In this experiment you will be matched with another participant from Prolific.
+        Neither of you will ever know the identity of the other.
+    </p>
+    <p>
+        There are two roles in this study: The <b>Sender</b> and the <b>Receiver</b>.
+    </p>
+    <p>
+        Both of you can receive a bonus payment depending on your decisions. There are two possible set of bonuses.
+        It looks as follows:
+    </p>
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            <div class='frame' style="text-align:center">
+                <img src="{{ static 'intro_many_rounds/step1.jpg'}}" width="auto" height="120"/>
+        </div>
+    </div>
+        <p style="text-align:center">
+            First the Sender learns what the possible bonuses are, Option A and Option B.
+        </p>
+</div>
+
+
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{{ endblock }}

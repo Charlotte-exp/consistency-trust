@@ -58,6 +58,8 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
+    current_index = models.IntegerField(initial=0)
+
     treatment = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
 
@@ -171,6 +173,54 @@ class AttentionChecks(Page):
 
 
 class Instructions(Page):
+    form_model = 'player'
+    form_fields = ['current_index']
+
+    def vars_for_template(player: Player):
+        """  """
+        images = [
+            'intro_many_rounds/step1.jpg',
+            'intro_many_rounds/step2.jpg',
+            'intro_many_rounds/step3.jpg'
+        ]
+
+        texts = [
+            'This is the text for Image 1.',
+            'This is the text for Image 2.',
+            'This is the text for Image 3.'
+        ]
+        current_index = player.current_index
+
+        if player.role == C.RECEIVER_ROLE:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+                #current_image=images[current_index],
+                #current_text=texts[current_index],
+                #current_index=current_index,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+                #current_image=images[current_index],
+                #current_text=texts[current_index],
+                #current_index=current_index,
+            )
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        if player.current_index == 0:  # Update this if you have more or fewer images
+            player.current_index += 1
+
+
+class InstruReceiver(Page):
 
     def vars_for_template(player: Player):
         """  """
@@ -192,7 +242,51 @@ class Instructions(Page):
             )
 
 
-class Role(Page):
+class InstruSender(Page):
+
+    def vars_for_template(player: Player):
+        """  """
+        if player.role == C.RECEIVER_ROLE:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+
+
+class InstruRepeated(Page):
+
+    def vars_for_template(player: Player):
+        """  """
+        if player.role == C.RECEIVER_ROLE:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+        else:
+            return dict(
+                # role=player.role,
+                sender_optionA=C.optionA_sender_high,
+                receiver_optionA=C.optionA_receiver_high,
+                sender_optionB=C.optionB_sender_high,
+                receiver_optionB=C.optionB_receiver_high,
+            )
+
+
+class InstruSelection(Page):
 
     def vars_for_template(player: Player):
         """  """
@@ -254,7 +348,11 @@ class Comprehension(Page):
 
 
 page_sequence = [Consent,
-                 AttentionChecks,
+                 #AttentionChecks,
                  Instructions,
-                 Role,
+                 InstruReceiver,
+                 InstruSender,
+                 InstruRepeated,
+                 InstruSelection,
+                 #Role,
                  Comprehension]
