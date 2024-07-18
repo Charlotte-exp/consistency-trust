@@ -58,10 +58,20 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    current_index = models.IntegerField(initial=0)
-
     treatment = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
+
+    message_test = models.StringField(
+        initial='',
+        choices=['Option A', 'Option B'],
+    )
+
+    choice = models.StringField(
+        initial='',
+        choices=['Option A', 'Option B'],
+        verbose_name='Your choice:',
+        widget=widgets.RadioSelect
+    )
 
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
@@ -173,24 +183,9 @@ class AttentionChecks(Page):
 
 
 class Instructions(Page):
-    form_model = 'player'
-    form_fields = ['current_index']
 
     def vars_for_template(player: Player):
         """  """
-        images = [
-            'intro_many_rounds/step1.jpg',
-            'intro_many_rounds/step2.jpg',
-            'intro_many_rounds/step3.jpg'
-        ]
-
-        texts = [
-            'This is the text for Image 1.',
-            'This is the text for Image 2.',
-            'This is the text for Image 3.'
-        ]
-        current_index = player.current_index
-
         if player.role == C.RECEIVER_ROLE:
             return dict(
                 # role=player.role,
@@ -198,9 +193,6 @@ class Instructions(Page):
                 receiver_optionA=C.optionA_receiver_high,
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
-                #current_image=images[current_index],
-                #current_text=texts[current_index],
-                #current_index=current_index,
             )
         else:
             return dict(
@@ -209,18 +201,12 @@ class Instructions(Page):
                 receiver_optionA=C.optionA_receiver_high,
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
-                #current_image=images[current_index],
-                #current_text=texts[current_index],
-                #current_index=current_index,
             )
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        if player.current_index == 0:  # Update this if you have more or fewer images
-            player.current_index += 1
 
 
 class InstruReceiver(Page):
+    form_model = 'player'
+    form_fields = ['q3']
 
     def vars_for_template(player: Player):
         """  """
@@ -240,9 +226,22 @@ class InstruReceiver(Page):
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
             )
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        function from oTree
+        I record for each questions how many times they got it wrong and tell the participants when they got it wrong.
+        They can only continue when all are correct
+        """
+        if values['q3'] != 2:
+            player.q3_failed_attempts += 1
+            return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
 
 class InstruSender(Page):
+    form_model = 'player'
+    form_fields = ['q4']
 
     def vars_for_template(player: Player):
         """  """
@@ -262,9 +261,23 @@ class InstruSender(Page):
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
             )
+
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        function from oTree
+        I record for each questions how many times they got it wrong and tell the participants when they got it wrong.
+        They can only continue when all are correct
+        """
+        if values['q4'] != 1:
+            player.q4_failed_attempts += 1
+            return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
 
 class InstruRepeated(Page):
+    form_model = 'player'
+    form_fields = ['q1', 'q2']
 
     def vars_for_template(player: Player):
         """  """
@@ -284,6 +297,21 @@ class InstruRepeated(Page):
                 sender_optionB=C.optionB_sender_high,
                 receiver_optionB=C.optionB_receiver_high,
             )
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        function from oTree
+        I record for each questions how many times they got it wrong and tell the participants when they got it wrong.
+        They can only continue when all are correct
+        """
+        if values['q1'] != 2:
+            player.q1_failed_attempts += 1
+            return 'Answer to question 1 is incorrect. Check the instructions again and give a new answer'
+
+        if values['q2'] != 1:
+            player.q2_failed_attempts += 1
+            return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
 
 
 class InstruSelection(Page):

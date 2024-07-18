@@ -6,30 +6,46 @@ The role of the Sender
 
 <div>
     <p>
-        In this experiment you will be matched with another participant from Prolific.
-        Neither of you will ever know the identity of the other.
-    </p>
-    <p>
-        There are two roles in this study: The <b>Sender</b> and the <b>Receiver</b>.
-    </p>
-    <p>
-        Both of you can receive a bonus payment depending on your decisions. There are two possible set of bonuses.
-        It looks as follows:
+        Unlike the Receiver, the Sender knows what the options are.
+        The Sender must choose which message to send.<br>
+        The two possible messages look like this:
     </p>
 </div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
-        <p>
-            <div class='frame' style="text-align:center">
-                <img src="{{ static 'intro_many_rounds/step1.jpg'}}" width="auto" height="120"/>
+        <p style="text-align:center">
+            Which message would you like to send to the Receiver?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="message_test" value="Option A" class="btn btn-primary btn-large">Option A will earn the Receiver a bigger bonus than Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="message_test" value="Option B" class="btn btn-primary btn-large">Option B will earn the Receiver a bigger bonus than Option A</button>
+            </div>
         </div>
     </div>
+</div>
         <p style="text-align:center">
-            First the Sender learns what the possible bonuses are, Option A and Option B.
+            <i>You can click on a message to see what it feels like.</i>
         </p>
+
+<div>
+    <p>
+        Remember, the message is the only information the Receiver has about the bonuses.
+        Regardless of what the message say, they can choose any option.
+        Once they choice is made, they will only know their own bonus.
+        They will never know what the Sender earned or what was in the option not chosen.
+    </p>
 </div>
 
+    <br>
+    <hr size="6" width="100%" align="center" color="black">
+<div class="card-body">
+    <h4>Please answer these short questions about the game before finishing:</h4>
+    {{ formfields }}
+</div>
 
 
     <p>
