@@ -13,8 +13,8 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = 2
     NUM_ROUNDS = 1
 
-    SENDER_ROLE = 'Sender'
-    RECEIVER_ROLE = 'Receiver'
+    #SENDER_ROLE = 'Sender'
+    #RECEIVER_ROLE = 'Receiver'
 
     optionA_sender_high = cu(0.5)
     optionA_receiver_high = cu(1.5)
@@ -115,7 +115,7 @@ class Player(BasePlayer):
         choices=[
             [1, 'Yes, the set of Options are the same in every round.'],
             [2, 'No there are two possible sets of Options.'],
-            [3, 'No, there are different set of Options on each round.']
+            #[3, 'No, there are different set of Options on each round.']
         ],
         verbose_name='Does the Receiver see the same set of Options in every round?',
         widget=widgets.RadioSelect
@@ -183,49 +183,27 @@ class AttentionChecks(Page):
 
 
 class Instructions(Page):
-
+    """
+    General instructions of the deception task.
+    For all roles
+    """
     def vars_for_template(player: Player):
         """  """
-        if player.role == C.RECEIVER_ROLE:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
+        return dict(
+            # role=player.role,
+            sender_optionA=C.optionA_sender_high,
+            receiver_optionA=C.optionA_receiver_high,
+            sender_optionB=C.optionB_sender_high,
+            receiver_optionB=C.optionB_receiver_high,
+        )
 
 
 class InstruReceiver(Page):
+    """
+    Instructions about what the Receiver sees and does.
+    """
     form_model = 'player'
     form_fields = ['q3']
-
-    def vars_for_template(player: Player):
-        """  """
-        if player.role == C.RECEIVER_ROLE:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
 
     @staticmethod
     def error_message(player: Player, values):
@@ -239,28 +217,33 @@ class InstruReceiver(Page):
             return 'Answer to question 3 is incorrect. Check the instructions again and give a new answer'
 
 
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.role == C.SENDER_ROLE:
+    #         return True
+
+
 class InstruSender(Page):
+    """
+    Instructions about what the Sender knows and does.
+    """
     form_model = 'player'
     form_fields = ['q4']
 
     def vars_for_template(player: Player):
         """  """
-        if player.role == C.RECEIVER_ROLE:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
+        return dict(
+            # role=player.role,
+            sender_optionA_high=C.optionA_sender_high,
+            receiver_optionA_high=C.optionA_receiver_high,
+            sender_optionB_high=C.optionB_sender_high,
+            receiver_optionB_high=C.optionB_receiver_high,
+
+            sender_optionA_low=C.optionA_sender_low,
+            receiver_optionA_low=C.optionA_receiver_low,
+            sender_optionB_low=C.optionB_sender_low,
+            receiver_optionB_low=C.optionB_receiver_low,
+        )
 
 
     @staticmethod
@@ -275,28 +258,35 @@ class InstruSender(Page):
             return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
 
 
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.role == C.SENDER_ROLE:
+    #         return True
+
+
 class InstruRepeated(Page):
+    """
+    Instructions about repeated rounds and random rounds selection.
+    Bonus options displayed
+    Sender only!
+    """
     form_model = 'player'
     form_fields = ['q1', 'q2']
 
     def vars_for_template(player: Player):
         """  """
-        if player.role == C.RECEIVER_ROLE:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
+        return dict(
+            # role=player.role,
+            sender_optionA_high=C.optionA_sender_high,
+            receiver_optionA_high=C.optionA_receiver_high,
+            sender_optionB_high=C.optionB_sender_high,
+            receiver_optionB_high=C.optionB_receiver_high,
+
+            sender_optionA_low=C.optionA_sender_low,
+            receiver_optionA_low=C.optionA_receiver_low,
+            sender_optionB_low=C.optionB_sender_low,
+            receiver_optionB_low=C.optionB_receiver_low,
+        )
 
     @staticmethod
     def error_message(player: Player, values):
@@ -314,45 +304,28 @@ class InstruRepeated(Page):
             return 'Answer to question 2 is incorrect. Check the instructions again and give a new answer'
 
 
-class InstruSelection(Page):
-
-    def vars_for_template(player: Player):
-        """  """
-        if player.role == C.RECEIVER_ROLE:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
-        else:
-            return dict(
-                # role=player.role,
-                sender_optionA=C.optionA_sender_high,
-                receiver_optionA=C.optionA_receiver_high,
-                sender_optionB=C.optionB_sender_high,
-                receiver_optionB=C.optionB_receiver_high,
-            )
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.role == C.SENDER_ROLE:
+    #         return True
 
 
-class Comprehension(Page):
+class Role(Page):
+    """
+    Instructions for only Receiver??
+    """
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
 
-    # @staticmethod
-    # def error_message(player: Player, values):
-    #     # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
-    #     # but if you have many similar fields, this is more efficient.
-    #     solutions = dict(q1=2, q2=3, q3=1, q4=3)
-    #
-    #     # error_message can return a dict whose keys are field names and whose
-    #     # values are error messages
-    #     errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
-    #     # print('errors is', errors)
-    #     if errors:
-    #         player.num_failed_attempts += 1
-    #         return errors
+    def vars_for_template(player: Player):
+        """  """
+        return dict(
+            # role=player.role,
+            sender_optionA=C.optionA_sender_high,
+            receiver_optionA=C.optionA_receiver_high,
+            sender_optionB=C.optionB_sender_high,
+            receiver_optionB=C.optionB_receiver_high,
+        )
 
     @staticmethod
     def error_message(player: Player, values):
@@ -373,6 +346,12 @@ class Comprehension(Page):
         if values['q4'] != 1:
             player.q4_failed_attempts += 1
             return 'Answer to question 4 is incorrect. Check the instructions again and give a new answer'
+
+
+    # @staticmethod
+    # def is_displayed(player: Player):
+    #     if player.role == C.RECEIVER_ROLE:
+    #         return True
 
 
 page_sequence = [Consent,
@@ -381,6 +360,5 @@ page_sequence = [Consent,
                  InstruReceiver,
                  InstruSender,
                  InstruRepeated,
-                 InstruSelection,
                  #Role,
-                 Comprehension]
+                 ]

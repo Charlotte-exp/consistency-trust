@@ -203,7 +203,14 @@ class StakesPage(Page):
 
 class SenderMessage(Page):
     form_model = 'player'
-    form_fields = ['message', 'better4you', 'better4receiver', 'what_receiver_knows']
+    #form_fields = ['message', 'better4you', 'better4receiver', 'what_receiver_knows']
+
+    @staticmethod
+    def get_form_fields(player):
+        if player.round_number == 1:
+            return ['message', 'better4you', 'better4receiver', 'what_receiver_knows']
+        else:
+            return ['message']
 
     def vars_for_template(player: Player):
         """  """
@@ -219,17 +226,18 @@ class SenderMessage(Page):
 
     @staticmethod
     def error_message(player: Player, values):
-        # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
-        # but if you have many similar fields, this is more efficient.
-        solutions = dict(better4you='Option B', better4receiver='Option A', what_receiver_knows='Nothing')
+        if player.round_number == 1:
+            # alternatively, you could make quiz1_error_message, quiz2_error_message, etc.
+            # but if you have many similar fields, this is more efficient.
+            solutions = dict(better4you='Option B', better4receiver='Option A', what_receiver_knows='Nothing')
 
-        # error_message can return a dict whose keys are field names and whose
-        # values are error messages
-        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
-        # print('errors is', errors)
-        if errors:
-            player.num_failed_attempts += 1
-            return errors
+            # error_message can return a dict whose keys are field names and whose
+            # values are error messages
+            errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+            # print('errors is', errors)
+            if errors:
+                player.num_failed_attempts += 1
+                return errors
 
     # @staticmethod
     # def get_timeout_seconds(player):

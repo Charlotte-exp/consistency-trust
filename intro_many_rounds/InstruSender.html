@@ -2,15 +2,73 @@
 The role of the Sender
 {{ endblock }}
 
+{{ block styles }}
+
+    <style>
+
+        .red_box {
+        padding: 4px;
+        border: 2px solid red;
+        border-radius: 4px;
+        color: black;
+        }
+
+    </style>
+
+{{ endblock }}
+
+
 {{ block content }}
 
 <div>
     <p>
+        <u>You are the <b>Sender</b> in this study</u>
+    </p>
+    <p>
         Unlike the Receiver, the Sender knows what the options are.
-        The Sender must choose which message to send.<br>
+        Below are the two bonus payment options for both the Sender and the Receiver:
+    </p>
+</div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div>
+    <p>
+        Based on this knowledge,
+        the Sender is free to choose which message to send.<br>
         The two possible messages look like this:
     </p>
 </div>
+
 
 <div class="card bg-light instructions">
     <div  class="card-body">
@@ -33,8 +91,12 @@ The role of the Sender
 
 <div>
     <p>
+        One of the messages is honest, the other dishonest.
+        The honest message, if chosen by the receiver, always lead to less money for oneself.
+    </p>
+    <p>
         Remember, the message is the only information the Receiver has about the bonuses.
-        Regardless of what the message say, they can choose any option.
+        Regardless of what the message says, they can choose any option.
         Once they choice is made, they will only know their own bonus.
         They will never know what the Sender earned or what was in the option not chosen.
     </p>
@@ -43,8 +105,12 @@ The role of the Sender
     <br>
     <hr size="6" width="100%" align="center" color="black">
 <div class="card-body">
-    <h4>Please answer these short questions about the game before finishing:</h4>
+    <h4>Please answer these short questions about the game before continuing:</h4>
     {{ formfields }}
+    <br>
+    <p>
+
+    </p>
 </div>
 
 

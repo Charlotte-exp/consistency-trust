@@ -92,12 +92,16 @@ Round {{ player.round_number}}
         They will only know the final payoff at the end of the experiment,
         <b>never what the other option was nor what you earned from their choice.</b>
     </p>
-    <div style="text-align: center;">
+    {{ if round_number == 1 }}
+        <div style="text-align: center;">
         <div style="display: inline-block; text-align: left;">
             {{ formfield player.better4you }}
             {{ formfield player.better4receiver }}
             {{ formfield player.what_receiver_knows }}
         </div>
+        {{ else }}
+
+        {{ endif }}
     </div>
 </div>
 
@@ -145,12 +149,16 @@ Round {{ player.round_number}}
         They will only know the final payoff at the end of the experiment,
         <b>never what the other option was nor what you earned from their choice.</b>
     </p>
+    {{ if round_number == 1 }}
         <div style="text-align: center;">
         <div style="display: inline-block; text-align: left;">
             {{ formfield player.better4you }}
             {{ formfield player.better4receiver }}
             {{ formfield player.what_receiver_knows }}
         </div>
+        {{ else }}
+
+        {{ endif }}
     </div>
 </div>
 
