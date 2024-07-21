@@ -29,16 +29,10 @@ class C(BaseConstants):
 class Subsession(BaseSubsession):
 
     def get_treatments(self):
-        items = [1, 2, 3, 4]
-        random_item = random.choice(items)
-        if random_item == 1:
-            return 'high_high_high'
-        elif random_item == 2:
-            return 'high_high_low'
-        elif random_item == 3:
-            return 'high_low_high'
-        elif random_item == 4:
-            return 'high_low_low'
+        treatments = ["high_high_high", 'high_low_low', 'low_high_low', 'low_low_high']
+        treatment = random.choice(treatments)
+        # print(treatment)
+        return treatment
 
 
 class Group(BaseGroup):
@@ -112,10 +106,11 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, '1, the same in each task'],
-            [2, '3, one per task']
+            [1, '1 partner, the same in each task'],
+            [2, '3 partners, one per task']
         ],
-        verbose_name='With how many different partner did each participant interact?',
+        verbose_name='With how many different partner did each participant interact '
+                     '(regardless of whether some partner dropped out)?',
         widget=widgets.RadioSelect
     )
 
@@ -159,6 +154,14 @@ class Player(BasePlayer):
             list_round_stakes = ['high', 'low', 'high']
         elif player.participant.treatment == 'high_low_low':
             list_round_stakes = ['high', 'low', 'low']
+        if player.participant.treatment == 'low_high_high':
+            list_round_stakes = ['low', 'high', 'high']
+        elif player.participant.treatment == 'low_high_low':
+            list_round_stakes = ['low', 'high', 'low']
+        elif player.participant.treatment == 'low_low_high':
+            list_round_stakes = ['low', 'low', 'high']
+        elif player.participant.treatment == 'low_low_low':
+            list_round_stakes = ['low', 'low', 'low']
 
         round_stake = list_round_stakes[player.round_number - 1]
         player.group.stake = round_stake
@@ -302,10 +305,11 @@ class StakesWaitPage(WaitPage):
     # body_text = "Please wait for the Receiver to make their choice."
 
     def vars_for_template(player: Player):
-            """  """
             participant = player.participant
             return dict(
                 is_dropout=participant.is_dropout,
+                round_number=player.round_number,
+
             )
 
 
@@ -327,6 +331,7 @@ class SenderMessage(Page):
             receiver_optionA=player.optionA_receiver,
             sender_optionB=player.optionB_sender,
             receiver_optionB=player.optionB_receiver,
+            round_number=player.round_number,
 
             player=player.id_in_group,
             partner=partner.id_in_group,
@@ -395,6 +400,8 @@ class ReceiverChoice(Page):
                 best_option='Option A',
                 worst_option='Option B',
 
+                round_number=player.round_number,
+
                 button=player.get_button_order(),
             )
         else:
@@ -403,6 +410,9 @@ class ReceiverChoice(Page):
                 player=player.id_in_group,
                 best_option='Option B',
                 worst_option='Option A',
+
+
+                round_number=player.round_number,
 
                 button=player.get_button_order(),
             )
@@ -433,7 +443,6 @@ class ReceiverChoice(Page):
             partner.left_hanging = 1
             me.left_hanging = 2
             me.choice = 'None'
-            partner.choice = 'None'
 
 
 class ResultsWaitPage(WaitPage):

@@ -1,0 +1,77 @@
+{{ block title }}
+The role of the Receiver
+{{ endblock }}
+
+{{ block content }}
+
+<div>
+    <p>
+        Only the receiver chooses between the two bonus options.
+        However, they do not know what the bonuses actually are.
+        All they see is this:
+    </p>
+    <p>
+
+    </p>
+
+</div>
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which option do you chose?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="choice_test" value="Option A" class="btn btn-primary btn-large">Option A</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="choice_test" value="Option B" class="btn btn-primary btn-large">Option B</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <p style="text-align:center">
+            <i>You can click on an option to see what it feels like.</i>
+        </p>
+</div>
+
+<br>
+<div>
+    <p>
+        They have one other piece of information, a message sent by the Sender.<br>
+        There are two possible messages:
+    </p>
+    <div class="row">
+        <div class="col" style="text-align:center">
+             <b>"Option A will earn you more money than Option B"</b>
+        </div>
+        <div class="col" style="text-align:center">
+                 <b>"Option B will earn you more money than Option A"</b>
+        </div>
+    </div>
+    <p></p>
+    <p>
+        With only this information, the receiver choose between option A and option B.
+        Regardless of what the message say, they can choose any option!
+        Once they choice is made, all they will know is their own bonus.
+        They will never know what the Sender earned or what was in the option not chosen.
+    </p>
+
+</div>
+
+    <br>
+    <hr size="6" width="100%" align="center" color="black">
+<div class="card-body">
+    <h4>Please answer these short questions before continuing:</h4>
+    {{ formfields }}
+</div>
+
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{{ endblock }}

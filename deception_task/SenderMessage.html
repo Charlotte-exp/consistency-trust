@@ -1,6 +1,6 @@
 {{ block title }}
 
-Message
+Your Message
 
 {{ endblock }}
 
@@ -40,12 +40,7 @@ Message
 {{ block content }}
 
 <p>
-    Below are the two bonus payment options for both you and the Receiver for this task.
-    Remember that the Receiver does not know the bonuses attached to each options
-    and that the only information they will have is your message.
-    <br>
-    They will only know the final payoff at the end of the experiment,
-    never what the other option was nor what you earned from their choice.
+    Below are the two bonus payment options for both you and <b>Receiver {{ round_number }}</b> for task {{ round_number }}.
 </p>
 
 <div class="card-body">
@@ -77,12 +72,19 @@ Message
             </p>
         </div>
     </div>
+    <br>
+    <p>
+        Remember that the Receiver does not know the bonuses attached to each options
+        and that the only information they will have is your message.
+        They will only know the final payoff at the end of the experiment,
+        <b>never what the other option was nor what you earned from their choice.</b>
+    </p>
 </div>
 
 <div class="card bg-light instructions">
     <div class="card-body">
         <p style="text-align:center">
-            Which message would you like to send to the Receiver?
+            Which message would you like to send to Receiver {{ round_number }}?
         </p>
         <div class="row">
             <div class="col" style="text-align:center">

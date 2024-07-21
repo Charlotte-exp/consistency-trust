@@ -4,6 +4,14 @@ from os import popen
 
 SESSION_CONFIGS = [
     dict(
+        name='deception_many_rounds',
+        display_name="otree5 deception many rounds - no receivers",
+        app_sequence=['intro_many_rounds', 'deception_many_rounds'],
+        num_demo_participants=6,
+        use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
+    ),
+    dict(
         name='deception_task',
         display_name="otree5 deception task",
         app_sequence=['intro_deception', 'deception_task'],
@@ -32,11 +40,12 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.50, doc=""
+    real_world_currency_per_point=1.00, participation_fee=0.80, doc=""
 )
 
 SESSION_FIELDS = []
-PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout']
+PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout',
+                      'randomly_selected_round', 'randomly_selected_stake', 'randomly_selected_message']
 
 
 # ISO-639 code

@@ -1,0 +1,191 @@
+{{ block title }}
+
+Round {{ player.round_number}}
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <script>
+        setTimeout(
+        function () {
+            alert("Please make your decision soon.");
+        },
+        90*1000 // 90 seconds
+    );
+    </script>
+
+    <style>
+
+        .red_box {
+        padding: 4px;
+        border: 2px solid red;
+        border-radius: 4px;
+        color: black;
+        }
+
+    </style>
+
+{{ endblock }}
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+
+{{ if player.stake == 'high' }}
+<p>
+    Below are the two bonus payment options for both you and the Receiver for round {{ round_number }}. <br>
+    <font color="red">The bigger bonus is higher in this round!</font>
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA }}</b> for you.
+                    </li>
+                    <li>
+                        <b class="red_box">{{ receiver_optionA }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b class="red_box">{{ sender_optionB }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        Remember that the Receiver does not know the bonuses attached to each options
+        and that the only information they will have is your message.
+        They will only know the final payoff at the end of the experiment,
+        <b>never what the other option was nor what you earned from their choice.</b>
+    </p>
+    {{ if round_number == 1 }}
+        <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+            {{ formfield player.better4you }}
+            {{ formfield player.better4receiver }}
+            {{ formfield player.what_receiver_knows }}
+        </div>
+        {{ else }}
+
+        {{ endif }}
+    </div>
+</div>
+
+
+{{ else }}
+
+<p>
+    Below are the two bonus payment options for both you and the Receiver for round {{ round_number }}. <br>
+    Pay attention, they can be different for each new round!
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+    <br>
+    <p>
+        Remember that the Receiver does not know the bonuses attached to each options
+        and that the only information they will have is your message.
+        They will only know the final payoff at the end of the experiment,
+        <b>never what the other option was nor what you earned from their choice.</b>
+    </p>
+    {{ if round_number == 1 }}
+        <div style="text-align: center;">
+        <div style="display: inline-block; text-align: left;">
+            {{ formfield player.better4you }}
+            {{ formfield player.better4receiver }}
+            {{ formfield player.what_receiver_knows }}
+        </div>
+        {{ else }}
+
+        {{ endif }}
+    </div>
+</div>
+
+
+
+{{ endif }}
+
+<div class="card bg-light instructions">
+    <div class="card-body">
+        <p style="text-align:center">
+            Which message would you like to send to the Receiver?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="message" value="Option A" class="btn btn-primary btn-large">Option A will earn the Receiver a bigger bonus than Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="message" value="Option B" class="btn btn-primary btn-large">Option B will earn the Receiver a bigger bonus than Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+        <p></p>
+        <p style="text-align:center">
+            <b>(The Receiver will see this exact wording.)</b>
+        </p>
+
+
+{{ endblock }}

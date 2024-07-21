@@ -1,0 +1,51 @@
+{{ block title }}
+
+End of Stage 1
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    This was the last round.
+</p>
+<p>
+    Here are your final results: <br>
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Message</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.message }} will earn the Receiver a bigger bonus</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+<p> </p>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your message on that round is:
+
+            <div class="card-body">
+                <b>"{{ best_option }} will earn you more money than {{ worst_option}}"</b>
+            </div>
+            and this it message we will display to the Receiver in the second stage.
+        </p>
+    </div>
+</div>
+
+    <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+    </div>
+
+
+
+{{ endblock }}

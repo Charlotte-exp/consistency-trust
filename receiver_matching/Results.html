@@ -1,0 +1,65 @@
+{{ block title }}
+    Results
+{{ endblock }}
+
+
+{{ block scripts }}
+
+    <style>
+        .otree-timer {
+            display: none;
+        }
+    </style>
+
+    <script>
+        $(function () {
+            $('.otree-timer__time-left').on('update.countdown', function (event) {
+                if (event.offset.totalSeconds === 10) {
+                    $('.otree-timer').show();
+                }
+            });
+        });
+    </script>
+
+{{ endblock }}
+
+{{ block content }}
+
+{{ if player.left_hanging }}
+
+    <p>
+        It looks like the Receiver left the experiment before making a choice. <br>
+        Instead the computer chose an option at random and you bonus will be: {{ payoff }}.
+    </p>
+
+{{ elif player.participant.is_dropout }}
+
+    <div>
+        <p>You were inactive too long and the program assumed you dropped out. Thus the experiment was ended.</p>
+   </div>
+
+{{ else }}
+
+    {{ if role == 'Sender' }}
+    <p>
+        Based on the choice of the Receiver, your bonus will be: {{ payoff }}.
+    </p>
+    {{ else }}
+    <p>
+        Based on your choice, your bonus will be: {{ payoff }}.
+    </p>
+    {{ endif }}
+
+{{ endif }}
+
+{{ if not player.participant.is_dropout }}
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+        </div>
+    </p>
+{{ endif }}
+
+{{ endblock }}
+
+

@@ -15,15 +15,15 @@ Instructions
         There are two players in this task: a <b>Sender</b> and a <b>Receiver</b>.
     </p>
     <p>
-        The experiment is made of <b>one task repeated three times</b>, each time with another participant.
-        Your role, either Sender or Receiver, is fixed across all three repeats of the task.
+        The experiment is made of <b>one task repeated several times</b>, each time with another participant.
+        Your role, either Sender or Receiver, is fixed across all repeats of the task.
         The task is a choice between two bonus payment options: A and B.
         Each option determines a monetary bonus for both participants.
     </p>
     <p>
         There are two possible sets of payment options.
         On each round you can face either of the two with 50% probability.
-        The bonuses of all three rounds will be summed up and paid to you through Prolific.
+        At the end of the study, one task will be selected at random and you will be paid only the bonus from this task.
     </p>
     <p>
         The task is made of two steps:
@@ -40,36 +40,8 @@ Instructions
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            For all three repetitions of the task, you have been assigned the role of: <b>{{ player.role }}</b>
+            For all repetitions of the task, you have been assigned the role of: <b>Sender</b>
         </p>
-
-        {{ if player.role == C.RECEIVER_ROLE }}
-        <p>
-            You are the one choosing between Option A and Option B.
-            In the first step, the Sender saw the bonuses attached to each option and chose which message to send you.
-        </p>
-        <p>
-            The message you receive will be either of:
-            <ul>
-                <li>
-                    Option A will earn you a bigger bonus than Option B.
-                </li>
-                <li>
-                    Option B will earn you a bigger bonus than Option A.
-                </li>
-            </ul>
-        </p>
-        <p>
-            For the second step, once you have the message, it is your turn to choose either option A or option B.
-            The message is not binding: in the end, it only depends on your choice.
-            Your decision will determine both of your bonuses,
-            regardless of whether or not your followed the Sender's suggestion.
-            However, <b>you will never know what bonuses were actually offered in the option not chosen</b>
-            (that is, if the message sent by the Sender was true or not).
-            Moreover, you will never know the bonus the Sender could be paid with the other option.
-        </p>
-
-        {{ else }}
         <p>
             You are the one who knows what the bonuses from each option are.
             In the first step, you have a choice between two messages to send to the Receiver to influence their choice.
@@ -86,7 +58,8 @@ Instructions
             </ul>
         </p>
         <p>
-            For the second step, the Receiver will see your message, and then choose either Option A or Option B.
+            For the second step, one task will be chosen at random and your decision from that task will be implemented.
+            The Receiver will see your message, and then choose either Option A or Option B.
             The message is not binding: in the end, it only depends on the Receiver's choice.
             Their decision will determine both of your bonuses,
             regardless of whether or not they followed your suggestion.
@@ -94,7 +67,6 @@ Instructions
             (that is, they will never know whether your message was true or not).
             Moreover, they will never know the bonuses that you could have earned according to the different options.
         </p>
-        {{ endif }}
     </div>
 </div>
 
@@ -103,10 +75,7 @@ Instructions
 <div>
     <p>
         After you press the "Next" button,
-        you will be redirected to a wait room to be paired with another player who will be the
-        {{ if player.role == C.RECEIVER_ROLE }}Sender{{ else }}Receiver{{ endif }}.
-        Once you are paired, the task will start immediately.
-        Once the first task is finished, you will come back to the wait room to be paired with a new participant.
+        you will immediately start with the first task.
     </p>
 </div>
 

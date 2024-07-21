@@ -1,0 +1,129 @@
+{{ block title }}
+Repetition over multiple rounds
+{{ endblock }}
+
+{{ block styles }}
+
+    <style>
+
+        .red_box {
+        padding: 4px;
+        border: 2px solid red;
+        border-radius: 4px;
+        color: black;
+        }
+
+    </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<div>
+    <p>
+        The first stage, when the Sender chooses which message to send,
+        is repeated over several rounds.
+        On each round, they will see what the bonus for each option is.
+        <b>They might not always be the same!</b>
+    </p>
+</div>
+
+
+
+<p>
+    Below are the two bonus payment options for both you and the Receiver:
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+<p>
+    On some rounds, the Options are different:
+</p>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA_high }}</b> for you.
+                    </li>
+                    <li>
+                        <b class="red_box">{{ receiver_optionA_high }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b class="red_box">{{ sender_optionB_high }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB_high }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+<div>
+    <p>
+        Each round is linked to a different receiver.
+        Only one message and receiver choice pair will be randomly selected for payment.
+    </p>
+    <p>
+        The first round of stage 1 will start on the next page.
+    </p>
+</div>
+
+
+    <br>
+    <hr size="6" width="100%" align="center" color="black">
+<div class="card-body">
+    <h4>Please answer these short questions about the game before finishing:</h4>
+    {{ formfields }}
+</div>
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{{ endblock }}

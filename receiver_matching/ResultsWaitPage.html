@@ -2,11 +2,11 @@
 {% load otree static %}
 
 
-{% block title %}
+{{ block title }}
     Wait Page
-{% endblock %}
+{{ endblock }}
 
-{% block content %}
+{{ block content }}
 
 {{ if is_dropout }}
 
@@ -17,14 +17,27 @@
 {{ else }}
 
     {{ if role == 'Sender' }}
-
     <div>
         <p>
             Please wait while the Receiver makes their choice.
+        </p>
+        <p>
+            This will not take more than 2 minutes.
+        </p>
+    </div>
+
+    {{ else }}
+
+    <div>
+        <p>
+            Please wait while the Sender makes their choice.
+        </p>
+        <p>
+            This will take at most 2 minutes.
         </p>
     </div>
 
     {{ endif }}
 {{ endif }}
 
-{% endblock %}>
+{{ endblock }}

@@ -7,16 +7,30 @@
 
 {% block content %}
     <div id="defaultText">
+        {{ if role == 'Sender' }}
         <p>
-            Please wait until another participant is ready to interact with you in this study.
+            You will now be matched with a Receiver.
         </p>
         <p>
-            You will wait a maximum of 5 minutes. If no other participant arrives during this time,
+            You will wait a maximum of 5 minutes. If no Receiver is ready during this time,
+            you will be redirected to Prolific and paid a small bonus for your efforts.
+        </p>
+        <p>
+            <b>PLEASE STAY ON THIS PAGE AND BE READY TO CONTINUE FOR THE LAST STAGE OF THE EXPERIMENT</b> in order to receive your bonus <b>Thank you!</b>
+        </p>
+         {{ else }}
+        <p>
+            You will be matched with a Sender who already chose which message to send.
+        </p>
+        <p>
+            You will wait a maximum of 5 minutes. If no Sender is ready during this time,
             you will not be able to make decisions in this game.
         </p>
         <p>
-            <b>YOU MUST STAY ON THIS PAGE AND BE READY TO PARTICIPATE</b> in order to be eligible for a bonus. <b>Thank you!
-        </b>
+            <b>YOU MUST STAY ON THIS PAGE AND BE READY TO PARTICIPATE</b> in order to be eligible for a bonus. <b>Thank you!</b>
+        </p>
+        {{ endif }}
+
     </div>
 
     <div style="display:none;">
@@ -26,12 +40,21 @@
     </div>
 
        <div id="newText" style="display:none">
-           <p>Looks like no-one else has turned up. We're really sorry about that. </p>
-            <p>Please use the following link to receive the show-up fee:  <b><a href="https://app.prolific.co/submissions/complete?cc=CIJSBAPH">
-                https://app.prolific.co/submissions/complete?cc=CIJSBAPH </a></b>
-        .</p>
+           {{ if role == 'Sender' }}
+           <p>
+               Looks like there was no Receiver to be matched with you. We're really sorry about that.
+           </p>
+           {{ else }}
+           <p>
+               Looks like there was no Sender to be matched with you. We're really sorry about that.
+           </p>
+           {{ endif }}
+            <p>
+                Please use the following link to receive the show-up fee and a small bonus:
+                <b><a href="https://app.prolific.co/submissions/complete?cc=CIJSBAPH">
+                    https://app.prolific.co/submissions/complete?cc=CIJSBAPH</a></b>.
+            </p>
        </div>
-    <br>
 
 {% endblock %}
 

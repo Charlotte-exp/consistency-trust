@@ -1,0 +1,41 @@
+{{ block title }}
+
+End of Stage 1
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    This was the last round.
+</p>
+<p>
+    Here are your final results: <br>
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Message</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.message }} will earn the Receiver a bigger bonus</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+<p style="color:white;">{{ call_payment }}</p>
+
+<p>
+    When you press the randomiser button, one round will be randomly selected.
+    The message you chose on that round will be sent to the Receiver you are matched with in stage 2.
+</p>
+<p>
+    <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
+</p>
+
+
+
+{{ endblock }}

@@ -1,0 +1,123 @@
+{{ block title }}
+The role of the Sender
+{{ endblock }}
+
+{{ block styles }}
+
+    <style>
+
+        .red_box {
+        padding: 4px;
+        border: 2px solid red;
+        border-radius: 4px;
+        color: black;
+        }
+
+    </style>
+
+{{ endblock }}
+
+
+{{ block content }}
+
+<div>
+    <p>
+        <u>You are the <b>Sender</b> in this study</u>
+    </p>
+    <p>
+        Unlike the Receiver, the Sender knows what the options are.
+        Below are the two bonus payment options for both the Sender and the Receiver:
+    </p>
+</div>
+
+<div class="card-body">
+    <div class="row">
+        <div class="col">
+            <p>
+                <font color="blue">Option A</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionA_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionA_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+        <div class="col">
+            <p>
+                <font color="blue">Option B</font>:
+                <ul>
+                    <li>
+                        <b>{{ sender_optionB_low }}</b> for you.
+                    </li>
+                    <li>
+                        <b>{{ receiver_optionB_low }}</b> for the Receiver.
+                    </li>
+                </ul>
+            </p>
+        </div>
+    </div>
+</div>
+
+<div>
+    <p>
+        Based on this knowledge,
+        the Sender is free to choose which message to send.<br>
+        The two possible messages look like this:
+    </p>
+</div>
+
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p style="text-align:center">
+            Which message would you like to send to the Receiver?
+        </p>
+        <div class="row">
+            <div class="col" style="text-align:center">
+                <button name="message_test" value="Option A" class="btn btn-primary btn-large">Option A will earn the Receiver a bigger bonus than Option B</button>
+            </div>
+            <div class="col" style="text-align:center">
+                <button name="message_test" value="Option B" class="btn btn-primary btn-large">Option B will earn the Receiver a bigger bonus than Option A</button>
+            </div>
+        </div>
+    </div>
+</div>
+        <p style="text-align:center">
+            <i>You can click on a message to see what it feels like.</i>
+        </p>
+
+<div>
+    <p>
+        One of the messages is honest, the other dishonest.
+        The honest message, if chosen by the receiver, always lead to less money for oneself.
+    </p>
+    <p>
+        Remember, the message is the only information the Receiver has about the bonuses.
+        Regardless of what the message says, they can choose any option.
+        Once they choice is made, they will only know their own bonus.
+        They will never know what the Sender earned or what was in the option not chosen.
+    </p>
+</div>
+
+    <br>
+    <hr size="6" width="100%" align="center" color="black">
+<div class="card-body">
+    <h4>Please answer these short questions about the game before continuing:</h4>
+    {{ formfields }}
+    <br>
+    <p>
+
+    </p>
+</div>
+
+
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{{ endblock }}
