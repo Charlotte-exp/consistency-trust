@@ -1,0 +1,70 @@
+{{ block title }}
+
+Round {{ subsession.round_number }}
+
+{{ endblock }}
+
+{{ block styles }}
+
+<style>
+    /* (A) SHARED CLASS */
+
+    table {
+    background-color:#F5F5F5;
+    color:black;
+    border-collapse:separate;
+    border-radius: 5px;
+    border:1px solid #E8E8E8;
+    }
+
+    </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<table class="table text-center" style="width: 20%; margin: auto">
+    <tr>
+        <td>{{ proba }}</td>
+    </tr>
+    <tr>
+        <td>{{ conversion }}</td>
+    </tr>
+</table>
+
+
+<p>
+    <br>
+</p>
+
+    <div style="display: flex; justify-content: center">
+        <img src="{{ static 'threshold_dictator/dictator.jpg'}}" width="auto" height="100">
+    </div>
+
+<p>
+    <br>
+    <br>
+</p>
+
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <b> xxx </b> units for you <br>
+            <b> xxx </b> units for the receiver
+        </div>
+        <div class="col" style="text-align:center">
+            <b> xxx </b> units for you <br>
+            <b> xxx </b> units for the receiver
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
+        </div>
+        <div class="col" style="text-align:center">
+            <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
+        </div>
+    </div>
+
+
+{{ endblock }}
