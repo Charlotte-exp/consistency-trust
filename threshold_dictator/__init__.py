@@ -2,6 +2,7 @@ from otree.api import *
 
 import random
 import itertools
+import numpy as np
 
 doc = """
 Your app description
@@ -32,6 +33,8 @@ class Player(BasePlayer):
 
     cost = models.CurrencyField(initial=cu(0))
     benefit = models.CurrencyField(initial=cu(0))
+    proba_implementation = models.IntegerField(initial=0)
+    conversion_rate = models.FloatField(initial=0)
 
     decision = models.CurrencyField(
         choices=[
@@ -51,9 +54,22 @@ class Player(BasePlayer):
             if number_1 + number_2 >= 10 and number_1 <= number_2:
                 player.cost = number_1
                 player.benefit = number_2
-                print('cost', player.cost, 'benefit', player.benefit)
+                # print('cost', player.cost, 'benefit', player.benefit)
                 return player.cost, player.benefit
 
+    def get_proba(player):
+        probabilities = list(range(10, 91, 10))
+        proba = random.choice(probabilities)
+        player.proba_implementation = proba
+        print('proba:', player.proba_implementation)
+        return player.proba_implementation
+
+    def get_conversion(player):
+        conversion_rates = np.around(np.arange(0.1, 1.1, 0.1), 1).tolist()  # np for float and need to round up
+        conversion = random.choice(conversion_rates)
+        player.conversion_rate = conversion
+        print('conversion:', player.conversion_rate)
+        return player.conversion_rate
 
 
 ######## PAGES ##########
@@ -66,8 +82,10 @@ class Decision(Page):
     def vars_for_template(player: Player):
         return dict(
             call_benefits=player.get_benefits(), # has to be on another page or they can change on refresh...
-            proba=int(C.proba_implementation * 100),  # remove decimal from display
-            conversion=C.conversion_rate,
+            call_probability=player.get_proba(),
+            call_conversion=player.get_conversion(),
+            proba=player.proba_implementation,
+            conversion=player.conversion_rate,
             cost=player.cost,
             benefit=player.benefit,
         )
