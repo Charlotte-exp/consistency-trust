@@ -45,6 +45,47 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    q1 = models.IntegerField(
+        choices=[
+            [1, 'I get 100 points, the previous participant gets 0 points'],
+            [2, 'I get fewer than 100 points, the previous participant gets more than 0 points'],
+            [3, 'Both I and the previous participant get 100 points']
+        ],
+        verbose_name='How will your choice to “Defect” affect both you and the previous participant?',
+        widget=widgets.RadioSelect
+    )
+
+    q2 = models.IntegerField(
+        choices=[
+            [1, 'It will always be the same'],
+            [2, 'The points will vary each round'],
+            [3, 'The points are fixed at 50 points each'],
+        ],
+        verbose_name='If you choose to “Cooperate,” '
+                     'what will determine how many points you and the previous participant receive?',
+        widget=widgets.RadioSelect
+    )
+
+    q3 = models.IntegerField(
+        choices=[
+            [1, f'Points are always worth 5 cents each'],
+            [2, 'Points are converted to cents at a random rate at the end of the study'],
+            [3, f'Points are converted to cents at a rate that changes each round, between 1 and 10 cents per point'],
+        ],
+        verbose_name=f'Will all rounds count toward the final bonus payment?',
+        widget=widgets.RadioSelect
+    )
+
+    q4 = models.IntegerField(
+        choices=[
+            [1, 'No, only one round will be randomly selected to count'],
+            [2, f'Yes, all rounds will count'],
+            [3, f'Only the last round will count']
+        ],
+        verbose_name=f'How will points be converted to cents?',
+        widget=widgets.RadioSelect
+    )
+
     def get_benefits(player):
         numbers = list(range(1, 9))
         while True:
@@ -74,6 +115,11 @@ class Player(BasePlayer):
 
 ######## PAGES ##########
 
+class Introduction(Page):
+    form_model = 'player'
+    form_fields = ['q1', 'q2', 'q3', 'q4']
+
+
 class Decision(Page):
     form_model = 'player'
     form_fields = ['decision']
@@ -91,7 +137,8 @@ class Decision(Page):
         )
 
 
-page_sequence = [Decision,
+page_sequence = [Introduction,
+                 Decision,
                  # ResultsWaitPage,
                  # Results
                  ]
