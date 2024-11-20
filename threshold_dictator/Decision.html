@@ -30,18 +30,24 @@ Round {{ subsession.round_number }}
     color: black;
     }
 
+    .big {
+    font-size: 18px;
+    }
+
     </style>
 
 {{ endblock }}
 
 {{ block content }}
 
-<table class="table text-center" style="width: 20%; margin: auto">
+<table class="table text-left" style="width: 50%; margin: auto">
     <tr>
+        <th>Probability of implementation</th>
         <td>{{ proba }}%</td>
     </tr>
     <tr>
-        <td>1 unit = £{{ conversion }}</td>
+        <th>Conversion rate</th>
+        <td>1 point = £{{ conversion }}</td>
     </tr>
 </table>
 
@@ -67,13 +73,13 @@ Round {{ subsession.round_number }}
 </p>
 
     <div class="row">
-        <div class="col" style="text-align:center">
-            <b> {{ cost }} </b> units for you <br>
-            <b> {{ benefit }} </b> units for the receiver
+        <div class="col big" style="text-align:center">
+            <b> {{ cost }} </b> points for you <br>
+            <b> {{ benefit }} </b> points for the receiver
         </div>
-        <div class="col" style="text-align:center">
-            <b> 10 </b> units for you <br>
-            <b> 0 </b> units for the receiver
+        <div class="col big" style="text-align:center">
+            <b> 10 </b> points for you <br>
+            <b> 0 </b> points for the receiver
         </div>
     </div>
     <br>

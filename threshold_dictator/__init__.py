@@ -12,7 +12,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 6
+    NUM_ROUNDS = 3
 
     endowment = cu(10)
     conversion_rate = 1
@@ -36,12 +36,20 @@ class Player(BasePlayer):
     proba_implementation = models.IntegerField(initial=0)
     conversion_rate = models.FloatField(initial=0)
 
-    decision = models.CurrencyField(
+    randomly_selected_round = models.IntegerField(initial=0)
+    randomly_selected_decision = models.IntegerField(initial=0)
+    randomly_selected_cost = models.CurrencyField(initial=0)
+    randomly_selected_benefit = models.CurrencyField(initial=0)
+    randomly_selected_proba_implementation = models.IntegerField(initial=0)
+    randomly_selected_conversion_rate = models.FloatField(initial=0)
+
+    decision = models.IntegerField(
+        initial=0,
         choices=[
             [0, f'Selfish option'],  # defect
             [1, f'Cooperative option'],  # cooperate
         ],
-        verbose_name='Your decision:',
+        verbose_name='Your choice:',
         widget=widgets.RadioSelect
     )
 
@@ -86,6 +94,19 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    random_selection = models.StringField(
+        initial='',
+        choices=['randomise', 'whatever'],
+    )
+
+    comment_box = models.LongStringField(
+        verbose_name=''
+    )
+
+    strategy_box = models.LongStringField(
+        verbose_name=''
+    )
+
     def get_benefits(player):
         numbers = list(range(1, 9))
         while True:
@@ -99,7 +120,7 @@ class Player(BasePlayer):
                 return player.cost, player.benefit
 
     def get_proba(player):
-        probabilities = list(range(10, 91, 10))
+        probabilities = list(range(1, 11, 1))
         proba = random.choice(probabilities)
         player.proba_implementation = proba
         print('proba:', player.proba_implementation)
@@ -113,11 +134,36 @@ class Player(BasePlayer):
         return player.conversion_rate
 
 
+######## FUNCTIONS ##########
+
+def random_payment(player: Player):
+    randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
+    me = player.in_round(randomly_selected_round)
+    player.randomly_selected_round = randomly_selected_round
+    player.participant.randomly_selected_round = randomly_selected_round
+
+    attributes = ['decision', 'cost', 'benefit', 'proba_implementation', 'conversion_rate']
+    for attr in attributes:
+        value = getattr(me, attr)
+        setattr(player, f'randomly_selected_{attr}', value)
+        setattr(player.participant, f'randomly_selected_{attr}', value)
+    # print('round is', randomly_selected_round)
+    # print('stake is', randomly_selected_stake)
+    # print('message is', randomly_selected_message)
+
+
 ######## PAGES ##########
 
 class Introduction(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        else:
+            return False
 
 
 class Decision(Page):
@@ -130,6 +176,8 @@ class Decision(Page):
             call_benefits=player.get_benefits(), # has to be on another page or they can change on refresh...
             call_probability=player.get_proba(),
             call_conversion=player.get_conversion(),
+
+            decision=player.decision,
             proba=player.proba_implementation,
             conversion=player.conversion_rate,
             cost=player.cost,
@@ -137,8 +185,79 @@ class Decision(Page):
         )
 
 
+class RandomSelection(Page):
+    form_model = 'player'
+    form_fields = ['random_selection']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+    def vars_for_template(player: Player):
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+
+            call_payment=random_payment(player),
+            #call_payoff=get_payoff(player),
+        )
+
+
+class End(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+    def vars_for_template(player: Player):
+        return dict(
+                player_in_all_rounds=player.in_all_rounds(),
+                total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+
+                random_round=player.randomly_selected_round,
+                cost=player.randomly_selected_cost,
+                benefit=player.randomly_selected_benefit,
+                proba_implementation=player.randomly_selected_proba_implementation,
+                conversion_rate=player.randomly_selected_conversion_rate,
+            )
+
+
+class Payment(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+    def vars_for_template(player: Player):
+        participant = player.participant
+        session = player.session
+        return dict(
+            bonus=player.payoff.to_real_world_currency(session),
+            participation_fee=session.config['participation_fee'],
+            final_payment=player.payoff.to_real_world_currency(session) + session.config['participation_fee'],
+        )
+
+
+class ProlificLink(Page):
+    """
+    This page redirects pp to prolific automatically with a javascript (don't forget to put paste the correct link!).
+    There is a short text and the link in case it is not automatic.
+    """
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+
+
 page_sequence = [Introduction,
                  Decision,
                  # ResultsWaitPage,
                  # Results
+                 RandomSelection,
+                 End,
+                 Payment,
+                 ProlificLink,
                  ]

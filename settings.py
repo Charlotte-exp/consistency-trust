@@ -53,7 +53,9 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_FIELDS = []
 PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout',
-                      'randomly_selected_round', 'randomly_selected_stake', 'randomly_selected_message']
+                      'randomly_selected_round', 'randomly_selected_decision','randomly_selected_cost',
+                      'randomly_selected_benefit', 'randomly_selected_proba_implementation',
+                      'randomly_selected_conversion_rate']
 
 
 # ISO-639 code

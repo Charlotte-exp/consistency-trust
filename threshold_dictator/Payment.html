@@ -1,0 +1,23 @@
+{{ block title }}Payment{{ endblock }}
+
+{% block content %}
+
+<div class="panel panel-default" style="margin-bottom:10px">
+    <div class="panel-body">
+        Since you do not make any active decision in the second stage,
+        the study is now over for you. <strong>Thank you for participating!</strong>
+        Once all senders and receivers are done with the study, you will receive your bonus through Prolific.
+        This can take a couple of weeks.
+        <p> </p>
+        <hr size="6" width="50%" align="center" color="black">
+    </div>
+    <p></p>
+        <p>
+            Click on the <b>next button</b> to be redirected to Prolific and payed the participation payment immediately.
+        </p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+</div>
+
+{% endblock %}
