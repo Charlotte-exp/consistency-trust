@@ -297,7 +297,7 @@ class ProlificLink(Page):
 
 
 page_sequence = [Consent,
-                 #Introduction,
+                 Introduction,
                  SetStakes,
                  Decision,
                  # ResultsWaitPage,
