@@ -14,7 +14,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 3
 
-    endowment = cu(10)
+    endowment = cu(100)
     conversion_rate = 1
     proba_implementation = 0.1
 
@@ -31,15 +31,15 @@ class Player(BasePlayer):
 
     receiver_payoff = models.CurrencyField(initial=cu(0))
 
-    cost = models.CurrencyField(initial=cu(0))
-    benefit = models.CurrencyField(initial=cu(0))
+    cost = models.IntegerField(initial=0)
+    benefit = models.IntegerField(initial=0)
     proba_implementation = models.IntegerField(initial=0)
     conversion_rate = models.FloatField(initial=0)
 
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_decision = models.IntegerField(initial=0)
-    randomly_selected_cost = models.CurrencyField(initial=0)
-    randomly_selected_benefit = models.CurrencyField(initial=0)
+    randomly_selected_cost = models.IntegerField(initial=0)
+    randomly_selected_benefit = models.IntegerField(initial=0)
     randomly_selected_proba_implementation = models.IntegerField(initial=0)
     randomly_selected_conversion_rate = models.FloatField(initial=0)
 
@@ -108,35 +108,52 @@ class Player(BasePlayer):
     )
 
     def get_benefits(player):
-        numbers = list(range(1, 9))
+        """
+        This function returns two numbers between 1 and 9 on each round to become the benefit and the cost.
+        In addition, the sum of the two numbers is always smaller than 100
+        and the first number (the cost) is smaller than the second (the benefit)
+        """
+        numbers = list(range(1, 99))
         while True:
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
             number_1, number_2 = random.choices(numbers, k=2)
             # check if sampled numbers satisfy the condition
-            if number_1 + number_2 >= 10 and number_1 <= number_2:
+            if number_1 + number_2 >= 100 and number_1 <= number_2:
                 player.cost = number_1
                 player.benefit = number_2
                 # print('cost', player.cost, 'benefit', player.benefit)
                 return player.cost, player.benefit
 
     def get_proba(player):
+        """
+        This function creates a list of possible probabilites of implementation from 1 t0 10 in increments of 1.
+        it then selects on of those every time it is called
+        """
         probabilities = list(range(1, 11, 1))
         proba = random.choice(probabilities)
         player.proba_implementation = proba
-        print('proba:', player.proba_implementation)
+        #print('proba:', player.proba_implementation)
         return player.proba_implementation
 
     def get_conversion(player):
+        """
+        This function creates a list of possible conversion rates from 0.1 to 0.9 in increments of 0.1
+        it then selects on of those every time it is called
+        """
         conversion_rates = np.around(np.arange(0.1, 1.1, 0.1), 1).tolist()  # np for float and need to round up
         conversion = random.choice(conversion_rates)
         player.conversion_rate = conversion
-        print('conversion:', player.conversion_rate)
+        #print('conversion:', player.conversion_rate)
         return player.conversion_rate
 
 
 ######## FUNCTIONS ##########
 
 def random_payment(player: Player):
+    """
+    This function selects one round among all with equal probability.
+    It records the value of each variable on this round as new random_variable fields
+    """
     randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
     me = player.in_round(randomly_selected_round)
     player.randomly_selected_round = randomly_selected_round
@@ -154,6 +171,21 @@ def random_payment(player: Player):
 
 ######## PAGES ##########
 
+class Consent(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        else:
+            return False
+
+    def vars_for_template(player: Player):
+        return {
+            'participation_fee': player.session.config['participation_fee'],
+        }
+
+
 class Introduction(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2', 'q3', 'q4']
@@ -166,6 +198,21 @@ class Introduction(Page):
             return False
 
 
+class SetStakes(Page):
+
+    timeout_seconds = 1  # instant timeout
+
+    def vars_for_template(player: Player):
+        participant = player.participant
+        return dict(
+            round_number=player.round_number,
+
+            call_benefits=player.get_benefits(),
+            call_probability=player.get_proba(),
+            call_conversion=player.get_conversion(),
+        )
+
+
 class Decision(Page):
     form_model = 'player'
     form_fields = ['decision']
@@ -173,10 +220,6 @@ class Decision(Page):
 
     def vars_for_template(player: Player):
         return dict(
-            call_benefits=player.get_benefits(), # has to be on another page or they can change on refresh...
-            call_probability=player.get_proba(),
-            call_conversion=player.get_conversion(),
-
             decision=player.decision,
             proba=player.proba_implementation,
             conversion=player.conversion_rate,
@@ -217,10 +260,11 @@ class End(Page):
                 total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
 
                 random_round=player.randomly_selected_round,
-                cost=player.randomly_selected_cost,
-                benefit=player.randomly_selected_benefit,
-                proba_implementation=player.randomly_selected_proba_implementation,
-                conversion_rate=player.randomly_selected_conversion_rate,
+                random_decision=player.randomly_selected_decision,
+                random_cost=player.randomly_selected_cost,
+                random_benefit=player.randomly_selected_benefit,
+                random_proba_implementation=player.randomly_selected_proba_implementation,
+                random_conversion_rate=player.randomly_selected_conversion_rate,
             )
 
 
@@ -252,7 +296,9 @@ class ProlificLink(Page):
             return True
 
 
-page_sequence = [Introduction,
+page_sequence = [Consent,
+                 #Introduction,
+                 SetStakes,
                  Decision,
                  # ResultsWaitPage,
                  # Results

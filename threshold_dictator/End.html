@@ -29,7 +29,7 @@ Summary of the task
             <td>{{ p.benefit }}</td>
             <td>{{ p.proba_implementation }}</td>
             <td>{{ p.conversion_rate }}</td>
-            <td>{{ p.decision }}</td>
+            <td>{{ p.get_decision_display }}</td>
         {{ endfor }}
         </tr>
     </table>
@@ -40,15 +40,25 @@ Summary of the task
     <div  class="card-body">
         <p>
             The round randomly selected for payment is <b>{{ random_round }}</b>.
-            Your choice on that round is:
-
+            Your choice on that round was:
+        </p>
+            {{ if random_decision == 0 }}
             <div class="card-body">
-                <b>{{ player.decision }}</b>
+                <b>Selfish option</b>
             </div>
-            and this it message we will display to the Receiver in the second stage.
+            {{ else }}
+            <div class="card-body">
+                <b>Cooperative option</b>
+            </div>
+            {{ endif }}
+        <p>
+            This means that you will receive {{ random_cost }} points as a bonus,
+            and the previous participant will receive {{ random_benefit }} points as their bonus.
         </p>
     </div>
 </div>
+
+<br>
 
     <div style="display: flex; justify-content: flex-end">
         {% next_button %}

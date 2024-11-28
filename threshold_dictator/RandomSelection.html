@@ -29,7 +29,7 @@ Summary of the task
             <td>{{ p.benefit }}</td>
             <td>{{ p.proba_implementation }}</td>
             <td>{{ p.conversion_rate }}</td>
-            <td>{{ p.decision }}</td>
+            <td>{{ p.get_decision_display }}</td>
         {{ endfor }}
         </tr>
     </table>
@@ -38,7 +38,7 @@ Summary of the task
 
 <p>
     When you press the randomiser button, one round will be randomly selected.
-    The option you chose on that round is the one you and the previous participant will receive in bonus payment.
+    The option you chose on that round is the one you and the previous participant will receive as bonus payment.
 </p>
 <p>
     <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
