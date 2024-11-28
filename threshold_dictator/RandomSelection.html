@@ -1,0 +1,49 @@
+{{ block title }}
+
+Summary of the task
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    This was the last round.
+</p>
+<p>
+    Here is a summary of all your choices: <br>
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Cost</th>
+            <th>Benefit</th>
+            <th>Probability of implementation</th>
+            <th>Conversion rate</th>
+            <th>Choice</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.cost }}</td>
+            <td>{{ p.benefit }}</td>
+            <td>{{ p.proba_implementation }}</td>
+            <td>{{ p.conversion_rate }}</td>
+            <td>{{ p.get_decision_display }}</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+<p style="color:white;">{{ call_payment }}</p>
+
+<p>
+    When you press the randomiser button, one round will be randomly selected.
+    The option you chose on that round is the one you and the previous participant will receive as bonus payment.
+</p>
+<p>
+    <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
+</p>
+
+
+
+{{ endblock }}

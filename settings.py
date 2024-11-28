@@ -4,6 +4,14 @@ from os import popen
 
 SESSION_CONFIGS = [
     dict(
+        name='threshold_dictator',
+        display_name="otree5 dictator for threshold analysis",
+        app_sequence=['threshold_dictator'],
+        num_demo_participants=8,
+        use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
+    ),
+    dict(
         name='deception_many_rounds',
         display_name="otree5 deception many rounds - no receivers",
         app_sequence=['intro_many_rounds', 'deception_many_rounds'],
@@ -45,7 +53,9 @@ SESSION_CONFIG_DEFAULTS = dict(
 
 SESSION_FIELDS = []
 PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout',
-                      'randomly_selected_round', 'randomly_selected_stake', 'randomly_selected_message']
+                      'randomly_selected_round', 'randomly_selected_decision','randomly_selected_cost',
+                      'randomly_selected_benefit', 'randomly_selected_proba_implementation',
+                      'randomly_selected_conversion_rate']
 
 
 # ISO-639 code

@@ -1,0 +1,69 @@
+{{ block title }}
+
+Summary of the task
+
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    This was the last round.
+</p>
+<p>
+    Here is a summary of all your choices: <br>
+</p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Cost</th>
+            <th>Benefit</th>
+            <th>Probability of implementation</th>
+            <th>Conversion rate</th>
+            <th>Choice</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.cost }}</td>
+            <td>{{ p.benefit }}</td>
+            <td>{{ p.proba_implementation }}</td>
+            <td>{{ p.conversion_rate }}</td>
+            <td>{{ p.get_decision_display }}</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+<p> </p>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your choice on that round was:
+        </p>
+            {{ if random_decision == 0 }}
+            <div class="card-body">
+                <b>Selfish option</b>
+            </div>
+            {{ else }}
+            <div class="card-body">
+                <b>Cooperative option</b>
+            </div>
+            {{ endif }}
+        <p>
+            This means that you will receive {{ random_cost }} points as a bonus,
+            and the previous participant will receive {{ random_benefit }} points as their bonus.
+        </p>
+    </div>
+</div>
+
+<br>
+
+    <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+    </div>
+
+
+
+{{ endblock }}

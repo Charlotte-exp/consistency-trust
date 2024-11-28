@@ -1,0 +1,96 @@
+{{ block title }}
+
+Round {{ subsession.round_number }}
+
+{{ endblock }}
+
+{{ block styles }}
+
+<style>
+    /* (A) SHARED CLASS */
+
+    table {
+    background-color:#F5F5F5;
+    color:black;
+    border-collapse:separate;
+    border-radius: 5px;
+    border:1px solid #E8E8E8;
+    }
+
+    .grey_box {
+    display: flex;                  /* Enable flexbox */
+    align-items: center;            /* Center vertically */
+    justify-content: center;        /* Center horizontally */
+    padding: 10px;
+    border: 1px solid #E8E8E8;
+    height: 50px;
+    width: 40px;
+    border-radius: 5px;
+    background: #F5F5F5;
+    color: black;
+    }
+
+    .big {
+    font-size: 18px;
+    }
+
+    </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<table class="table text-left" style="width: 50%; margin: auto">
+    <tr>
+        <th>Probability of implementation</th>
+        <td>{{ proba }}%</td>
+    </tr>
+    <tr>
+        <th>Conversion rate</th>
+        <td>1 point = £{{ conversion }}</td>
+    </tr>
+</table>
+
+
+<p>
+    <br>
+</p>
+<!--
+
+    <div style="display: flex; justify-content: center">
+        <div class="grey_box">
+            {{ cost }}
+        </div>
+        <img src="{{ static 'threshold_dictator/dictator_short.jpg'}}" width="auto" height="100">
+        <div class="grey_box">
+            {{ benefit }}
+        </div>
+    </div>
+-->
+<p>
+    <br>
+    <br>
+</p>
+
+    <div class="row">
+        <div class="col big" style="text-align:center">
+            <b> {{ cost }} </b> points for you <br>
+            <b> {{ benefit }} </b> points for the receiver
+        </div>
+        <div class="col big" style="text-align:center">
+            <b> 10 </b> points for you <br>
+            <b> 0 </b> points for the receiver
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
+        </div>
+        <div class="col" style="text-align:center">
+            <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
+        </div>
+    </div>
+
+
+{{ endblock }}
