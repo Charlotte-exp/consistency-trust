@@ -12,9 +12,9 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 3
+    NUM_ROUNDS = 12
 
-    endowment = cu(100)
+    endowment = 100  # maximum range
     conversion_rate = 1
     proba_implementation = 0.1
 
@@ -118,7 +118,7 @@ class Player(BasePlayer):
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
             number_1, number_2 = random.choices(numbers, k=2)
             # check if sampled numbers satisfy the condition
-            if number_1 + number_2 >= 100 and number_1 <= number_2:
+            if number_1 + number_2 >= C.endowment and number_1 <= number_2:
                 player.cost = number_1
                 player.benefit = number_2
                 # print('cost', player.cost, 'benefit', player.benefit)
