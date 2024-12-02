@@ -15,13 +15,12 @@ class C(BaseConstants):
     NUM_ROUNDS = 12
 
     endowment = 100  # maximum range
-    conversion_rate = 1
-    proba_implementation = 0.1
+    #conversion_rate = 1
+    #proba_implementation = 0.1
 
 
 class Subsession(BaseSubsession):
     pass
-
 
 class Group(BaseGroup):
     pass
@@ -29,19 +28,22 @@ class Group(BaseGroup):
 
 class Player(BasePlayer):
 
-    receiver_payoff = models.CurrencyField(initial=cu(0))
+    treatment = models.StringField(initial='')
+    num_failed_attempts = models.IntegerField(initial=0)
 
     cost = models.IntegerField(initial=0)
     benefit = models.IntegerField(initial=0)
-    proba_implementation = models.IntegerField(initial=0)
-    conversion_rate = models.FloatField(initial=0)
+    high_proba = models.IntegerField(initial=0)
+    low_proba = models.IntegerField(initial=0)
+    #proba_implementation = models.IntegerField(initial=0)
+    #conversion_rate = models.FloatField(initial=0)
 
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_decision = models.IntegerField(initial=0)
     randomly_selected_cost = models.IntegerField(initial=0)
     randomly_selected_benefit = models.IntegerField(initial=0)
-    randomly_selected_proba_implementation = models.IntegerField(initial=0)
-    randomly_selected_conversion_rate = models.FloatField(initial=0)
+    #randomly_selected_proba_implementation = models.IntegerField(initial=0)
+    #randomly_selected_conversion_rate = models.FloatField(initial=0)
 
     decision = models.IntegerField(
         initial=0,
@@ -94,6 +96,27 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    q5 = models.IntegerField(
+        choices=[
+            [1, 'If that round is selected, 100 cents will be added to your bonus.'],
+            [2, f'If that round is selected, your bonus may go up by more than 100 cents. '
+                f'How much more and with what probability will vary by round.'],
+        ],
+        verbose_name=f'How will your choice of “sure thing” affect your bonus?',
+        widget=widgets.RadioSelect
+    )
+
+    q6 = models.IntegerField(
+        choices=[
+            [1, 'If that round is selected, 100 cents will be added to your bonus.'],
+            [2, f'If that round is selected, your bonus may go up by more than 100 cents. '
+                f'How much more and with what probability will vary by round.'],
+        ],
+        verbose_name=f'If you choose the “risky option,” '
+                     f'what will determine how many points you and the previous participant receive?',
+        widget=widgets.RadioSelect
+    )
+
     random_selection = models.StringField(
         initial='',
         choices=['randomise', 'whatever'],
@@ -113,7 +136,7 @@ class Player(BasePlayer):
         In addition, the sum of the two numbers is always smaller than 100
         and the first number (the cost) is smaller than the second (the benefit)
         """
-        numbers = list(range(1, 99))
+        numbers = list(range(1, C.endowment-1))
         while True:
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
             number_1, number_2 = random.choices(numbers, k=2)
@@ -123,6 +146,17 @@ class Player(BasePlayer):
                 player.benefit = number_2
                 # print('cost', player.cost, 'benefit', player.benefit)
                 return player.cost, player.benefit
+
+    def get_likelihood(player):
+        """
+        """
+        number_1 = random.random()
+        number_2 = 1-number_1
+        if number_1 >= number_2:
+            player.high_proba = number_1
+            player.low_proba = number_2
+            print('high', player.high_proba, 'low', player. low_proba)
+            return number_1, number_2
 
     def get_proba(player):
         """
@@ -149,6 +183,21 @@ class Player(BasePlayer):
 
 ######## FUNCTIONS ##########
 
+def creating_session(subsession):
+    """
+    We use itertools to assign treatment regularly to make sure there is a somewhat equal amount of each in the
+    session but also that is it equally distributed in the sample.
+    It simply cycles through the list of treatments (high & low) and that's saved in the participant vars.
+    """
+
+    treatments = itertools.cycle(['treatment', 'control'])
+    for p in subsession.get_players():
+        p.treatment = next(treatments)
+        p.participant.condition = p.treatment
+        # print('condition is', p.condition)
+        # print('vars condition is', p.participant.condition)
+
+
 def random_payment(player: Player):
     """
     This function selects one round among all with equal probability.
@@ -159,7 +208,9 @@ def random_payment(player: Player):
     player.randomly_selected_round = randomly_selected_round
     player.participant.randomly_selected_round = randomly_selected_round
 
-    attributes = ['decision', 'cost', 'benefit', 'proba_implementation', 'conversion_rate']
+    attributes = ['decision', 'cost', 'benefit',
+                  #'proba_implementation', 'conversion_rate'
+                  ]
     for attr in attributes:
         value = getattr(me, attr)
         setattr(player, f'randomly_selected_{attr}', value)
@@ -188,7 +239,29 @@ class Consent(Page):
 
 class Introduction(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2', 'q3', 'q4']
+
+    def get_form_fields(player:Player):
+        """ make one q3 for each subgroup that displays only to each to avoid empty field errors"""
+        if player.treatment == 'treatment':
+            return ['q1', 'q2', 'q4']
+        else:
+            return ['q5', 'q6']
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        records the number of time the page was submitted with an error. which specific error is not recorded.
+        """
+        if player.treatment == 'treatment':
+            solutions = dict(q1=1, q2=2, q4=1)
+        else:
+            solutions = dict(q5=1, q6=2)
+        # error_message can return a dict whose keys are field names and whose values are error messages
+        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+        # print('errors is', errors)
+        if errors:
+            player.num_failed_attempts += 1
+            return errors
 
     @staticmethod
     def is_displayed(player: Player):
@@ -197,19 +270,27 @@ class Introduction(Page):
         else:
             return False
 
+    def vars_for_template(player: Player):
+        return dict(
+            round_number=player.round_number,
+            treatment=player.treatment,
+
+            call_benefits=player.get_benefits(),
+            # call_probability=player.get_proba(),
+            # call_conversion=player.get_conversion(),
+        )
 
 class SetStakes(Page):
 
     timeout_seconds = 1  # instant timeout
 
     def vars_for_template(player: Player):
-        participant = player.participant
         return dict(
             round_number=player.round_number,
 
             call_benefits=player.get_benefits(),
-            call_probability=player.get_proba(),
-            call_conversion=player.get_conversion(),
+            # call_probability=player.get_proba(),
+            # call_conversion=player.get_conversion(),
         )
 
 
@@ -221,8 +302,8 @@ class Decision(Page):
     def vars_for_template(player: Player):
         return dict(
             decision=player.decision,
-            proba=player.proba_implementation,
-            conversion=player.conversion_rate,
+            #proba=player.proba_implementation,
+            #conversion=player.conversion_rate,
             cost=player.cost,
             benefit=player.benefit,
         )
@@ -263,8 +344,8 @@ class End(Page):
                 random_decision=player.randomly_selected_decision,
                 random_cost=player.randomly_selected_cost,
                 random_benefit=player.randomly_selected_benefit,
-                random_proba_implementation=player.randomly_selected_proba_implementation,
-                random_conversion_rate=player.randomly_selected_conversion_rate,
+                #random_proba_implementation=player.randomly_selected_proba_implementation,
+                #random_conversion_rate=player.randomly_selected_conversion_rate,
             )
 
 
