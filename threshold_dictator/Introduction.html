@@ -5,6 +5,16 @@ Instructions
 
 {{ block content }}
 
+{{ if player.treatment == '' }}
+
+<p>
+    nothing
+</p>
+
+{{ endif }}
+
+{{ if treatment == 'treatment' }}
+
 <div>
     <p>
         In this study, we’re exploring how people make cooperative decisions across a series of choices,
@@ -29,7 +39,6 @@ Instructions
     </p>
     <p>
         These points will be converted to cents and added to your and the previous participant’s bonus payments.
-        The “conversion rate” of points to cents will change every round, ranging from 1 to 10 cents per point.
     </p>
     <p>
         Only one round will be chosen to count toward the final bonus.
@@ -40,8 +49,7 @@ Instructions
     <p>
         On each decision screen, you’ll see all the relevant information for that round,
         including your points,
-        the previous participant’s points, the conversion rate,
-        and the probability that the round will count.
+        and the previous participant’s points.
     </p>
 </div>
 
@@ -55,6 +63,56 @@ Instructions
         {% endfor %}
     </div>
 </div>
+
+
+{{ else }}
+
+<div>
+    <p>
+        In this study, we’re exploring how people make financial decisions involving risk.
+    </p>
+
+    <p>
+        In each of 20 rounds, you’ll choose between two options: a “risky” option and a “sure thing”.
+    </p>
+
+    <p>
+        The choices you make will affect your bonus as follows:
+        <ul>
+            <li>
+                Sure thing: You receive 100 cents.
+            </li>
+            <li>
+                Risky option: You have a chance of earning more than 100 cents.
+                But you also might earn nothing.
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        The exact number of cents you might earn by selecting the risky option
+        and the exact probability with which you might earn it will vary each round.
+    </p>
+    <p>
+        Only one round will be chosen to count toward the final bonus.
+        This round will be selected at random after you have completed all rounds.
+    </p>
+    <p>
+        If you selected the risky option in that round
+        we will then randomly determine whether you get the specified bonus based on the specified probability.
+    </p>
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <h4>Now we will ask some comprehension questions to check your understanding:</h4>
+        {% for field in form %}
+            {% formfield field %}
+        {% endfor %}
+    </div>
+</div>
+
+{{ endif }}
 
 <br>
     <p>
