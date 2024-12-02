@@ -40,23 +40,7 @@ Round {{ subsession.round_number }}
 
 {{ block content }}
 
-<table class="table text-left" style="width: 50%; margin: auto">
-    <tr>
-        <th>Probability of implementation</th>
-        <td>{{ proba }}%</td>
-    </tr>
-    <tr>
-        <th>Conversion rate</th>
-        <td>1 point = £{{ conversion }}</td>
-    </tr>
-</table>
-
-
-<p>
-    <br>
-</p>
 <!--
-
     <div style="display: flex; justify-content: center">
         <div class="grey_box">
             {{ cost }}
@@ -69,8 +53,8 @@ Round {{ subsession.round_number }}
 -->
 <p>
     <br>
-    <br>
 </p>
+    {{ if player.treatment == 'treatment' }}
 
     <div class="row">
         <div class="col big" style="text-align:center">
@@ -82,15 +66,40 @@ Round {{ subsession.round_number }}
             <b> 0 </b> points for the receiver
         </div>
     </div>
+
     <br>
     <div class="row">
         <div class="col" style="text-align:center">
-            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
-        </div>
-        <div class="col" style="text-align:center">
             <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
         </div>
+        <div class="col" style="text-align:center">
+            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
+        </div>
     </div>
+
+    {{ else }}
+
+    <div class="row">
+        <div class="col big" style="text-align:center">
+            <b> {{ gamble }} </b> points with {{ proba_gamble }}% probability <br>
+            <b> 0 </b> points with {{ proba_sure }}% probability
+        </div>
+        <div class="col big" style="text-align:center">
+            <b> {{ C.safe_option }} </b> points for sure
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <button name="decision_control" value="0" class="btn btn-primary btn-large">Risky option</button>
+        </div>
+        <div class="col" style="text-align:center">
+            <button name="decision_control" value="1" class="btn btn-primary btn-large">Safe option</button>
+        </div>
+    </div>
+
+    {{ endif }}
 
 
 {{ endblock }}

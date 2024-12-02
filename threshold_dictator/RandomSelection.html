@@ -13,13 +13,13 @@ Summary of the task
     Here is a summary of all your choices: <br>
 </p>
 
+{{ if player.treatment == 'treatment'}}
+
     <table class="table">
         <tr>
             <th>Round</th>
             <th>Cost</th>
             <th>Benefit</th>
-            <th>Probability of implementation</th>
-            <th>Conversion rate</th>
             <th>Choice</th>
         </tr>
         {{ for p in player_in_all_rounds }}
@@ -27,12 +27,31 @@ Summary of the task
             <td>{{ p.round_number }}</td>
             <td>{{ p.cost }}</td>
             <td>{{ p.benefit }}</td>
-            <td>{{ p.proba_implementation }}</td>
-            <td>{{ p.conversion_rate }}</td>
             <td>{{ p.get_decision_display }}</td>
         {{ endfor }}
         </tr>
     </table>
+
+{{ else }}
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Bonus</th>
+            <th>Probability</th>
+            <th>Choice</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.benefit_x2}}</td>
+            <td>{{ p.proba_gamble }}</td>
+            <td>{{ p.get_decision_control_display }}</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+{{ endif }}
 
 <p style="color:white;">{{ call_payment }}</p>
 
