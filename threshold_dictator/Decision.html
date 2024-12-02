@@ -67,28 +67,39 @@ Round {{ subsession.round_number }}
         </div>
     </div>
 
+    <br>
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
+        </div>
+        <div class="col" style="text-align:center">
+            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
+        </div>
+    </div>
+
     {{ else }}
 
     <div class="row">
         <div class="col big" style="text-align:center">
-            <b> {{ cost }} </b> points with {{  }} probability <br>
-            <b> {{ benefit }} </b> points with {{  }} probability
+            <b> {{ gamble }} </b> points with {{ proba_gamble }}% probability <br>
+            <b> 0 </b> points with {{ proba_sure }}% probability
         </div>
         <div class="col big" style="text-align:center">
-            <b> {{ C.endowment }} </b> points for sure
+            <b> {{ C.safe_option }} </b> points for sure
+        </div>
+    </div>
+
+    <br>
+    <div class="row">
+        <div class="col" style="text-align:center">
+            <button name="decision_control" value="0" class="btn btn-primary btn-large">Risky option</button>
+        </div>
+        <div class="col" style="text-align:center">
+            <button name="decision_control" value="1" class="btn btn-primary btn-large">Safe option</button>
         </div>
     </div>
 
     {{ endif }}
-    <br>
-    <div class="row">
-        <div class="col" style="text-align:center">
-            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
-        </div>
-        <div class="col" style="text-align:center">
-            <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
-        </div>
-    </div>
 
 
 {{ endblock }}

@@ -13,6 +13,8 @@ Summary of the task
     Here is a summary of all your choices: <br>
 </p>
 
+    {{ if player.treatment == 'treatment'}}
+
     <table class="table">
         <tr>
             <th>Round</th>
@@ -53,6 +55,55 @@ Summary of the task
         </p>
     </div>
 </div>
+
+{{ else }}
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Bonus</th>
+            <th>Probability</th>
+            <th>Choice</th>
+        </tr>
+        {{ for p in player_in_all_rounds }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.benefit_x2}}</td>
+            <td>{{ p.proba_gamble }}</td>
+            <td>{{ p.get_decision_control_display }}</td>
+        {{ endfor }}
+        </tr>
+    </table>
+
+<p> </p>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your choice on that round was:
+        </p>
+            {{ if random_decision_control == 0 }}
+            <div class="card-body">
+                <b>Risky option</b>
+            </div>
+
+                <p>
+                    And the result of that gamble gives you: {{ payoff }}.
+                </p>
+            {{ else }}
+            <div class="card-body">
+                <b>Safe option</b>
+            </div>
+            <p>
+                This means that you will receive {{ C.safe_option }} points as a bonus.
+            </p>
+            {{ endif }}
+    </div>
+</div>
+
+
+{{ endif }}
 
 <br>
 
