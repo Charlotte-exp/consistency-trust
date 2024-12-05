@@ -44,8 +44,8 @@ Summary of the task
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
-            <td>{{ p.benefit_x2}}</td>
-            <td>{{ p.proba_gamble }}</td>
+            <td>{{ p.benefit}}</td>
+            <td>{{ p.proba_gamble }}%</td>
             <td>{{ p.get_decision_control_display }}</td>
         {{ endfor }}
         </tr>
