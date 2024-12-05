@@ -14,7 +14,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 5
 
-    endowment = 100  # maximum range
+    endowment = cu(2)  # maximum range
     safe_option = endowment
     #conversion_rate = 1
     #proba_implementation = 0.1
@@ -32,8 +32,8 @@ class Player(BasePlayer):
     treatment = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
 
-    cost = models.IntegerField(initial=0)
-    benefit = models.IntegerField(initial=0)
+    cost = models.CurrencyField(initial=0)
+    benefit = models.CurrencyField(initial=0)
     proba_gamble = models.IntegerField(initial=0)
     proba_sure = models.IntegerField(initial=0)
     #proba_implementation = models.IntegerField(initial=0)
@@ -42,8 +42,8 @@ class Player(BasePlayer):
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_decision = models.IntegerField(initial=0)
     randomly_selected_decision_control = models.IntegerField(initial=0)
-    randomly_selected_cost = models.IntegerField(initial=0)
-    randomly_selected_benefit = models.IntegerField(initial=0)
+    randomly_selected_cost = models.CurrencyField(initial=0)
+    randomly_selected_benefit = models.CurrencyField(initial=0)
     randomly_selected_proba_gamble = models.IntegerField(initial=0)
     #randomly_selected_proba_implementation = models.IntegerField(initial=0)
     #randomly_selected_conversion_rate = models.FloatField(initial=0)
@@ -74,7 +74,7 @@ class Player(BasePlayer):
             [2, 'I get fewer than 100 points, the previous participant gets more than 0 points'],
             [3, 'Both I and the previous participant get 100 points']
         ],
-        verbose_name='How will your choice to “Defect” affect both you and the previous participant?',
+        verbose_name='How will your choice of the “Selfish” option affect both you and the previous participant?',
         widget=widgets.RadioSelect
     )
 
@@ -84,7 +84,7 @@ class Player(BasePlayer):
             [2, 'The points will vary each round'],
             [3, 'The points are fixed at 50 points each'],
         ],
-        verbose_name='If you choose to “Cooperate,” '
+        verbose_name='If you choose the “Cooperate” option, '
                      'what will determine how many points you and the previous participant receive?',
         widget=widgets.RadioSelect
     )
@@ -95,7 +95,7 @@ class Player(BasePlayer):
             [2, 'Points are converted to cents at a random rate at the end of the study'],
             [3, f'Points are converted to cents at a rate that changes each round, between 1 and 10 cents per point'],
         ],
-        verbose_name=f'Will all rounds count toward the final bonus payment?',
+        verbose_name=f'How will points be converted to cents?',
         widget=widgets.RadioSelect
     )
 
@@ -105,7 +105,7 @@ class Player(BasePlayer):
             [2, f'Yes, all rounds will count'],
             [3, f'Only the last round will count']
         ],
-        verbose_name=f'How will points be converted to cents?',
+        verbose_name=f'Will all rounds count toward the final bonus payment?',
         widget=widgets.RadioSelect
     )
 
@@ -149,7 +149,7 @@ class Player(BasePlayer):
         In addition, the sum of the two numbers is always smaller than 100
         and the first number (the cost) is smaller than the second (the benefit)
         """
-        numbers = list(range(1, C.endowment-1))
+        numbers = [x / 10 for x in range(1, int(C.endowment * 10))]  # list from 0.1 to 1.9
         while True:
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
             number_1, number_2 = random.choices(numbers, k=2)
@@ -160,21 +160,22 @@ class Player(BasePlayer):
                 # print('cost', player.cost, 'benefit', player.benefit)
                 return player.cost, player.benefit
 
-    def benefit_x2(player):
-        return player.benefit * 2
-
-    def get_likelihood(player):
+    def get_gambles(player):
         """
         """
+        numbers = [x / 10 for x in range(1, int((C.endowment*2) * 10))]  # list from 0.1 to 3.9
+        probabilities = list(range(10, 100, 10))  # list from 10 to 100 in increments of 10
         while True:
-            probabilities = list(range(10, 100, 10))  # list from 10 to 100 in increments of 10
-            number_1 = random.choice(probabilities)
-            number_2 = 100 - number_1  # Calculate the complement to sum to 1
+            number_1 = random.choice(numbers)
+            proba_1 = random.choice(probabilities)
+            proba_2 = 100 - proba_1  # Calculate the complement to sum to 1
             # Check if both numbers are within the range [0.01, 0.99]
-            player.proba_gamble = number_1
-            player.proba_sure = number_2
-            print('proba_1', player.proba_gamble, 'proba_2', player.proba_sure)
-            return player.proba_gamble, player.proba_sure
+            if number_1 * (proba_1/100) >= C.endowment: # gamble's EV must be higher than sure thing
+                player.benefit = number_1
+                player.proba_gamble = proba_1
+                player.proba_sure = proba_2
+                #print('EV', (player.proba_gamble*2)*player.benefit)
+                return player.proba_gamble, player.proba_sure
 
 
     # def get_proba(player):
@@ -241,7 +242,7 @@ def gamble(player: Player):
     if player.randomly_selected_decision_control == 0: # if chose the risky choice AKA the gamble
         if player.randomly_selected_proba_gamble/100 >= random.random():
             print('you won!')
-            control_bonus = player.randomly_selected_benefit * 2
+            control_bonus = player.randomly_selected_benefit
             player.payoff = control_bonus
             return control_bonus
         else:
@@ -321,14 +322,22 @@ class SetStakes(Page):
     timeout_seconds = 1  # instant timeout
 
     def vars_for_template(player: Player):
-        return dict(
-            round_number=player.round_number,
+        if player.treatment == 'treatment':
+            return dict(
+                round_number=player.round_number,
 
-            call_benefits=player.get_benefits(),
-            call_likelihood=player.get_likelihood(),
-            # call_probability=player.get_proba(),
-            # call_conversion=player.get_conversion(),
-        )
+                call_benefits=player.get_benefits(),
+                # call_probability=player.get_proba(),
+                # call_conversion=player.get_conversion(),
+            )
+        else:
+            return dict(
+                round_number=player.round_number,
+
+                call_likelihood=player. get_gambles(),
+                # call_probability=player.get_proba(),
+                # call_conversion=player.get_conversion(),
+            )
 
 
 class Decision(Page):
@@ -341,17 +350,25 @@ class Decision(Page):
             return ['decision_control']
 
     def vars_for_template(player: Player):
-        return dict(
-            decision=player.decision,
-            decision_control=player.decision_control,
-            #proba=player.proba_implementation,
-            #conversion=player.conversion_rate,
-            cost=player.cost,
-            benefit=player.benefit,
-            gamble=player.benefit*2,
-            proba_gamble=player.proba_gamble,
-            proba_sure=player.proba_sure,
-        )
+        if player.treatment == 'treatment':
+            return dict(
+                decision=player.decision,
+                # proba=player.proba_implementation,
+                # conversion=player.conversion_rate,
+                cost=player.cost,
+                benefit=player.benefit,
+            )
+        else:
+            return dict(
+                decision_control=player.decision_control,
+                # proba=player.proba_implementation,
+                # conversion=player.conversion_rate,
+                cost=player.cost,
+                benefit=player.benefit,
+                proba_gamble=player.proba_gamble,
+                proba_sure=player.proba_sure,
+            )
+
 
 
 class RandomSelection(Page):
@@ -391,10 +408,20 @@ class End(Page):
                 random_decision_control=player.randomly_selected_decision_control,
                 random_cost=player.randomly_selected_cost,
                 random_benefit=player.randomly_selected_benefit,
-                random_bonus=player.randomly_selected_benefit*2,
+                random_bonus=player.randomly_selected_benefit,
                 #random_proba_implementation=player.randomly_selected_proba_implementation,
                 #random_conversion_rate=player.randomly_selected_conversion_rate,
             )
+
+
+class CommentBox(Page):
+    form_model = 'player'
+    form_fields = ['comment_box', 'strategy_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
 
 
 class Payment(Page):
@@ -426,13 +453,14 @@ class ProlificLink(Page):
 
 
 page_sequence = [Consent,
-                 Introduction,
+                 #Introduction,
                  SetStakes,
                  Decision,
                  # ResultsWaitPage,
                  # Results
                  RandomSelection,
                  End,
+                 CommentBox,
                  Payment,
                  ProlificLink,
                  ]
