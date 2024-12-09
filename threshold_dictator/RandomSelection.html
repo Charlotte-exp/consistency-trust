@@ -6,6 +6,8 @@ Summary of the task
 
 {{ block content }}
 
+<p style="color:white;">{{ call_payment }}</p>
+
 <p>
     This was the last round.
 </p>
@@ -32,6 +34,11 @@ Summary of the task
         </tr>
     </table>
 
+<p>
+    When you press the randomiser button, one round will be randomly selected.
+    The option you chose on that round is the one you and the previous participant will receive as bonus payment.
+</p>
+
 {{ else }}
 
     <table class="table">
@@ -51,14 +58,13 @@ Summary of the task
         </tr>
     </table>
 
+    <p>
+        When you press the randomiser button, one round will be randomly selected.
+        The option you chose on that round is the one you will receive.
+    </p>
+
 {{ endif }}
 
-<p style="color:white;">{{ call_payment }}</p>
-
-<p>
-    When you press the randomiser button, one round will be randomly selected.
-    The option you chose on that round is the one you and the previous participant will receive as bonus payment.
-</p>
 <p>
     <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
 </p>
