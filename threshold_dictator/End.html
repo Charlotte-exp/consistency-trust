@@ -18,8 +18,8 @@ Summary of the task
     <table class="table">
         <tr>
             <th>Round</th>
-            <th>Cost</th>
-            <th>Benefit</th>
+            <th>Your bonus</th>
+            <th>The previous participant's bonus</th>
             <th>Choice</th>
         </tr>
         {{ for p in player_in_all_rounds }}
@@ -50,8 +50,8 @@ Summary of the task
             </div>
             {{ endif }}
         <p>
-            This means that you will receive {{ random_cost }} points as a bonus,
-            and the previous participant will receive {{ random_benefit }} points as their bonus.
+            This means that you will receive <b>{{ random_cost }}</b> points as a bonus,
+            and the previous participant will receive <b>{{ random_benefit }}</b> points as their bonus.
         </p>
     </div>
 </div>
@@ -89,14 +89,16 @@ Summary of the task
             </div>
 
                 <p>
-                    And the result of that gamble gives you: {{ payoff }}.
+                    Since you chose the risky gamble,
+                    the randomiser button also selected an outcome for that. <br>
+                    The result of that gamble gives you: <b>{{ payoff }}</b>.
                 </p>
             {{ else }}
             <div class="card-body">
                 <b>Safe option</b>
             </div>
             <p>
-                This means that you will receive {{ C.safe_option }} points as a bonus.
+                This means that you will receive <b>{{ C.safe_option }}</b> points as a bonus.
             </p>
             {{ endif }}
     </div>
