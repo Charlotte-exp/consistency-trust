@@ -70,9 +70,9 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, 'I get 100 points, the previous participant gets 0 points'],
-            [2, 'I get fewer than 100 points, the previous participant gets more than 0 points'],
-            [3, 'Both I and the previous participant get 100 points']
+            [1, f'I get { C.endowment }, the previous participant gets £0'],
+            [2, f'I get fewer than { C.endowment }, the previous participant gets more than £0'],
+            [3, f'Both I and the previous participant get { C.endowment }']
         ],
         verbose_name='How will your choice of the “Selfish” option affect both you and the previous participant?',
         widget=widgets.RadioSelect
@@ -81,11 +81,11 @@ class Player(BasePlayer):
     q2 = models.IntegerField(
         choices=[
             [1, 'It will always be the same'],
-            [2, 'The points will vary each round'],
-            [3, 'The points are fixed at 50 points each'],
+            [2, 'The amounts will vary each round'],
+            [3, f'The amounts are fixed at { C.endowment/2 } each'],
         ],
         verbose_name='If you choose the “Cooperate” option, '
-                     'what will determine how many points you and the previous participant receive?',
+                     'what will determine the bonus amount you and the previous participant receive?',
         widget=widgets.RadioSelect
     )
 
@@ -102,8 +102,8 @@ class Player(BasePlayer):
     q4 = models.IntegerField(
         choices=[
             [1, 'No, only one round will be randomly selected to count'],
-            [2, f'Yes, all rounds will count'],
-            [3, f'Only the last round will count']
+            [2, 'Yes, all rounds will count'],
+            [3, 'Only the last round will count']
         ],
         verbose_name=f'Will all rounds count toward the final bonus payment?',
         widget=widgets.RadioSelect
@@ -111,9 +111,9 @@ class Player(BasePlayer):
 
     q5 = models.IntegerField(
         choices=[
-            [1, 'If that round is selected, 100 cents will be added to your bonus.'],
-            [2, f'If that round is selected, your bonus may go up by more than 100 cents. '
-                f'How much more and with what probability will vary by round.'],
+            [1, f'If that round is selected, { C.endowment } will be added to your bonus.'],
+            [2, f'If that round is selected, your bonus may go up by more than { C.endowment }. '
+                'How much more and with what probability will vary by round.'],
         ],
         verbose_name=f'How will your choice of “sure thing” affect your bonus?',
         widget=widgets.RadioSelect
@@ -121,12 +121,11 @@ class Player(BasePlayer):
 
     q6 = models.IntegerField(
         choices=[
-            [1, 'If that round is selected, 100 cents will be added to your bonus.'],
-            [2, f'If that round is selected, your bonus may go up by more than 100 cents. '
-                f'How much more and with what probability will vary by round.'],
+            [1, f'If that round is selected, { C.endowment } will be added to your bonus.'],
+            [2, f'If that round is selected, your bonus may go up by more than { C.endowment }. '
+                'How much more and with what probability will vary by round.'],
         ],
-        verbose_name=f'If you choose the “risky option,” '
-                     f'what will determine how many points you and the previous participant receive?',
+        verbose_name=f'How will your choice of “risky option” affect your bonus?',
         widget=widgets.RadioSelect
     )
 
