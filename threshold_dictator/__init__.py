@@ -61,8 +61,8 @@ class Player(BasePlayer):
     decision_control = models.IntegerField(
         initial=0,
         choices=[
-            [0, f'Risky option'],  # defect
-            [1, f'Safe option'],  # cooperate
+            [0, f'Safe option'],
+            [1, f'Risky option'],
         ],
         verbose_name='Your choice:',
         widget=widgets.RadioSelect
@@ -240,17 +240,17 @@ def random_payment(player: Player):
 def gamble(player: Player):
     if player.randomly_selected_decision_control == 0: # if chose the risky choice AKA the gamble
         if player.randomly_selected_proba_gamble/100 >= random.random():
-            print('you won!')
+            #print('you won!')
             control_bonus = player.randomly_selected_benefit
             player.payoff = control_bonus
             return control_bonus
         else:
-            print('you lost!')
+            #print('you lost!')
             control_bonus = 0
             player.payoff = control_bonus
             return control_bonus
     else:
-        print('you are safe!')
+        #print('you are safe!')
         control_bonus = C.safe_option
         player.payoff = control_bonus
         return control_bonus

@@ -18,16 +18,21 @@ Summary of the task
     <table class="table">
         <tr>
             <th>Round</th>
+            <th>Choice</th>
             <th>Your bonus</th>
             <th>The previous participant's bonus</th>
-            <th>Choice</th>
         </tr>
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
+            <td>{{ p.get_decision_display }}</td>
+            {{ if p.decision == 1}}
             <td>{{ p.cost }}</td>
             <td>{{ p.benefit }}</td>
-            <td>{{ p.get_decision_display }}</td>
+            {{ else }}
+            <td>{{ C.endowment }}</td>
+            <td>£0</td>
+            {{ endif }}
         {{ endfor }}
         </tr>
     </table>
@@ -44,15 +49,19 @@ Summary of the task
             <div class="card-body">
                 <b>Selfish option</b>
             </div>
+            <p>
+                This means that you will receive <b>{{ C.endowment }}</b> points as a bonus,
+                and the previous participant will receive <b>£0</b> points as their bonus.
+            </p>
             {{ else }}
             <div class="card-body">
                 <b>Cooperative option</b>
             </div>
+            <p>
+                This means that you will receive <b>{{ random_cost }}</b> points as a bonus,
+                and the previous participant will receive <b>{{ random_benefit }}</b> points as their bonus.
+            </p>
             {{ endif }}
-        <p>
-            This means that you will receive <b>{{ random_cost }}</b> points as a bonus,
-            and the previous participant will receive <b>{{ random_benefit }}</b> points as their bonus.
-        </p>
     </div>
 </div>
 
@@ -61,18 +70,23 @@ Summary of the task
     <table class="table">
         <tr>
             <th>Round</th>
+            <th>Choice</th>
             <th>Bonus</th>
             <th>Probability</th>
-            <th>Choice</th>
         </tr>
         {{ for p in player_in_all_rounds }}
         <tr>
             <td>{{ p.round_number }}</td>
-            <td>{{ p.benefit}}</td>
-            <td>{{ p.proba_gamble }}%</td>
             <td>{{ p.get_decision_control_display }}</td>
-        {{ endfor }}
+            {{ if p.decision_control == 1}}
+            <td>{{ p.benefit }}</td>
+            <td>{{ p.proba_gamble }}%</td>
+            {{ else }}
+            <td>{{ C.safe_option }}</td>
+            <td>100% (for sure)</td>
+            {{ endif }}
         </tr>
+        {{ endfor }}
     </table>
 
 <p> </p>
@@ -87,12 +101,11 @@ Summary of the task
             <div class="card-body">
                 <b>Risky option</b>
             </div>
-
-                <p>
-                    Since you chose the risky gamble,
-                    the randomiser button also selected an outcome for that. <br>
-                    The result of that gamble gives you: <b>{{ payoff }}</b>.
-                </p>
+            <p>
+                Since you chose the risky gamble,
+                the randomiser button also selected an outcome for that. <br>
+                The result of that gamble gives you: <b>{{ payoff }}</b>.
+            </p>
             {{ else }}
             <div class="card-body">
                 <b>Safe option</b>
