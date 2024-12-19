@@ -13,6 +13,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 10
+    half_rounds = int(NUM_ROUNDS/2)
 
     endowment = cu(2)  # maximum range
     safe_option = endowment
@@ -142,20 +143,6 @@ class Player(BasePlayer):
     strategy_box = models.LongStringField(
         verbose_name=''
     )
-
-    def get_balanced_treatments(player):
-        if 1 <= player.round_number <= C.NUM_ROUNDS / 2 and player.treatment == 'treatment-control':
-            player.treatment = 'treatment'
-            print('treatment is', player.treatment)
-        elif C.NUM_ROUNDS / 2 + 1 <= player.round_number <= C.NUM_ROUNDS and player.treatment == 'treatment-control':
-            player.treatment = 'control'
-            print('treatment is', player.treatment)
-        elif 1 <= player.round_number <= C.NUM_ROUNDS / 2 and player.treatment == 'control-treatment':
-            player.treatment = 'control'
-            print('treatment is', player.treatment)
-        elif C.NUM_ROUNDS / 2 + 1 <= player.round_number <= C.NUM_ROUNDS and player.treatment == 'control-treatment':
-            player.treatment = 'treatment'
-            print('treatment is', player.treatment)
 
     def get_benefits(player):
         """
@@ -305,6 +292,17 @@ class Consent(Page):
 class Introduction(Page):
     form_model = 'player'
 
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        else:
+            return False
+
+
+class Instructions(Page):
+    form_model = 'player'
+
     def get_form_fields(player:Player):
         if player.treatment == 'treatment':
             return ['q1', 'q2', 'q4']
@@ -353,7 +351,6 @@ class SetStakes(Page):
         if player.treatment == 'treatment':
             return dict(
                 round_number=player.round_number,
-                call_treatments=player.get_balanced_treatments(),
 
                 call_benefits=player.get_benefits(),
                 # call_probability=player.get_proba(),
@@ -362,7 +359,6 @@ class SetStakes(Page):
         else:
             return dict(
                 round_number=player.round_number,
-                call_treatments=player.get_balanced_treatments(),
 
                 call_likelihood=player. get_gambles(),
                 # call_probability=player.get_proba(),
@@ -542,6 +538,7 @@ class ProlificLink(Page):
 
 page_sequence = [Consent,
                  Introduction,
+                 Instructions,
                  SetStakes,
                  Decision,
                  # ResultsWaitPage,

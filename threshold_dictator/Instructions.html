@@ -1,0 +1,114 @@
+{{ block title }}
+Instructions
+{{ endblock }}
+
+
+{{ block content }}
+
+{{ if treatment == 'treatment' }}
+
+<div>
+    <p>
+        In this study, we’re exploring how people make cooperative decisions.
+    </p>
+    <p>
+        In each of {{ C.NUM_ROUNDS }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
+    </p>
+    <p>
+        The choices you make will affect your bonus as well as the bonus of a previous participant who participated in this study,
+        as follows:
+        <ul>
+            <li>
+                Selfish option: You receive {{ C.endowment }}, while the previous participant receives £0.
+            </li>
+            <li>
+                Cooperative option: You receive <u>fewer</u> than {{ C.endowment }},
+                and the previous participant receives <u>more</u> than £0.
+            </li>
+        </ul>
+        The exact amount you and the previous participant will receive,
+        if you choose the cooperative option, will vary each round
+    </p>
+    <p>
+        Only one round will be chosen to count toward the final bonus.
+        This round will be selected at random after you have completed all rounds.
+        Each round has an equal chance of being selected.
+        Only amounts from the chosen round will be added to your and the previous participant’s bonus payments.
+    </p>
+</div>
+
+<br>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <h4>Now we will ask some comprehension questions to check your understanding:</h4>
+        {% for field in form %}
+            {% formfield field %}
+        {% endfor %}
+    </div>
+</div>
+
+
+{{ else }}
+
+<div>
+    <p>
+        In this study, we’re exploring how people make financial decisions involving risk.
+    </p>
+
+    <p>
+        In each of {{ C.NUM_ROUNDS }} rounds,
+        you’ll choose between two options: a “risky” option” and a “sure thing”.
+    </p>
+
+    <p>
+        The choices you make will affect your bonus as follows:
+        <ul>
+            <li>
+                Sure thing: You receive {{ C.endowment }}.
+            </li>
+            <li>
+                Risky option: You have a chance of earning more than {{ C.endowment }}.
+                But you also might earn nothing.
+            </li>
+        </ul>
+    </p>
+
+    <p>
+        The exact amounts you might earn by selecting the risky option
+        and the exact probability with which you might earn it will vary each round.
+    </p>
+    <p>
+        Only one round will be chosen to count toward the final bonus.
+        This round will be selected at random after you have completed all rounds.
+        Each round has an equal chance of being selected.
+        Only amounts from the chosen round will be added to your bonus.
+    </p>
+    <p>
+        If you selected the risky option in that round
+        we will then randomly determine whether you get the specified bonus based on the specified probability.
+    </p>
+</div>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <h4>Now we will ask some comprehension questions to check your understanding:</h4>
+        {% for field in form %}
+            {% formfield field %}
+        {% endfor %}
+    </div>
+</div>
+
+{{ endif }}
+
+<br>
+    <p>
+        When you click the next button, you will immediately start the first task.
+    </p>
+    <p>
+        <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+        </div>
+    </p>
+
+{{ endblock }}
