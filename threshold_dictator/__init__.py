@@ -12,7 +12,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 5
+    NUM_ROUNDS = 10
 
     endowment = cu(2)  # maximum range
     safe_option = endowment
@@ -30,6 +30,7 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     treatment = models.StringField(initial='')
+    balanced_order = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
 
     cost = models.CurrencyField(initial=0)
@@ -142,6 +143,20 @@ class Player(BasePlayer):
         verbose_name=''
     )
 
+    def get_balanced_treatments(player):
+        if 1 <= player.round_number <= C.NUM_ROUNDS / 2 and player.treatment == 'treatment-control':
+            player.treatment = 'treatment'
+            print('treatment is', player.treatment)
+        elif C.NUM_ROUNDS / 2 + 1 <= player.round_number <= C.NUM_ROUNDS and player.treatment == 'treatment-control':
+            player.treatment = 'control'
+            print('treatment is', player.treatment)
+        elif 1 <= player.round_number <= C.NUM_ROUNDS / 2 and player.treatment == 'control-treatment':
+            player.treatment = 'control'
+            print('treatment is', player.treatment)
+        elif C.NUM_ROUNDS / 2 + 1 <= player.round_number <= C.NUM_ROUNDS and player.treatment == 'control-treatment':
+            player.treatment = 'treatment'
+            print('treatment is', player.treatment)
+
     def get_benefits(player):
         """
         This function returns two numbers between 1 and 9 on each round to become the benefit and the cost.
@@ -209,12 +224,26 @@ def creating_session(subsession):
     It simply cycles through the list of treatments (high & low) and that's saved in the participant vars.
     """
 
-    treatments = itertools.cycle(['treatment', 'control'])
+    order = itertools.cycle(['treatment-control', 'control-treatment'])
     for p in subsession.get_players():
-        p.treatment = next(treatments)
-        p.participant.condition = p.treatment
+        p.balanced_order = next(order)
+        p.participant.balanced_order = p.balanced_order
         # print('condition is', p.condition)
         # print('vars condition is', p.participant.condition)
+        half_rounds = C.NUM_ROUNDS // 2
+        if subsession.round_number <= half_rounds:
+            # First half of the rounds
+            p.treatment = 'treatment' if p.balanced_order == 'treatment-control' else 'control'
+        else:
+            # Second half of the rounds
+            p.treatment = 'control' if p.balanced_order == 'treatment-control' else 'treatment'
+
+        # Debugging information
+        print(
+            f"Round {subsession.round_number}: "
+            f"Player {p.id_in_group}, "
+            f"Balanced Order: {p.balanced_order}, "
+            f"Treatment: {p.treatment}")
 
 
 def random_payment(player: Player):
@@ -300,7 +329,7 @@ class Introduction(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        if player.round_number == 1:
+        if player.round_number == 1 or player.round_number == C.NUM_ROUNDS/2+1:
             return True
         else:
             return False
@@ -324,6 +353,7 @@ class SetStakes(Page):
         if player.treatment == 'treatment':
             return dict(
                 round_number=player.round_number,
+                call_treatments=player.get_balanced_treatments(),
 
                 call_benefits=player.get_benefits(),
                 # call_probability=player.get_proba(),
@@ -332,6 +362,7 @@ class SetStakes(Page):
         else:
             return dict(
                 round_number=player.round_number,
+                call_treatments=player.get_balanced_treatments(),
 
                 call_likelihood=player. get_gambles(),
                 # call_probability=player.get_proba(),
@@ -369,6 +400,39 @@ class Decision(Page):
             )
 
 
+class Results(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS/2 or player.round_number == C.NUM_ROUNDS :
+            return True
+
+    def vars_for_template(player: Player):
+        total_rounds = C.NUM_ROUNDS
+        half_rounds = total_rounds // 2
+
+        all_rounds = player.in_all_rounds()
+        in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
+        in_second_half = [p for p in all_rounds if p.round_number > half_rounds]
+
+        player_in_first_half = player.in_round(1)
+        player_in_second_half = player.in_round(half_rounds+1)
+        if player.round_number == half_rounds:
+            return dict(
+                player_in_this_half=in_first_half,
+                treatment_in_this_half=player_in_first_half.treatment,
+
+                half_rounds=half_rounds,
+            )
+        else:
+            return dict(
+                player_in_this_half=in_second_half,
+                treatment_in_this_half=player_in_second_half.treatment,
+
+                half_rounds=half_rounds,
+            )
+
 
 class RandomSelection(Page):
     form_model = 'player'
@@ -380,9 +444,21 @@ class RandomSelection(Page):
             return True
 
     def vars_for_template(player: Player):
+        total_rounds = C.NUM_ROUNDS
+        half_rounds = total_rounds // 2
+
+        all_rounds = player.in_all_rounds()
+        in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
+        in_second_half = [p for p in all_rounds if p.round_number > half_rounds]
+
+        player_in_first_half = player.in_round(1)
+        player_in_second_half = player.in_round(half_rounds+1)
         return dict(
             player_in_all_rounds=player.in_all_rounds(),
-            total_payoff=sum([p.payoff for p in player.in_all_rounds()]),
+            player_in_first_half=in_first_half,
+            player_in_second_half=in_second_half,
+            treatment_in_first_half=player_in_first_half.treatment,
+            treatment_in_second_half=player_in_second_half.treatment,
 
             call_payment=random_payment(player),
             call_gamble=gamble(player),
@@ -398,19 +474,32 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
-        return dict(
-                player_in_all_rounds=player.in_all_rounds(),
-                payoff=player.payoff,  # for control
+        total_rounds = C.NUM_ROUNDS
+        half_rounds = total_rounds // 2
 
-                random_round=player.randomly_selected_round,
-                random_decision=player.randomly_selected_decision,
-                random_decision_control=player.randomly_selected_decision_control,
-                random_cost=player.randomly_selected_cost,
-                random_benefit=player.randomly_selected_benefit,
-                random_bonus=player.randomly_selected_benefit,
-                #random_proba_implementation=player.randomly_selected_proba_implementation,
-                #random_conversion_rate=player.randomly_selected_conversion_rate,
-            )
+        all_rounds = player.in_all_rounds()
+        in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
+        in_second_half = [p for p in all_rounds if p.round_number > half_rounds]
+
+        player_in_first_half = player.in_round(1)
+        player_in_second_half = player.in_round(half_rounds + 1)
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            player_in_first_half=in_first_half,
+            player_in_second_half=in_second_half,
+            treatment_in_first_half=player_in_first_half.treatment,
+            treatment_in_second_half=player_in_second_half.treatment,
+            payoff=player.payoff,  # for control
+
+            random_round=player.randomly_selected_round,
+            random_decision=player.randomly_selected_decision,
+            random_decision_control=player.randomly_selected_decision_control,
+            random_cost=player.randomly_selected_cost,
+            random_benefit=player.randomly_selected_benefit,
+            random_bonus=player.randomly_selected_benefit,
+            #random_proba_implementation=player.randomly_selected_proba_implementation,
+            #random_conversion_rate=player.randomly_selected_conversion_rate,
+        )
 
 
 class CommentBox(Page):
@@ -456,7 +545,7 @@ page_sequence = [Consent,
                  SetStakes,
                  Decision,
                  # ResultsWaitPage,
-                 # Results
+                 Results,
                  RandomSelection,
                  End,
                  CommentBox,

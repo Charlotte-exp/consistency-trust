@@ -1,6 +1,6 @@
 {{ block title }}
 
-Summary of the task
+Summary of the tasks
 
 {{ endblock }}
 
@@ -13,7 +13,11 @@ Summary of the task
     Here is a summary of all your choices: <br>
 </p>
 
-    {{ if player.treatment == 'treatment'}}
+    {{ if treatment_in_first_half == 'treatment'}}
+
+    <p>
+        First task:
+    </p>
 
     <table class="table">
         <tr>
@@ -22,7 +26,7 @@ Summary of the task
             <th>Your bonus</th>
             <th>The previous participant's bonus</th>
         </tr>
-        {{ for p in player_in_all_rounds }}
+        {{ for p in player_in_first_half }}
         <tr>
             <td>{{ p.round_number }}</td>
             <td>{{ p.get_decision_display }}</td>
@@ -33,11 +37,65 @@ Summary of the task
             <td>{{ C.endowment }}</td>
             <td>£0</td>
             {{ endif }}
-        {{ endfor }}
         </tr>
+        {{ endfor }}
+    </table>
+<br>
+
+    <p>
+        Second task:
+    </p>
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Choice</th>
+            <th>Bonus</th>
+            <th>Probability</th>
+        </tr>
+        {{ for p in player_in_second_half }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.get_decision_control_display }}</td>
+            {{ if p.decision_control == 1}}
+            <td>{{ p.benefit }}</td>
+            <td>{{ p.proba_gamble }}%</td>
+            {{ else }}
+            <td>{{ C.safe_option }}</td>
+            <td>100% (for sure)</td>
+            {{ endif }}
+        </tr>
+        {{ endfor }}
     </table>
 
 <p> </p>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your choice on that round was:
+        </p>
+            {{ if random_decision_control == 1 }}
+            <div class="card-body">
+                <b>Risky option</b>
+            </div>
+            <p>
+                Since you chose the risky gamble,
+                the randomiser button also selected an outcome for that. <br>
+                The result of that gamble gives you: <b>{{ payoff }}</b>.
+            </p>
+            {{ else }}
+            <div class="card-body">
+                <b>Safe option</b>
+            </div>
+            <p>
+                This means that you will receive <b>{{ C.safe_option }}</b> points as a bonus.
+            </p>
+            {{ endif }}
+    </div>
+</div>
+
 
 <div class="card bg-light instructions">
     <div  class="card-body">
@@ -65,7 +123,14 @@ Summary of the task
     </div>
 </div>
 
-{{ else }}
+{{ endif }}
+
+
+{{ if treatment_in_first_half == 'control' }}
+
+    <p>
+        First task:
+    </p>
 
     <table class="table">
         <tr>
@@ -74,7 +139,7 @@ Summary of the task
             <th>Bonus</th>
             <th>Probability</th>
         </tr>
-        {{ for p in player_in_all_rounds }}
+        {{ for p in player_in_second_half }}
         <tr>
             <td>{{ p.round_number }}</td>
             <td>{{ p.get_decision_control_display }}</td>
@@ -90,6 +155,59 @@ Summary of the task
     </table>
 
 <p> </p>
+
+    <p>
+        Second task:
+    </p>
+
+<table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Choice</th>
+            <th>Your bonus</th>
+            <th>The previous participant's bonus</th>
+        </tr>
+        {{ for p in player_in_first_half }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.get_decision_display }}</td>
+            {{ if p.decision == 1}}
+            <td>{{ p.cost }}</td>
+            <td>{{ p.benefit }}</td>
+            {{ else }}
+            <td>{{ C.endowment }}</td>
+            <td>£0</td>
+            {{ endif }}
+        </tr>
+        {{ endfor }}
+    </table>
+<br>
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <p>
+            The round randomly selected for payment is <b>{{ random_round }}</b>.
+            Your choice on that round was:
+        </p>
+            {{ if random_decision == 0 }}
+            <div class="card-body">
+                <b>Selfish option</b>
+            </div>
+            <p>
+                This means that you will receive <b>{{ C.endowment }}</b> points as a bonus,
+                and the previous participant will receive <b>£0</b> points as their bonus.
+            </p>
+            {{ else }}
+            <div class="card-body">
+                <b>Cooperative option</b>
+            </div>
+            <p>
+                This means that you will receive <b>{{ random_cost }}</b> points as a bonus,
+                and the previous participant will receive <b>{{ random_benefit }}</b> points as their bonus.
+            </p>
+            {{ endif }}
+    </div>
+</div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">

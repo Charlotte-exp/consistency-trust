@@ -1,10 +1,87 @@
 {{ block title }}
-    Page title
+    Summary of the task
 {{ endblock }}
 
 {{ block content }}
 
-    {{ next_button }}
+{{ if player.round_number == half_rounds }}
+    <p>
+        The first task is now done.
+        Below is the summary of your choices
+    </p>
+{{ else }}
+    <p>
+        The second task is now done.
+        Below is the summary of your choices
+    </p>
+{{ endif }}
+
+{{ if treatment_in_this_half == 'treatment'}}
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Choice</th>
+            <th>Your bonus</th>
+            <th>The previous participant's bonus</th>
+        </tr>
+        {{ for p in player_in_this_half }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.get_decision_display }}</td>
+            {{ if p.decision == 1}}
+            <td>{{ p.cost }}</td>
+            <td>{{ p.benefit }}</td>
+            {{ else }}
+            <td>{{ C.endowment }}</td>
+            <td>£0</td>
+            {{ endif }}
+        </tr>
+        {{ endfor }}
+    </table>
+<br>
+
+{{ endif }}
+
+
+{{ if treatment_in_this_half == 'control'}}
+
+    <table class="table">
+        <tr>
+            <th>Round</th>
+            <th>Choice</th>
+            <th>Bonus</th>
+            <th>Probability</th>
+        </tr>
+        {{ for p in player_in_this_half }}
+        <tr>
+            <td>{{ p.round_number }}</td>
+            <td>{{ p.get_decision_control_display }}</td>
+            {{ if p.decision_control == 1}}
+            <td>{{ p.benefit }}</td>
+            <td>{{ p.proba_gamble }}%</td>
+            {{ else }}
+            <td>{{ C.safe_option }}</td>
+            <td>100% (for sure)</td>
+            {{ endif }}
+        </tr>
+        {{ endfor }}
+    </table>
+<br>
+
+{{ endif }}
+
+
+{{ if player.round_number == half_rounds }}
+    <p>
+        When you click the next button, you will immediately start the second task.
+    </p>
+{{ endif }}
+
+    <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+    </div>
+
 {{ endblock }}
 
 
