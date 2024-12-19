@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
         name='threshold_dictator',
         display_name="otree5 dictator for threshold analysis",
         app_sequence=['threshold_dictator'],
-        num_demo_participants=8,
+        num_demo_participants=30,
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
     ),

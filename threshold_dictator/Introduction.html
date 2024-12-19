@@ -17,39 +17,31 @@ Instructions
 
 <div>
     <p>
-        In this study, we’re exploring how people make cooperative decisions across a series of choices,
-        with some conditions changing each time.
+        In this study, we’re exploring how people make cooperative decisions.
     </p>
     <p>
-        In each of 20 rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
+        In each of {{ C.NUM_ROUNDS }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
     </p>
     <p>
         The choices you make will affect your bonus as well as the bonus of a previous participant who participated in this study,
         as follows:
         <ul>
             <li>
-                Selfish option: You receive 100 points, while the previous participant receives 0 points.
+                Selfish option: You receive {{ C.endowment }}, while the previous participant receives £0.
             </li>
             <li>
-                Cooperative option: You receive fewer than 100 points,
-                and the previous participant receives more than 0 points.
+                Cooperative option: You receive <u>fewer</u> than {{ C.endowment }},
+                and the previous participant receives <u>more</u> than £0.
             </li>
         </ul>
-        The exact points awarded will vary each round.
-    </p>
-    <p>
-        These points will be converted to cents and added to your and the previous participant’s bonus payments.
+        The exact amount you and the previous participant will receive,
+        if you choose the cooperative option, will vary each round
     </p>
     <p>
         Only one round will be chosen to count toward the final bonus.
-        The chance of any given round being selected varies,
-        ranging from 1% to 10%.
-        Only points from the chosen round will be added to your and the previous participant’s bonus payments.
-    </p>
-    <p>
-        On each decision screen, you’ll see all the relevant information for that round,
-        including your points,
-        and the previous participant’s points.
+        This round will be selected at random after you have completed all rounds.
+        Each round has an equal chance of being selected.
+        Only amounts from the chosen round will be added to your and the previous participant’s bonus payments.
     </p>
 </div>
 
@@ -73,29 +65,32 @@ Instructions
     </p>
 
     <p>
-        In each of 20 rounds, you’ll choose between two options: a “risky” option and a “sure thing”.
+        In each of {{ C.NUM_ROUNDS }} rounds,
+        you’ll choose between two options: a “risky” option” and a “sure thing”.
     </p>
 
     <p>
         The choices you make will affect your bonus as follows:
         <ul>
             <li>
-                Sure thing: You receive 100 cents.
+                Sure thing: You receive {{ C.endowment }}.
             </li>
             <li>
-                Risky option: You have a chance of earning more than 100 cents.
+                Risky option: You have a chance of earning more than {{ C.endowment }}.
                 But you also might earn nothing.
             </li>
         </ul>
     </p>
 
     <p>
-        The exact number of cents you might earn by selecting the risky option
+        The exact amounts you might earn by selecting the risky option
         and the exact probability with which you might earn it will vary each round.
     </p>
     <p>
         Only one round will be chosen to count toward the final bonus.
         This round will be selected at random after you have completed all rounds.
+        Each round has an equal chance of being selected.
+        Only amounts from the chosen round will be added to your bonus.
     </p>
     <p>
         If you selected the risky option in that round
@@ -115,6 +110,9 @@ Instructions
 {{ endif }}
 
 <br>
+    <p>
+        When you click the next button, you will immediately start the first round.
+    </p>
     <p>
         <div style="display: flex; justify-content: flex-end">
         {% next_button %}
