@@ -1,5 +1,11 @@
 {{ block title }}
-Instructions
+
+{{ if player.round_number == 1 }}
+    Instructions for the first task
+{{ else }}
+    Instructions for the second task
+{{ endif }}
+
 {{ endblock }}
 
 
@@ -9,13 +15,14 @@ Instructions
 
 <div>
     <p>
-        In this study, we’re exploring how people make cooperative decisions.
+        In this task, we’re exploring how people make cooperative decisions.
     </p>
     <p>
-        In each of {{ C.NUM_ROUNDS }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
+        In each of {{ C.half_rounds }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
     </p>
     <p>
-        The choices you make will affect your bonus as well as the bonus of a previous participant who participated in this study,
+        The choices you make will affect your bonus
+        as well as the bonus of a previous participant who participated in this study,
         as follows:
         <ul>
             <li>
@@ -28,12 +35,6 @@ Instructions
         </ul>
         The exact amount you and the previous participant will receive,
         if you choose the cooperative option, will vary each round
-    </p>
-    <p>
-        Only one round will be chosen to count toward the final bonus.
-        This round will be selected at random after you have completed all rounds.
-        Each round has an equal chance of being selected.
-        Only amounts from the chosen round will be added to your and the previous participant’s bonus payments.
     </p>
 </div>
 
@@ -53,11 +54,11 @@ Instructions
 
 <div>
     <p>
-        In this study, we’re exploring how people make financial decisions involving risk.
+        In this task, we’re exploring how people make financial decisions involving risk.
     </p>
 
     <p>
-        In each of {{ C.NUM_ROUNDS }} rounds,
+        In each of {{ C.half_rounds }} rounds,
         you’ll choose between two options: a “risky” option” and a “sure thing”.
     </p>
 
@@ -77,16 +78,6 @@ Instructions
     <p>
         The exact amounts you might earn by selecting the risky option
         and the exact probability with which you might earn it will vary each round.
-    </p>
-    <p>
-        Only one round will be chosen to count toward the final bonus.
-        This round will be selected at random after you have completed all rounds.
-        Each round has an equal chance of being selected.
-        Only amounts from the chosen round will be added to your bonus.
-    </p>
-    <p>
-        If you selected the risky option in that round
-        we will then randomly determine whether you get the specified bonus based on the specified probability.
     </p>
 </div>
 

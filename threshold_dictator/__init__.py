@@ -51,7 +51,7 @@ class Player(BasePlayer):
     #randomly_selected_conversion_rate = models.FloatField(initial=0)
 
     decision = models.IntegerField(
-        initial=0,
+        initial=2,
         choices=[
             [0, f'Selfish option'],  # defect
             [1, f'Cooperative option'],  # cooperate
@@ -61,7 +61,7 @@ class Player(BasePlayer):
     )
 
     decision_control = models.IntegerField(
-        initial=0,
+        initial=2,
         choices=[
             [0, f'Safe option'],
             [1, f'Risky option'],
@@ -305,7 +305,7 @@ class Instructions(Page):
 
     def get_form_fields(player:Player):
         if player.treatment == 'treatment':
-            return ['q1', 'q2', 'q4']
+            return ['q1', 'q2']
         else:
             return ['q5', 'q6']
 
@@ -315,7 +315,7 @@ class Instructions(Page):
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
         if player.treatment == 'treatment':
-            solutions = dict(q1=1, q2=2, q4=1)
+            solutions = dict(q1=1, q2=2)
         else:
             solutions = dict(q5=1, q6=2)
         # error_message can return a dict whose keys are field names and whose values are error messages

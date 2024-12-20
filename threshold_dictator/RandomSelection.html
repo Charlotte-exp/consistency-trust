@@ -64,15 +64,6 @@ Summary of the complete experiment
         {{ endfor }}
     </table>
 
-    <p>
-        When you press the randomiser button, one round will be randomly selected.
-        The option you chose on that round is the one you will receive.
-    </p>
-    <p>
-        When you press the randomiser button, one round will be randomly selected.
-        The option you chose on that round is the one you and the previous participant will receive as bonus payment.
-    </p>
-
 {{ endif }}
 
 
@@ -89,7 +80,7 @@ Summary of the complete experiment
             <th>Bonus</th>
             <th>Probability</th>
         </tr>
-        {{ for p in player_in_second_half }}
+        {{ for p in player_in_first_half }}
         <tr>
             <td>{{ p.round_number }}</td>
             <td>{{ p.get_decision_control_display }}</td>
@@ -115,7 +106,7 @@ Summary of the complete experiment
             <th>Your bonus</th>
             <th>The previous participant's bonus</th>
         </tr>
-        {{ for p in player_in_first_half }}
+        {{ for p in player_in_second_half }}
         <tr>
             <td>{{ p.round_number }}</td>
             <td>{{ p.get_decision_display }}</td>
@@ -129,17 +120,21 @@ Summary of the complete experiment
         </tr>
         {{ endfor }}
     </table>
-<br>
-    <p>
-        When you press the randomiser button, one round will be randomly selected.
-        The option you chose on that round is the one you and the previous participant will receive as bonus payment.
-    </p>
-    <p>
-        When you press the randomiser button, one round will be randomly selected.
-        The option you chose on that round is the one you will receive.
-    </p>
 
 {{ endif }}
+
+<br>
+    <p>
+        When you press the randomiser button, one round out of the {{ C.NUM_ROUNDS }} above will be randomly selected.
+        The option you chose on that round is the one you will receive.
+    </p>
+    <p>
+        If one of the cooperative/selfish rounds is selected,
+        the option you chose on that round is the one you and the previous participant will receive as bonus payment.
+        If one of the risky/safe rounds is selected,
+        and you selected the risky option in that round,
+        the computer will automatically randomly determine whether you get the specified bonus based on the specified probability.
+    </p>
 
 <p>
     <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
