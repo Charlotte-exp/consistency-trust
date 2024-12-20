@@ -8,7 +8,7 @@ SESSION_CONFIGS = [
         display_name="otree5 dictator for threshold analysis",
         app_sequence=['threshold_dictator'],
         num_demo_participants=30,
-        use_browser_bots=False,
+        use_browser_bots=True,
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
@@ -52,7 +52,7 @@ SESSION_CONFIG_DEFAULTS = dict(
 )
 
 SESSION_FIELDS = []
-PARTICIPANT_FIELDS = ['treatment', 'role', 'is_dropout',
+PARTICIPANT_FIELDS = ['balanced_order', 'treatment', 'role', 'is_dropout',
                       'randomly_selected_round', 'randomly_selected_decision', 'randomly_selected_decision_control',
                       'randomly_selected_cost', 'randomly_selected_benefit', 'randomly_selected_proba_gamble',
                       'randomly_selected_proba_implementation', 'randomly_selected_conversion_rate'

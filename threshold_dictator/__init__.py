@@ -225,13 +225,6 @@ def creating_session(subsession):
             # Second half of the rounds
             p.treatment = 'control' if p.balanced_order == 'treatment-control' else 'treatment'
 
-        # Debugging information
-        print(
-            f"Round {subsession.round_number}: "
-            f"Player {p.id_in_group}, "
-            f"Balanced Order: {p.balanced_order}, "
-            f"Treatment: {p.treatment}")
-
 
 def random_payment(player: Player):
     """
