@@ -12,11 +12,11 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 6
     half_rounds = int(NUM_ROUNDS/2)
 
     endowment = cu(2)  # maximum range
-    safe_option = endowment
+    safe_option = endowment  # separate from endowment in case I want to make it a diff number
     #conversion_rate = 1
     #proba_implementation = 0.1
 
@@ -49,6 +49,8 @@ class Player(BasePlayer):
     randomly_selected_proba_gamble = models.IntegerField(initial=0)
     #randomly_selected_proba_implementation = models.IntegerField(initial=0)
     #randomly_selected_conversion_rate = models.FloatField(initial=0)
+
+    previous_pp_payoff = models.CurrencyField(initial=0)
 
     decision = models.IntegerField(
         initial=2,
@@ -158,7 +160,6 @@ class Player(BasePlayer):
             if number_1 + number_2 >= C.endowment and number_1 <= number_2:
                 player.cost = number_1
                 player.benefit = number_2
-                # print('cost', player.cost, 'benefit', player.benefit)
                 return player.cost, player.benefit
 
     def get_gambles(player):
@@ -175,7 +176,6 @@ class Player(BasePlayer):
                 player.benefit = number_1
                 player.proba_gamble = proba_1
                 player.proba_sure = proba_2
-                #print('EV', (player.proba_gamble*2)*player.benefit)
                 return player.proba_gamble, player.proba_sure
 
 
@@ -206,17 +206,14 @@ class Player(BasePlayer):
 
 def creating_session(subsession):
     """
-    We use itertools to assign treatment regularly to make sure there is a somewhat equal amount of each in the
-    session but also that is it equally distributed in the sample.
-    It simply cycles through the list of treatments (high & low) and that's saved in the participant vars.
+    This is within subjects, so my 'treatments' are the order of the two games.
+    Half of the participants start with the treatment and the other half with control.
+    Based on that player variable, the function assigns the correct treatment variable for each round.
     """
-
     order = itertools.cycle(['treatment-control', 'control-treatment'])
     for p in subsession.get_players():
         p.balanced_order = next(order)
         p.participant.balanced_order = p.balanced_order
-        # print('condition is', p.condition)
-        # print('vars condition is', p.participant.condition)
         half_rounds = C.NUM_ROUNDS // 2
         if subsession.round_number <= half_rounds:
             # First half of the rounds
@@ -243,26 +240,32 @@ def random_payment(player: Player):
         value = getattr(me, attr)
         setattr(player, f'randomly_selected_{attr}', value)
         setattr(player.participant, f'randomly_selected_{attr}', value)
-    # print('round is', randomly_selected_round)
 
 
-def gamble(player: Player):
-    if player.randomly_selected_decision_control == 0: # if chose the risky choice AKA the gamble
+def set_payoffs(player: Player):
+    """
+    This functions sets the payoff for the template and the database dynamically.
+    Depending on which game/option chosen combination gets selected,
+    it assigns the right selected round value as payoff.
+    """
+    if player.randomly_selected_decision == 0:  # if chooses the selfish option
+        player.payoff = C.endowment
+        player.previous_pp_payoff = 0
+        #print('payoff is endowment', player.payoff)
+    elif player.randomly_selected_decision ==1: # if chooses cooperative option
+        player.payoff = player.randomly_selected_cost
+        player.previous_pp_payoff = player.randomly_selected_benefit
+        #print('payoff is cost', player.payoff)
+    elif player.randomly_selected_decision_control == 1: # if chose the risky choice AKA the gamble
         if player.randomly_selected_proba_gamble/100 >= random.random():
-            #print('you won!')
-            control_bonus = player.randomly_selected_benefit
-            player.payoff = control_bonus
-            return control_bonus
+            player.payoff = player.randomly_selected_benefit
+            #print('payoff is benefit', player.payoff)
         else:
-            #print('you lost!')
-            control_bonus = 0
-            player.payoff = control_bonus
-            return control_bonus
-    else:
-        #print('you are safe!')
-        control_bonus = C.safe_option
-        player.payoff = control_bonus
-        return control_bonus
+            player.payoff = 0
+            #print('payoff is null', player.payoff)
+    elif player.randomly_selected_decision_control == 0: # if chose safe option
+        player.payoff = C.safe_option
+        #print('payoff is safe', player.payoff)
 
 
 ######## PAGES ##########
@@ -313,7 +316,6 @@ class Instructions(Page):
             solutions = dict(q5=1, q6=2)
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
-        # print('errors is', errors)
         if errors:
             player.num_failed_attempts += 1
             return errors
@@ -338,7 +340,7 @@ class Instructions(Page):
 
 class SetStakes(Page):
 
-    timeout_seconds = 1  # instant timeout
+    timeout_seconds = 0.5  # instant timeout
 
     def vars_for_template(player: Player):
         if player.treatment == 'treatment':
@@ -450,8 +452,7 @@ class RandomSelection(Page):
             treatment_in_second_half=player_in_second_half.treatment,
 
             call_payment=random_payment(player),
-            call_gamble=gamble(player),
-            #call_payoff=get_payoff(player),
+            call_payoffs=set_payoffs(player),
         )
 
 
@@ -479,6 +480,7 @@ class End(Page):
             treatment_in_first_half=player_in_first_half.treatment,
             treatment_in_second_half=player_in_second_half.treatment,
             payoff=player.payoff,  # for control
+            previous_pp_payoff=player.previous_pp_payoff,
 
             random_round=player.randomly_selected_round,
             random_decision=player.randomly_selected_decision,
