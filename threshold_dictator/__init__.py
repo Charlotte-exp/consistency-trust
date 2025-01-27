@@ -74,9 +74,9 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'I get { C.endowment }, the previous participant gets £0'],
-            [2, f'I get fewer than { C.endowment }, the previous participant gets more than £0'],
-            [3, f'Both I and the previous participant get { C.endowment }']
+            [1, f'If that round is selected, I get { C.endowment }, the previous participant gets £0'],
+            [2, f'If that round is selected, I get less than { C.endowment }, the previous participant gets more than £0'],
+            [3, f'If that round is selected, Both I and the previous participant get { C.endowment }']
         ],
         verbose_name='How will your choice of the “Selfish” option affect both you and the previous participant?',
         widget=widgets.RadioSelect
@@ -89,7 +89,8 @@ class Player(BasePlayer):
             [3, f'The amounts are fixed at { C.endowment/2 } each'],
         ],
         verbose_name='If you choose the “Cooperate” option, '
-                     'what will determine the bonus amount you and the previous participant receive?',
+                     'what will determine the bonus amount you and the previous participant receive, '
+                     'if that round is selected?',
         widget=widgets.RadioSelect
     )
 
@@ -327,10 +328,23 @@ class Instructions(Page):
         else:
             return False
 
+
     def vars_for_template(player: Player):
+        if player.balanced_order == 'treatment-control':
+            if player.treatment == 'treatment':
+                opening_sentence = 'We will start with the cooperative part'
+            else:
+                opening_sentence = 'In this next part, we are exploring how people make financial decisions involving risk'
+        if player.balanced_order == 'control_treatment':
+            if player.treatment == 'control':
+                opening_sentence = 'We will start with the financial decisions involving risk'
+            else:
+                opening_sentence = 'In this next part, we are exploring how people make cooperative decisions'
+
         return dict(
             round_number=player.round_number,
             treatment=player.treatment,
+            opening_sentence=opening_sentence,
 
             call_benefits=player.get_benefits(),
             # call_probability=player.get_proba(),

@@ -15,10 +15,10 @@
 
 <div>
     <p>
-        In this task, we’re exploring how people make cooperative decisions.
+        {{ opening_sentence }}
     </p>
     <p>
-        In each of {{ C.half_rounds }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
+        For this part, in each of {{ C.half_rounds }} rounds, you’ll choose between two options: “Cooperative” or “Selfish”.
     </p>
     <p>
         The choices you make will affect your bonus
@@ -29,7 +29,7 @@
                 Selfish option: You receive {{ C.endowment }}, while the previous participant receives £0.
             </li>
             <li>
-                Cooperative option: You receive <u>fewer</u> than {{ C.endowment }},
+                Cooperative option: You receive <u>less</u> than {{ C.endowment }},
                 and the previous participant receives <u>more</u> than £0.
             </li>
         </ul>
@@ -54,12 +54,12 @@
 
 <div>
     <p>
-        In this task, we’re exploring how people make financial decisions involving risk.
+        {{ opening_sentence }}
     </p>
 
     <p>
         In each of {{ C.half_rounds }} rounds,
-        you’ll choose between two options: a “risky” option” and a “sure thing”.
+        you’ll choose between two options: a “risky” option and a “sure thing”.
     </p>
 
     <p>
@@ -78,6 +78,7 @@
     <p>
         The exact amounts you might earn by selecting the risky option
         and the exact probability with which you might earn it will vary each round.
+        Only amounts from the chosen round will be added to your bonus.
     </p>
 </div>
 
