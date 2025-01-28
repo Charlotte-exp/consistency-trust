@@ -74,23 +74,23 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'If that round is selected, I get { C.endowment }, the previous participant gets £0'],
-            [2, f'If that round is selected, I get less than { C.endowment }, the previous participant gets more than £0'],
-            [3, f'If that round is selected, Both I and the previous participant get { C.endowment }']
+            [1, f'I get { C.endowment }, the previous participant gets £0.'],
+            [2, f'I get less than { C.endowment }, the previous participant gets more than £0, '
+                f'and the exact amounts will vary each round.'],
+            [3, f'Both I and the previous participant get { C.endowment }.']
         ],
-        verbose_name='How will your choice of the “Selfish” option affect both you and the previous participant?',
+        verbose_name='What would be the payment for you and the previous participant, if you selected the selfish option on that round?',
         widget=widgets.RadioSelect
     )
 
     q2 = models.IntegerField(
         choices=[
-            [1, 'It will always be the same'],
-            [2, 'The amounts will vary each round'],
-            [3, f'The amounts are fixed at { C.endowment/2 } each'],
+            [1, f'I get {C.endowment}, the previous participant gets £0.'],
+            [2, f'I get less than {C.endowment}, the previous participant gets more than £0, '
+                f'and the exact amounts will vary each round.'],
+            [3, f'Both I and the previous participant get {C.endowment}.']
         ],
-        verbose_name='If you choose the “Cooperate” option, '
-                     'what will determine the bonus amount you and the previous participant receive, '
-                     'if that round is selected?',
+        verbose_name='What would be the payment for you and the previous participant, if you selected the cooperative option on that round?',
         widget=widgets.RadioSelect
     )
 
@@ -387,6 +387,7 @@ class Decision(Page):
         if player.treatment == 'treatment':
             return dict(
                 decision=player.decision,
+                part_round_number=C.half_rounds-player.round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
                 cost=player.cost,
@@ -395,6 +396,7 @@ class Decision(Page):
         else:
             return dict(
                 decision_control=player.decision_control,
+                part_round_number=C.half_rounds-player.round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
                 cost=player.cost,
