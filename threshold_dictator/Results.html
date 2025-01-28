@@ -1,17 +1,17 @@
 {{ block title }}
-    Summary of the task
+    Summary
 {{ endblock }}
 
 {{ block content }}
 
 {{ if player.round_number == half_rounds }}
     <p>
-        The first task is now done.
+        The first part is now done.
         Below is the summary of your choices
     </p>
 {{ else }}
     <p>
-        The second task is now done.
+        The second part is now done.
         Below is the summary of your choices
     </p>
 {{ endif }}
@@ -74,7 +74,7 @@
 
 {{ if player.round_number == half_rounds }}
     <p>
-        When you click the next button, you will immediately start the second task.
+        When you click the next button, you will immediately start the second part.
     </p>
 {{ endif }}
 

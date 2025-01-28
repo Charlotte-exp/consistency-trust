@@ -328,18 +328,17 @@ class Instructions(Page):
         else:
             return False
 
-
     def vars_for_template(player: Player):
         if player.balanced_order == 'treatment-control':
             if player.treatment == 'treatment':
-                opening_sentence = 'We will start with the cooperative part'
+                opening_sentence = 'We will start with the cooperative part.'
             else:
-                opening_sentence = 'In this next part, we are exploring how people make financial decisions involving risk'
-        if player.balanced_order == 'control_treatment':
+                opening_sentence = 'In this next part, we are exploring how people make financial decisions involving risk.'
+        elif player.balanced_order == 'control-treatment':
             if player.treatment == 'control':
-                opening_sentence = 'We will start with the financial decisions involving risk'
+                opening_sentence = 'We will start with the financial part.'
             else:
-                opening_sentence = 'In this next part, we are exploring how people make cooperative decisions'
+                opening_sentence = 'In this next part, we are exploring how people make cooperative decisions.'
 
         return dict(
             round_number=player.round_number,
