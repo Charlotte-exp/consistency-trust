@@ -1,6 +1,9 @@
 {{ block title }}
 
 Round {{ subsession.round_number }}
+<br>
+part round {{ part_round_number }}
+
 
 {{ endblock }}
 
@@ -51,51 +54,59 @@ Round {{ subsession.round_number }}
         </div>
     </div>
 -->
-<p>
-    <br>
-</p>
+    <p>
+        <br>
+    </p>
     {{ if player.treatment == 'treatment' }}
 
-    <div class="row">
-        <div class="col big" style="text-align:center">
-            <b> {{ cost }} </b> for you <br>
-            <b> {{ benefit }} </b> for the receiver
+    <div style="text-align:center">
+        <div>
+            <p>
+                <b> {{ C.endowment }} </b> for you <br>
+                <b> £0 </b> for the previous participant
+            </p>
+            <p>
+                <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
+            </p>
         </div>
-        <div class="col big" style="text-align:center">
-            <b> {{ C.endowment }} </b> for you <br>
-            <b> £0 </b> for the receiver
-        </div>
-    </div>
-
-    <br>
-    <div class="row">
-        <div class="col" style="text-align:center">
-            <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
-        </div>
-        <div class="col" style="text-align:center">
-            <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
+        <br>
+        <p> or </p>
+        <div>
+            <p>
+                <b> {{ cost }} </b> for you <br>
+                <b> {{ benefit }} </b> for the previous participant
+            </p>
+            <p>
+                <button name="decision" value="1" class="btn btn-primary btn-large">Cooperative option</button>
+            </p>
         </div>
     </div>
 
     {{ else }}
 
-    <div class="row">
-        <div class="col big" style="text-align:center">
-            <b> {{ benefit }} </b> with {{ proba_gamble }}% probability <br>
-            <b> £0 </b> with {{ proba_sure }}% probability
+    <div style="text-align:center">
+        <p>
+            You get:
+        </p>
+        <br>
+        <div>
+            <p>
+                <b>{{ benefit }} </b> with {{ proba_gamble }}% probability <br>
+                <b> £0 </b> with {{ proba_sure }}% probability
+            </p>
+            <p>
+                <button name="decision_control" value="1" class="btn btn-primary btn-large">Risky option</button>
+            </p>
         </div>
-        <div class="col big" style="text-align:center">
-            <b> {{ C.safe_option }} </b> for sure
-        </div>
-    </div>
-
-    <br>
-    <div class="row">
-        <div class="col" style="text-align:center">
-            <button name="decision_control" value="1" class="btn btn-primary btn-large">Risky option</button>
-        </div>
-        <div class="col" style="text-align:center">
-            <button name="decision_control" value="0" class="btn btn-primary btn-large">Safe option</button>
+        <br>
+        <p> or </p>
+        <div>
+            <p>
+                <b> {{ C.safe_option }} </b> for sure
+            </p>
+            <p>
+                <button name="decision_control" value="0" class="btn btn-primary btn-large">Safe option</button>
+            </p>
         </div>
     </div>
 
