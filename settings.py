@@ -85,6 +85,9 @@ DEMO_PAGE_INTRO_HTML = """
 Here are some oTree games.
 """
 
+WHITENOISE_MIMETYPES = {
+    '.pdf': 'application/pdf',
+}
 
 SECRET_KEY = '5784437076353'
 
