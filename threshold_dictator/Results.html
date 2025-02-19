@@ -27,7 +27,7 @@
         </tr>
         {{ for p in player_in_this_half }}
         <tr>
-            <td>{{ p.round_number }}</td>
+            <td>{{ p.part_round_number }}</td>
             <td>{{ p.get_decision_display }}</td>
             {{ if p.decision == 1}}
             <td>{{ p.cost }}</td>
@@ -55,7 +55,7 @@
         </tr>
         {{ for p in player_in_this_half }}
         <tr>
-            <td>{{ p.round_number }}</td>
+            <td>{{ p.part_round_number}}</td>
             <td>{{ p.get_decision_control_display }}</td>
             {{ if p.decision_control == 1}}
             <td>{{ p.benefit }}</td>

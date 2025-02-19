@@ -33,6 +33,7 @@ class Player(BasePlayer):
     treatment = models.StringField(initial='')
     balanced_order = models.StringField(initial='')
     num_failed_attempts = models.IntegerField(initial=0)
+    part_round_number = models.IntegerField(initial=0)
 
     cost = models.CurrencyField(initial=0)
     benefit = models.CurrencyField(initial=0)
@@ -215,13 +216,14 @@ def creating_session(subsession):
     for p in subsession.get_players():
         p.balanced_order = next(order)
         p.participant.balanced_order = p.balanced_order
-        half_rounds = C.NUM_ROUNDS // 2
-        if subsession.round_number <= half_rounds:
+        if subsession.round_number <= C.half_rounds:
             # First half of the rounds
             p.treatment = 'treatment' if p.balanced_order == 'treatment-control' else 'control'
+            p.part_round_number = subsession.round_number
         else:
             # Second half of the rounds
             p.treatment = 'control' if p.balanced_order == 'treatment-control' else 'treatment'
+            p.part_round_number = subsession.round_number-C.half_rounds
 
 
 def random_payment(player: Player):
@@ -232,7 +234,7 @@ def random_payment(player: Player):
     randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
     me = player.in_round(randomly_selected_round)
     player.randomly_selected_round = randomly_selected_round
-    player.participant.randomly_selected_round = randomly_selected_round
+    #player.participant.randomly_selected_round = randomly_selected_round
 
     attributes = ['decision', 'decision_control', 'cost', 'benefit', 'proba_gamble',
                   #'proba_implementation', 'conversion_rate'
@@ -240,7 +242,7 @@ def random_payment(player: Player):
     for attr in attributes:
         value = getattr(me, attr)
         setattr(player, f'randomly_selected_{attr}', value)
-        setattr(player.participant, f'randomly_selected_{attr}', value)
+        #setattr(player.participant, f'randomly_selected_{attr}', value)
 
 
 def set_payoffs(player: Player):
@@ -387,7 +389,7 @@ class Decision(Page):
         if player.treatment == 'treatment':
             return dict(
                 decision=player.decision,
-                part_round_number=C.half_rounds-player.round_number,
+                part_round_number=player.part_round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
                 cost=player.cost,
@@ -396,7 +398,7 @@ class Decision(Page):
         else:
             return dict(
                 decision_control=player.decision_control,
-                part_round_number=C.half_rounds-player.round_number,
+                part_round_number=player.part_round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
                 cost=player.cost,
@@ -415,8 +417,7 @@ class Results(Page):
             return True
 
     def vars_for_template(player: Player):
-        total_rounds = C.NUM_ROUNDS
-        half_rounds = total_rounds // 2
+        half_rounds = C.half_rounds
 
         all_rounds = player.in_all_rounds()
         in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
@@ -424,19 +425,19 @@ class Results(Page):
 
         player_in_first_half = player.in_round(1)
         player_in_second_half = player.in_round(half_rounds+1)
-        if player.round_number == half_rounds:
+        if player.round_number == C.half_rounds:
             return dict(
                 player_in_this_half=in_first_half,
                 treatment_in_this_half=player_in_first_half.treatment,
 
-                half_rounds=half_rounds,
+                half_rounds=C.half_rounds,
             )
         else:
             return dict(
                 player_in_this_half=in_second_half,
                 treatment_in_this_half=player_in_second_half.treatment,
 
-                half_rounds=half_rounds,
+                half_rounds=C.half_rounds,
             )
 
 
@@ -450,8 +451,7 @@ class RandomSelection(Page):
             return True
 
     def vars_for_template(player: Player):
-        total_rounds = C.NUM_ROUNDS
-        half_rounds = total_rounds // 2
+        half_rounds = C.half_rounds
 
         all_rounds = player.in_all_rounds()
         in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
@@ -465,6 +465,7 @@ class RandomSelection(Page):
             player_in_second_half=in_second_half,
             treatment_in_first_half=player_in_first_half.treatment,
             treatment_in_second_half=player_in_second_half.treatment,
+            part_round_number=player.part_round_number,
 
             call_payment=random_payment(player),
             call_payoffs=set_payoffs(player),
@@ -479,8 +480,8 @@ class End(Page):
             return True
 
     def vars_for_template(player: Player):
-        total_rounds = C.NUM_ROUNDS
-        half_rounds = total_rounds // 2
+        half_rounds = C.half_rounds
+        me = player.in_round(player.randomly_selected_round)
 
         all_rounds = player.in_all_rounds()
         in_first_half = [p for p in all_rounds if p.round_number <= half_rounds]
@@ -494,10 +495,12 @@ class End(Page):
             player_in_second_half=in_second_half,
             treatment_in_first_half=player_in_first_half.treatment,
             treatment_in_second_half=player_in_second_half.treatment,
+            part_round_number=player.part_round_number,
             payoff=player.payoff,  # for control
             previous_pp_payoff=player.previous_pp_payoff,
 
             random_round=player.randomly_selected_round,
+            random_part_round=me.part_round_number,
             random_decision=player.randomly_selected_decision,
             random_decision_control=player.randomly_selected_decision_control,
             random_cost=player.randomly_selected_cost,
