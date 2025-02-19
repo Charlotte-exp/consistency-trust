@@ -12,7 +12,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 6
+    NUM_ROUNDS = 10
     half_rounds = int(NUM_ROUNDS/2)
 
     endowment = cu(2)  # maximum range
@@ -32,7 +32,10 @@ class Player(BasePlayer):
 
     treatment = models.StringField(initial='')
     balanced_order = models.StringField(initial='')
-    num_failed_attempts = models.IntegerField(initial=0)
+    q1_failed_attempts = models.IntegerField(initial=0)
+    q2_failed_attempts = models.IntegerField(initial=0)
+    q5_failed_attempts = models.IntegerField(initial=0)
+    q6_failed_attempts = models.IntegerField(initial=0)
     part_round_number = models.IntegerField(initial=0)
 
     cost = models.CurrencyField(initial=0)
@@ -95,25 +98,25 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    q3 = models.IntegerField(
-        choices=[
-            [1, f'Points are always worth 5 cents each'],
-            [2, 'Points are converted to cents at a random rate at the end of the study'],
-            [3, f'Points are converted to cents at a rate that changes each round, between 1 and 10 cents per point'],
-        ],
-        verbose_name=f'How will points be converted to cents?',
-        widget=widgets.RadioSelect
-    )
-
-    q4 = models.IntegerField(
-        choices=[
-            [1, 'No, only one round will be randomly selected to count'],
-            [2, 'Yes, all rounds will count'],
-            [3, 'Only the last round will count']
-        ],
-        verbose_name=f'Will all rounds count toward the final bonus payment?',
-        widget=widgets.RadioSelect
-    )
+    # q3 = models.IntegerField(
+    #     choices=[
+    #         [1, f'Points are always worth 5 cents each'],
+    #         [2, 'Points are converted to cents at a random rate at the end of the study'],
+    #         [3, f'Points are converted to cents at a rate that changes each round, between 1 and 10 cents per point'],
+    #     ],
+    #     verbose_name=f'How will points be converted to cents?',
+    #     widget=widgets.RadioSelect
+    # )
+    #
+    # q4 = models.IntegerField(
+    #     choices=[
+    #         [1, 'No, only one round will be randomly selected to count'],
+    #         [2, 'Yes, all rounds will count'],
+    #         [3, 'Only the last round will count']
+    #     ],
+    #     verbose_name=f'Will all rounds count toward the final bonus payment?',
+    #     widget=widgets.RadioSelect
+    # )
 
     q5 = models.IntegerField(
         choices=[
@@ -317,10 +320,18 @@ class Instructions(Page):
             solutions = dict(q1=1, q2=2)
         else:
             solutions = dict(q5=1, q6=2)
+
         # error_message can return a dict whose keys are field names and whose values are error messages
-        errors = {f: 'This answer is wrong' for f in solutions if values[f] != solutions[f]}
+        errors = {}
+        for question, correct_answer in solutions.items():
+            if values[question] != correct_answer:
+                errors[question] = 'This answer is wrong'
+                # Increment the specific failed attempt counter for the incorrect question
+                failed_attempt_field = f"{question}_failed_attempts"
+                if hasattr(player, failed_attempt_field):  # Ensure the field exists
+                    setattr(player, failed_attempt_field, getattr(player, failed_attempt_field) + 1)
+
         if errors:
-            player.num_failed_attempts += 1
             return errors
 
     @staticmethod
