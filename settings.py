@@ -1,7 +1,6 @@
 from os import environ
 from os import popen
 
-import os
 
 SESSION_CONFIGS = [
     dict(
@@ -85,21 +84,6 @@ ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')
 DEMO_PAGE_INTRO_HTML = """
 Here are some oTree games.
 """
-
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-STATIC_URL = '/static/'  # Where static files are served
-
-# Include `_static/` so PDFs are collected
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "_static"),
-]
-
-# This is where Heroku collects static files
-STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-
-# Ensure all static files (including PDFs) are collected
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 
 
 SECRET_KEY = '5784437076353'
