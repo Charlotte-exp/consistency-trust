@@ -366,7 +366,7 @@ class Instructions(Page):
 
 class SetStakes(Page):
 
-    timeout_seconds = 0.5  # instant timeout
+    timeout_seconds = 0.3  # instant timeout
 
     def vars_for_template(player: Player):
         if player.treatment == 'treatment':
