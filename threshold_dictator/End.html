@@ -28,7 +28,7 @@ Summary of the parts
             <td>{{ p.benefit }}</td>
             {{ else }}
             <td>{{ C.endowment }}</td>
-            <td>£0</td>
+            <td>{{ C.zero }}</td>
             {{ endif }}
         </tr>
         {{ endfor }}
@@ -114,7 +114,7 @@ Summary of the parts
             <td>{{ p.benefit }}</td>
             {{ else }}
             <td>{{ C.endowment }}</td>
-            <td>£0</td>
+            <td>{{ C.zero }}</td>
             {{ endif }}
         </tr>
         {{ endfor }}

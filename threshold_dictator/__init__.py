@@ -14,8 +14,10 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 10
     half_rounds = int(NUM_ROUNDS/2)
+    session_time = 10
 
     endowment = cu(2)  # maximum range
+    zero = cu(0) # so currency or point is automatic everywhere
     safe_option = endowment  # separate from endowment in case I want to make it a diff number
     #conversion_rate = 1
     #proba_implementation = 0.1

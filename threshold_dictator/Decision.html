@@ -60,7 +60,7 @@ Round {{ part_round_number }}
         <div>
             <p>
                 <b> {{ C.endowment }} </b> for you <br>
-                <b> £0 </b> for the previous participant
+                <b> {{ C.zero }} </b> for the previous participant
             </p>
             <p>
                 <button name="decision" value="0" class="btn btn-primary btn-large">Selfish option</button>
@@ -89,7 +89,7 @@ Round {{ part_round_number }}
         <div>
             <p>
                 <b>{{ benefit }} </b> with {{ proba_gamble }}% probability <br>
-                <b> £0 </b> with {{ proba_sure }}% probability
+                <b> {{ C.zero }} </b> with {{ proba_sure }}% probability
             </p>
             <p>
                 <button name="decision_control" value="1" class="btn btn-primary btn-large">Risky option</button>

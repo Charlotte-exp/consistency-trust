@@ -48,7 +48,7 @@ SESSION_CONFIGS = [
 # e.g. self.session.config['participation_fee']
 
 SESSION_CONFIG_DEFAULTS = dict(
-    real_world_currency_per_point=1.00, participation_fee=0.80, doc=""
+    real_world_currency_per_point=1.00, participation_fee=1.50, doc=""
 )
 
 SESSION_FIELDS = []
@@ -64,7 +64,7 @@ PARTICIPANT_FIELDS = ['balanced_order', 'treatment', 'role', 'is_dropout',
 LANGUAGE_CODE = 'en'
 
 # e.g. EUR, GBP, CNY, JPY
-REAL_WORLD_CURRENCY_CODE = 'GBP'
+REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = False
 # POINTS_CUSTOM_NAME = 'tokens'
 
