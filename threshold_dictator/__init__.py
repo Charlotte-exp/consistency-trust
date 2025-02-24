@@ -12,9 +12,9 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 40
     half_rounds = int(NUM_ROUNDS/2)
-    session_time = 10
+    session_time = 15
 
     endowment = cu(2)  # maximum range
     zero = cu(0) # so currency or point is automatic everywhere
