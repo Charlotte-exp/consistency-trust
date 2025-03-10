@@ -5,6 +5,8 @@ Introduction
 
 {{ block content }}
 
+<div style="font-size: 14px">
+
 <div>
     <p>
         <b>Thank you for taking part in this study!</b>
@@ -35,10 +37,11 @@ Introduction
     <p>
         When you press next, you will read the instructions of the first part.
     </p>
-    <p>
-        <div style="display: flex; justify-content: flex-end">
-        {% next_button %}
-        </div>
-    </p>
 
+    <div style="display: flex; justify-content: flex-end">
+        {% next_button %}
+    </div>
+
+
+</div>
 {{ endblock }}

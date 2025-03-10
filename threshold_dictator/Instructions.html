@@ -11,6 +11,8 @@
 
 {{ block content }}
 
+<div style="font-size: 14px">
+
 {{ if treatment == 'treatment' }}
 
 <div>
@@ -112,10 +114,12 @@
         When you click the next button, you will immediately start the second round.
     </p>
     {{ endif }}
-    <p>
-        <div style="display: flex; justify-content: flex-end">
+
+    <div style="display: flex; justify-content: flex-end">
         {% next_button %}
-        </div>
-    </p>
+    </div>
+
+
+</div>
 
 {{ endblock }}
