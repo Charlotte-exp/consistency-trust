@@ -80,8 +80,8 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'I get { C.endowment }, the previous participant gets £0.'],
-            [2, f'I get less than { C.endowment }, the previous participant gets more than £0, '
+            [1, f'I get { C.endowment }, the previous participant gets { C.zero }.'],
+            [2, f'I get less than { C.endowment }, the previous participant gets more than { C.zero }, '
                 f'and the exact amounts will vary each round.'],
             [3, f'Both I and the previous participant get { C.endowment }.']
         ],
@@ -91,8 +91,8 @@ class Player(BasePlayer):
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'I get {C.endowment}, the previous participant gets £0.'],
-            [2, f'I get less than {C.endowment}, the previous participant gets more than £0, '
+            [1, f'I get {C.endowment}, the previous participant gets { C.zero }.'],
+            [2, f'I get less than {C.endowment}, the previous participant gets more than { C.zero }, '
                 f'and the exact amounts will vary each round.'],
             [3, f'Both I and the previous participant get {C.endowment}.']
         ],
