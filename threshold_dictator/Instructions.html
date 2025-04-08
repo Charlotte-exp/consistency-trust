@@ -11,6 +11,8 @@
 
 {{ block content }}
 
+<div style="font-size: 14px">
+
 {{ if treatment == 'treatment' }}
 
 <div>
@@ -26,11 +28,11 @@
         as follows:
         <ul>
             <li>
-                Selfish option: You receive {{ C.endowment }}, while the previous participant receives £0.
+                Selfish option: You receive {{ C.endowment }}, while the previous participant receives {{ C.zero }}.
             </li>
             <li>
                 Cooperative option: You receive <u>less</u> than {{ C.endowment }},
-                and the previous participant receives <u>more</u> than £0.
+                and the previous participant receives <u>more</u> than {{ C.zero }}.
             </li>
         </ul>
         The exact amount you and the previous participant will receive,
@@ -45,7 +47,7 @@
 
 <div class="card bg-light instructions">
     <div  class="card-body">
-        <h4>Now we will ask some comprehension questions to check your understanding:</h4>
+        <h5>Now we will ask some comprehension questions to check your understanding:</h5>
         <p>
             Assume that a given round is selected for payment.
         </p>
@@ -93,7 +95,7 @@
 
 <div class="card bg-light instructions">
     <div  class="card-body">
-        <h4>Now we will ask some comprehension questions to check your understanding:</h4>
+        <h5>Now we will ask some comprehension questions to check your understanding:</h5>
         {% for field in form %}
             {% formfield field %}
         {% endfor %}
@@ -105,17 +107,19 @@
 <br>
     {{ if player.round_number == 1 }}
     <p>
-        When you click the next button, you will immediately start the first part.
+        When you click the next button, you will immediately start the first round.
     </p>
     {{ else }}
     <p>
-        When you click the next button, you will immediately start the second part.
+        When you click the next button, you will immediately start the second round.
     </p>
     {{ endif }}
-    <p>
-        <div style="display: flex; justify-content: flex-end">
+
+    <div style="display: flex; justify-content: flex-end">
         {% next_button %}
-        </div>
-    </p>
+    </div>
+
+
+</div>
 
 {{ endblock }}

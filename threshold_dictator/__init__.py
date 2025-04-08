@@ -12,10 +12,12 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'threshold_dictator'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 40
     half_rounds = int(NUM_ROUNDS/2)
+    session_time = 15
 
     endowment = cu(2)  # maximum range
+    zero = cu(0) # so currency or point is automatic everywhere
     safe_option = endowment  # separate from endowment in case I want to make it a diff number
     #conversion_rate = 1
     #proba_implementation = 0.1
@@ -78,8 +80,8 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'I get { C.endowment }, the previous participant gets £0.'],
-            [2, f'I get less than { C.endowment }, the previous participant gets more than £0, '
+            [1, f'I get { C.endowment }, the previous participant gets { C.zero }.'],
+            [2, f'I get less than { C.endowment }, the previous participant gets more than { C.zero }, '
                 f'and the exact amounts will vary each round.'],
             [3, f'Both I and the previous participant get { C.endowment }.']
         ],
@@ -89,8 +91,8 @@ class Player(BasePlayer):
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'I get {C.endowment}, the previous participant gets £0.'],
-            [2, f'I get less than {C.endowment}, the previous participant gets more than £0, '
+            [1, f'I get {C.endowment}, the previous participant gets { C.zero }.'],
+            [2, f'I get less than {C.endowment}, the previous participant gets more than { C.zero }, '
                 f'and the exact amounts will vary each round.'],
             [3, f'Both I and the previous participant get {C.endowment}.']
         ],
@@ -151,7 +153,7 @@ class Player(BasePlayer):
         verbose_name=''
     )
 
-    def get_benefits(player):
+    def get_cost_benefit(player):
         """
         This function returns two numbers between 1 and 9 on each round to become the benefit and the cost.
         In addition, the sum of the two numbers is always smaller than 100
@@ -160,11 +162,11 @@ class Player(BasePlayer):
         numbers = [x / 10 for x in range(1, int(C.endowment * 10))]  # list from 0.1 to 1.9
         while True:
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
-            number_1, number_2 = random.choices(numbers, k=2)
+            cost_x, benefit_y = random.choices(numbers, k=2) # 2>x>0
             # check if sampled numbers satisfy the condition
-            if number_1 + number_2 >= C.endowment and number_1 <= number_2:
-                player.cost = number_1
-                player.benefit = number_2
+            if C.endowment-cost_x > benefit_y > cost_x: # 2-x>y and y>x
+                player.cost = cost_x
+                player.benefit = benefit_y
                 return player.cost, player.benefit
 
     def get_gambles(player):
@@ -358,7 +360,7 @@ class Instructions(Page):
             treatment=player.treatment,
             opening_sentence=opening_sentence,
 
-            call_benefits=player.get_benefits(),
+            call_benefits=player.get_cost_benefit(),
             # call_probability=player.get_proba(),
             # call_conversion=player.get_conversion(),
         )
@@ -373,7 +375,7 @@ class SetStakes(Page):
             return dict(
                 round_number=player.round_number,
 
-                call_benefits=player.get_benefits(),
+                call_benefits=player.get_cost_benefit(),
                 # call_probability=player.get_proba(),
                 # call_conversion=player.get_conversion(),
             )
@@ -403,7 +405,7 @@ class Decision(Page):
                 part_round_number=player.part_round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
-                cost=player.cost,
+                cost=C.endowment-player.cost,
                 benefit=player.benefit,
             )
         else:
@@ -412,7 +414,7 @@ class Decision(Page):
                 part_round_number=player.part_round_number,
                 # proba=player.proba_implementation,
                 # conversion=player.conversion_rate,
-                cost=player.cost,
+                cost=C.endowment-player.cost,
                 benefit=player.benefit,
                 proba_gamble=player.proba_gamble,
                 proba_sure=player.proba_sure,

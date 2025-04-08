@@ -4,6 +4,8 @@
 
 {{ block content }}
 
+<div style="font-size: 14px">
+
 {{ if player.round_number == half_rounds }}
     <p>
         The first part is now done.
@@ -18,6 +20,7 @@
 
 {{ if treatment_in_this_half == 'treatment'}}
 
+<div id="treat" style="overflow:auto; height:400px;">
     <table class="table">
         <tr>
             <th>Round</th>
@@ -34,11 +37,12 @@
             <td>{{ p.benefit }}</td>
             {{ else }}
             <td>{{ C.endowment }}</td>
-            <td>£0</td>
+            <td>{{ C.zero }}</td>
             {{ endif }}
         </tr>
         {{ endfor }}
     </table>
+</div>
 <br>
 
 {{ endif }}
@@ -46,6 +50,7 @@
 
 {{ if treatment_in_this_half == 'control'}}
 
+<div id="cont" style="overflow:auto; height:400px;">
     <table class="table">
         <tr>
             <th>Round</th>
@@ -67,6 +72,7 @@
         </tr>
         {{ endfor }}
     </table>
+</div>
 <br>
 
 {{ endif }}
@@ -81,6 +87,8 @@
     <div style="display: flex; justify-content: flex-end">
         {% next_button %}
     </div>
+
+</div>
 
 {{ endblock }}
 
