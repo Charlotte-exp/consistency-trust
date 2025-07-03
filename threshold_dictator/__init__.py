@@ -155,16 +155,17 @@ class Player(BasePlayer):
 
     def get_cost_benefit(player):
         """
-        This function returns two numbers between 1 and 9 on each round to become the benefit and the cost.
-        In addition, the sum of the two numbers is always smaller than 100
-        and the first number (the cost) is smaller than the second (the benefit)
+        This function returns two numbers between 0.1 and 1.9 on each round to become the benefit and the cost.
+        The benefit is the amount for the other participant, the cost is how much is lost from the 2$ sure option.
+        (this means that displayed to the participant is endowment-cost)
+        The two numbers must satisfy the following conditions:
+        benefit is larger than the cost and endowment-cost is larger than the benefit.
         """
         numbers = [x / 10 for x in range(1, int(C.endowment * 10))]  # list from 0.1 to 1.9
         while True:
             # sample two numbers with replacement (for without use random.sample(numbers, 2)
-            cost_x, benefit_y = random.choices(numbers, k=2) # 2>x>0
-            # check if sampled numbers satisfy the condition
-            if C.endowment-cost_x > benefit_y > cost_x: # 2-x>y and y>x
+            cost_x, benefit_y = random.choices(numbers, k=2)
+            if C.endowment-cost_x > benefit_y > cost_x: # ensure the numbers satisfy the conditions 2-x>y and y>x
                 player.cost = cost_x
                 player.benefit = benefit_y
                 return player.cost, player.benefit
@@ -172,17 +173,17 @@ class Player(BasePlayer):
     def get_gambles(player):
         """
         """
-        numbers = [x / 10 for x in range(1, int((C.endowment*2) * 10))]  # list from 0.1 to 3.9
+        numbers = [x / 10 for x in range(1, int((C.endowment*2.5) * 10))]  # list from 0.1 to 3.9
         probabilities = list(range(10, 100, 10))  # list from 10 to 100 in increments of 10
         while True:
             number_1 = random.choice(numbers)
             proba_1 = random.choice(probabilities)
             proba_2 = 100 - proba_1  # Calculate the complement to sum to 1
-            # Check if both numbers are within the range [0.01, 0.99]
             if number_1 * (proba_1/100) >= C.endowment: # gamble's EV must be higher than sure thing
                 player.benefit = number_1
                 player.proba_gamble = proba_1
                 player.proba_sure = proba_2
+                print(player.proba_gamble, player.proba_sure)
                 return player.proba_gamble, player.proba_sure
 
 
