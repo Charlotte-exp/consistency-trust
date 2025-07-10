@@ -173,7 +173,7 @@ class Player(BasePlayer):
     def get_gambles(player):
         """
         """
-        numbers = [x / 10 for x in range(1, int((C.endowment*2.5) * 10))]  # list from 0.1 to 3.9
+        numbers = [x / 10 for x in range(1, int((C.endowment*3.5) * 10))]  # list from 0.1 to 3.9
         probabilities = list(range(10, 100, 10))  # list from 10 to 100 in increments of 10
         while True:
             number_1 = random.choice(numbers)
