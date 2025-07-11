@@ -174,17 +174,16 @@ class Player(BasePlayer):
         """
         """
         numbers = [x / 10 for x in range(1, int((C.endowment*3.5) * 10))]  # list from 0.1 to 3.9
-        probabilities = list(range(10, 100, 10))  # list from 10 to 100 in increments of 10
-        while True:
-            number_1 = random.choice(numbers)
-            proba_1 = random.choice(probabilities)
-            proba_2 = 100 - proba_1  # Calculate the complement to sum to 1
-            if number_1 * (proba_1/100) >= C.endowment: # gamble's EV must be higher than sure thing
-                player.benefit = number_1
-                player.proba_gamble = proba_1
-                player.proba_sure = proba_2
-                print(player.proba_gamble, player.proba_sure)
-                return player.proba_gamble, player.proba_sure
+        expected_values = [round(1.25 + 0.05 * i, 2) for i in range(int((3 - 1.25) / 0.05) + 1)] # list from 1.25 to 3
+        probabilities = list(range(50, 100, 10))  # list from 50 to 100 in increments of 10
+        EV = random.choice(expected_values)
+        proba_1 = random.choice(probabilities)
+        number_1 = EV/(proba_1/100)
+        player.benefit = number_1
+        player.proba_gamble = proba_1
+        player.proba_sure = 100 - proba_1
+        print(player.proba_gamble, player.benefit)
+        return player.proba_gamble, player.proba_sure, player.benefit
 
 
     # def get_proba(player):
@@ -419,6 +418,7 @@ class Decision(Page):
                 benefit=player.benefit,
                 proba_gamble=player.proba_gamble,
                 proba_sure=player.proba_sure,
+                safe_option=C.safe_option / 2,
             )
 
 
