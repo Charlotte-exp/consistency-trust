@@ -14,7 +14,7 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 40
     half_rounds = int(NUM_ROUNDS/2)
-    session_time = 15
+    session_time = 10
 
     endowment = cu(2)  # maximum range
     zero = cu(0) # so currency or point is automatic everywhere
@@ -162,20 +162,22 @@ class Player(BasePlayer):
         benefit is larger than the cost and endowment-cost is larger than the benefit.
         """
         numbers = [x / 10 for x in range(1, int(C.endowment * 10))]  # list from 0.1 to 1.9
+        feasible_costs = [c for c in numbers if c < C.endowment / 2] # list from 0.1 to 0.9, anything higher will violate the condition below
+        cost_x = random.choice(feasible_costs)
         while True:
-            # sample two numbers with replacement (for without use random.sample(numbers, 2)
-            cost_x, benefit_y = random.choices(numbers, k=2)
+            benefit_y = random.choice(numbers)
             if C.endowment-cost_x > benefit_y > cost_x: # ensure the numbers satisfy the conditions 2-x>y and y>x
                 player.cost = cost_x
                 player.benefit = benefit_y
+                print(player.benefit, 2-player.cost, player.cost)
                 return player.cost, player.benefit
 
     def get_gambles(player):
         """
         """
         numbers = [x / 10 for x in range(1, int((C.endowment*3.5) * 10))]  # list from 0.1 to 3.9
-        expected_values = [round(1.25 + 0.05 * i, 2) for i in range(int((3 - 1.25) / 0.05) + 1)] # list from 1.25 to 3
-        probabilities = list(range(50, 100, 10))  # list from 50 to 100 in increments of 10
+        expected_values = [round(1.25 + 0.05 * i, 2) for i in range(int((5 - 1.25) / 0.05) + 1)] # list from 1.25 to 3
+        probabilities = list(range(50, 100, 5))  # list from 50 to 100 in increments of 10
         EV = random.choice(expected_values)
         proba_1 = random.choice(probabilities)
         number_1 = EV/(proba_1/100)
