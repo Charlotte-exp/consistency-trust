@@ -34,6 +34,7 @@ class Player(BasePlayer):
 
     treatment = models.StringField(initial='')
     balanced_order = models.StringField(initial='')
+    round_3or18 = models.StringField(initial='')
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
     q5_failed_attempts = models.IntegerField(initial=0)
@@ -220,9 +221,12 @@ def creating_session(subsession):
     Based on that player variable, the function assigns the correct treatment variable for each round.
     """
     order = itertools.cycle(['treatment-control', 'control-treatment'])
+    r318 = itertools.cycle([3, 3, 18, 18])  # Two 3s, then two 18s, repeating
     for p in subsession.get_players():
         p.balanced_order = next(order)
         p.participant.balanced_order = p.balanced_order
+        p.round_3or18 = next(r318)
+        p.participant.round_3or18 = p.round_3or18
         if subsession.round_number <= C.half_rounds:
             # First half of the rounds
             p.treatment = 'treatment' if p.balanced_order == 'treatment-control' else 'control'
@@ -231,6 +235,10 @@ def creating_session(subsession):
             # Second half of the rounds
             p.treatment = 'control' if p.balanced_order == 'treatment-control' else 'treatment'
             p.part_round_number = subsession.round_number-C.half_rounds
+        if p.part_round_number and p.round_3or18 == 3:
+            p.cost = 1
+            p.benefit = 1
+            p.proba_gamble = 1
 
 
 def random_payment(player: Player):
@@ -389,6 +397,17 @@ class SetStakes(Page):
                 # call_probability=player.get_proba(),
                 # call_conversion=player.get_conversion(),
             )
+
+    # Basically if this page does not appear then the benefit functions does not assign
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.part_round_number == 3 and player.round_3or18 == 3:
+            print("it's round 3")
+            return False
+        elif player.part_round_number == 18 and player.round_3or18 == 18:
+            return False
+        else:
+            return True
 
 
 class Decision(Page):
