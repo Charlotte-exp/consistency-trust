@@ -34,7 +34,7 @@ class Player(BasePlayer):
 
     treatment = models.StringField(initial='')
     balanced_order = models.StringField(initial='')
-    round_3or18 = models.StringField(initial='')
+    round_3or18 = models.IntegerField(initial=0)
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
     q5_failed_attempts = models.IntegerField(initial=0)
