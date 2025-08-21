@@ -1,0 +1,36 @@
+{{ block title }}
+
+Summary of the complete experiment
+
+{{ endblock }}
+
+{{ block content }}
+
+<div style="font-size: 14px">
+
+<p style="color:white; font-size: 2px">{{ call_payment }}</p>
+
+  <div>
+      Same as Results page!
+  </div>
+
+<br>
+    <p>
+        When you press the randomiser button, one round out of the {{ C.NUM_ROUNDS }} above will be randomly selected.
+        The option you chose on that round is the one you will receive.
+    </p>
+    <p>
+        If one of the cooperative/selfish rounds is selected,
+        the option you chose on that round is the one you and the previous participant will receive as bonus payment.
+        If one of the risky/safe rounds is selected,
+        and you selected the risky option in that round,
+        the computer will automatically randomly determine whether you get the specified bonus based on the specified probability.
+    </p>
+
+<p>
+    <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
+</p>
+
+</div>
+
+{{ endblock }}

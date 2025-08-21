@@ -4,8 +4,16 @@ from os import popen
 
 SESSION_CONFIGS = [
     dict(
+        name='observers',
+        display_name="Observer stage ",
+        app_sequence=['observers'],
+        num_demo_participants=30,
+        use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
+    ),
+    dict(
         name='threshold_dictator',
-        display_name="otree5 dictator for threshold analysis",
+        display_name="Dictator for threshold analysis",
         app_sequence=['threshold_dictator'],
         num_demo_participants=30,
         use_browser_bots=False,
@@ -13,7 +21,7 @@ SESSION_CONFIGS = [
     ),
     dict(
         name='deception_many_rounds',
-        display_name="otree5 deception many rounds - no receivers",
+        display_name="Deception many rounds - no receivers",
         app_sequence=['intro_many_rounds', 'deception_many_rounds'],
         num_demo_participants=6,
         use_browser_bots=False,
@@ -21,7 +29,7 @@ SESSION_CONFIGS = [
     ),
     dict(
         name='deception_task',
-        display_name="otree5 deception task",
+        display_name="Deception task",
         app_sequence=['intro_deception', 'deception_task'],
         num_demo_participants=24,
         use_browser_bots=False,
@@ -29,16 +37,11 @@ SESSION_CONFIGS = [
         ),
     dict(
         name='dictator',
-        display_name="otree5 dictator game",
+        display_name="Dictator game",
         app_sequence=['introduction', 'dictator'],
         num_demo_participants=12,
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
-    ),
-    dict(
-        name='survey',
-        app_sequence=['survey', 'payment_info'],
-        num_demo_participants=1
     ),
 ]
 

@@ -1,0 +1,35 @@
+{{ block title }}
+
+Observers
+
+{{ endblock }}
+
+{{ block styles }}
+
+  <style>
+
+
+  </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<div>
+    They see a specific value of k (the frequency of cooperation) and are asked,
+    on a sliding scale to rate how cooeprative the decision maker with this value of k was.
+    The scale should be just as in charlotte’s current design. Including however she incentivized it.
+    We need to include k=0,1,19,20. As well as a few other intermediate values.
+    These can be all intermediate values or a randomly generated subset, depending on how boring/time consuming it seems.
+    The order in which each value of I is seen shoukd be randomly determined.
+</div>
+
+<div>
+    {{ formfields }}
+</div>
+
+    <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+    </div>
+
+{{ endblock }}
