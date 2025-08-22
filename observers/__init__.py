@@ -22,11 +22,21 @@ class Subsession(BaseSubsession):
 
 def creating_session(subsession):
     """
-    Pairs of original and reported dice from the prolific pilot.
-    Must be called from a separate page or in the creating_session
+    create a fixed sequence of 10 elements for each player bu calling generate_k_sequence function.
+    Stored in a participant.vars since player field cannot be lists (and I don't need it in the database).
+    Because creating_session calls the function every round
+    we force it not to do that by setting a value based on round number instead.
     """
-    for p in subsession.get_players():
-        p.set_k_values()
+    if subsession.round_number == 1:
+        for p in subsession.get_players():
+            sequence = generate_k_sequence()
+            p.participant.vars['sequence'] = sequence
+            # set first round value directly
+            p.k_value = sequence[0]
+    else:
+        for p in subsession.get_players():
+            # for rounds >1, just pick from participant.vars
+            p.k_value = p.participant.vars['sequence'][p.round_number - 1]
 
 class Group(BaseGroup):
     pass
@@ -50,7 +60,8 @@ class Player(BasePlayer):
             [2, f'bla'],
             [3, f'bla']
         ],
-        verbose_name='What would be the payment for you and the previous participant, if you selected the selfish option on that round?',
+        verbose_name='What would be the payment for you and the previous participant, '
+                     'if you selected the selfish option on that round?',
         widget=widgets.RadioSelect
     )
 
@@ -60,33 +71,25 @@ class Player(BasePlayer):
             [2, f'bla'],
             [3, f'bla']
         ],
-        verbose_name='What would be the payment for you and the previous participant, if you selected the cooperative option on that round?',
+        verbose_name='What would be the payment for you and the previous participant, '
+                     'if you selected the cooperative option on that round?',
         widget=widgets.RadioSelect
     )
 
-    # def set_k_sequences(player):
-    #     """
-    #     Return a pair (original_dice, reported_dice) such that
-    #     distance = reported_dice - original_dice is *uniform* on {0,1,2,3,4,5}.
-    #     Within each distance the specific pair is chosen uniformly.
-    #     """
-    #     sequence = list(range(0,21))
-    #     k_value = random.choice(sequence)
-    #     player.k_value = k_value
-    #     # print(player.k_value)
-
-    def set_k_values(player):
-        """
-        Return a pair (original_dice, reported_dice) such that
-        distance = reported_dice - original_dice is *uniform* on {0,1,2,3,4,5}.
-        Within each distance the specific pair is chosen uniformly.
-        """
-        sequence = list(range(0, 21))
-        k_value = random.choice(sequence)
-        player.k_value = k_value
-        # print(player.k_value)
-
 ######## FUNCTIONS ##########
+
+def generate_k_sequence():
+    """
+    Generate a random sequence of 10 numbers.
+    One different sequence is assigned to a player at creating_session
+    4 values are always included, 6 are random.
+    each sequence is shuffled before being returned as the values are assigned to each round in order.
+    """
+    optional_values = list(range(2, 19))  # 2 to 18
+    necessary_values = [0, 1, 19, 20]
+    sequence = necessary_values + random.sample(optional_values, 6)
+    random.shuffle(sequence)
+    return sequence
 
 
 ########## PAGES #########
