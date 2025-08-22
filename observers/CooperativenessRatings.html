@@ -1,6 +1,6 @@
 {{ block title }}
 
-Observers
+    Rating n˚{{ player.round_number }}
 
 {{ endblock }}
 
@@ -10,6 +10,45 @@ Observers
 
     body {
         margin: 0;
+    }
+
+    .fraction-square {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      margin: 0 auto; /* centers the square */
+    }
+
+    .diagonal-line {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 70px;
+      height: 2px;
+      background: black;
+      transform: translate(-50%, -50%) rotate(-45deg);
+      transform-origin: center;
+    }
+
+    .k-value {
+<!--      font-family: monospace;-->
+      font-size: 2rem;
+      font-weight: bold;
+      width: 2ch;       /* enough for 2 digits */
+      text-align: right; /* aligns single digits to right of the slot */
+      position: absolute;
+      top: -5px;
+      left: -20px;
+      font-size: 2.5rem;
+      font-weight: bold;
+    }
+
+    .denominator {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-size: 1.5rem;
+      font-weight: bold;
     }
 
     .button-container {
@@ -239,15 +278,26 @@ Observers
 
 <div>
     <p>
-        A previous participant cooperated this amount of time out of 20:
+        Here is the number of times, out of a possible {{ C.number_of_trials }},
+        that another participant chose the cooperative option:
     </p>
-    <p>
-        {{ k_value }}/20
-    </p>
+    <div class="container my-5">
+        <div class="container my-5">
+            <div class="mx-auto p-4 bg-light text-center shadow" style="max-width: 250px; border-radius: 10px;">
+              <div class="fraction-square">
+                <div class="diagonal-line"></div>
+                <div class="k-value">{{ k_value }}</div>
+                <div class="denominator">{{ C.number_of_trials }}</div>
+              </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div  class="card-body">
-
+    <p style="text-align: center;">
+        <strong>On a scale from 0 to 100, how cooperative do you think this person is?</strong>
+    </p>
     <div class="slider-container">
         <span style="flex-grow: 1;">
             <input type="hidden" name="slider1_moved" value="0" id="check_slider1" />
@@ -264,6 +314,26 @@ Observers
             <output id="output1"></output>
         </span>
     </div>
+
+<!--    <p style="text-align: center;">-->
+<!--        <strong>How cooperative do you think this person is?</strong>-->
+<!--    </p>-->
+<!--    <div class="slider-container">-->
+<!--        <span style="flex-grow: 1;">-->
+<!--            <input type="hidden" name="slider1_moved" value="0" id="check_slider1" />-->
+<!--            <input type="range" name="ratings" id="slider1" min="0" max="100" step="1" value="" class="hidden-thumb">-->
+<!--        </span>-->
+
+<!--        <div class="slider-labels">-->
+<!--            <span>Very uncooperative</span>-->
+<!--            <span>Very cooperative</span>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--    <div style="text-align: center; margin-top: -15px">-->
+<!--        <span style="color: #FFFFFF">-->
+<!--            <output id="output1"></output>-->
+<!--        </span>-->
+<!--    </div>-->
 
     <!-- Error message -->
     <div id="error-message" style="display: none; color: red; text-align: center;">

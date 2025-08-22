@@ -16,6 +16,10 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 10
 
+    number_of_trials = 20 # from the actor task
+    percent_accurate = 10
+    bonus = cu(1)
+
 
 class Subsession(BaseSubsession):
     pass
@@ -56,23 +60,20 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'bla'],
-            [2, f'bla'],
-            [3, f'bla']
+            [1, f'the number or cooperative choices out of {C.number_of_trials} of one participant'],
+            [2, f'the number of cooperative choices out of {C.number_of_trials} of {C.NUM_ROUNDS} participants'],
+            [3, f'the number of cooperative choices out of {C.NUM_ROUNDS} of {C.number_of_trials} participants'],
         ],
-        verbose_name='What would be the payment for you and the previous participant, '
-                     'if you selected the selfish option on that round?',
+        verbose_name='What will you rate?',
         widget=widgets.RadioSelect
     )
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'bla'],
-            [2, f'bla'],
-            [3, f'bla']
+            [1, f'If your rating is within 5% of the average rating of all study participants'],
+            [2, f'If your rating is within {C.percent_accurate}% of the average rating of all study participants'],
         ],
-        verbose_name='What would be the payment for you and the previous participant, '
-                     'if you selected the cooperative option on that round?',
+        verbose_name='On what is your bonus based?',
         widget=widgets.RadioSelect
     )
 
@@ -103,7 +104,7 @@ class Instructions(Page):
     #     """
     #     records the number of time the page was submitted with an error. which specific error is not recorded.
     #     """
-    #     solutions = dict(q1=1, q2=2)
+    #     solutions = dict(q1=2, q2=2)
     #
     #     # error_message can return a dict whose keys are field names and whose values are error messages
     #     errors = {}

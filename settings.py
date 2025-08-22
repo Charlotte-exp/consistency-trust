@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
         name='observers',
         display_name="Observer stage ",
         app_sequence=['observers'],
-        num_demo_participants=2,
+        num_demo_participants=6,
         use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
     ),

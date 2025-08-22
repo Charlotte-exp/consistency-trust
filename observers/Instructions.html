@@ -1,6 +1,6 @@
 {{ block title }}
 
-Observers
+2nd stage
 
 {{ endblock }}
 
@@ -16,12 +16,26 @@ Observers
 {{ block content }}
 
 <div>
-    They see a specific value of k (the frequency of cooperation) and are asked,
-    on a sliding scale to rate how cooeprative the decision maker with this value of k was.
-    The scale should be just as in charlotte’s current design. Including however she incentivized it.
-    We need to include k=0,1,19,20. As well as a few other intermediate values.
-    These can be all intermediate values or a randomly generated subset, depending on how boring/time consuming it seems.
-    The order in which each value of I is seen shoukd be randomly determined.
+    <p>
+        Now, you will observe the outcome of other participants' choices.
+        You will see the number of times another participant chose the cooperative option out of the 20 trials.
+    </p>
+    <p>
+        For example, if a participant chose to the cooperative option for half the trials, you will see 10/20.
+        If they cooperated on all trials, you will see 20/20.
+        And if they cooperated on all trials but one, you will see 19/20.
+    </p>
+    <p>
+        You will this proportion of cooperative choices for 10 different participants, one per page.
+        Based on each proportion, we will ask you how cooperative you think the participant was overall.
+        So on each page, you will see the number of times a person chose the cooperative option,
+        and use a slider to rate out of 100 how cooperative you think they are.
+    </p>
+    <p>
+        If your rating is within {{ C.percent_accurate }}%
+        of the average ratings others in this study gave to that person,
+        you will earn a bonus of {{ C.bonus }}
+    </p>
 </div>
 
 <div>
