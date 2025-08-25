@@ -4,8 +4,6 @@ import random
 import itertools
 import numpy as np
 
-from threshold_dictator import RandomSelection
-
 doc = """
 Your app description
 """
@@ -49,11 +47,20 @@ class Group(BaseGroup):
 class Player(BasePlayer):
 
     k_value = models.IntegerField(initial=99)
-    ratings = models.FloatField(
+    ratings = models.IntegerField(
         initial=999,
         verbose_name='How cooperative is this person?',
         min=0, max=100,
     )
+
+    random_selection = models.StringField(
+        initial='',
+        choices=['randomise', 'whatever'],
+    )
+
+    randomly_selected_round = models.IntegerField(initial=0)
+    randomly_selected_k_value = models.IntegerField(initial=0)
+    randomly_selected_ratings = models.IntegerField(initial=0)
 
     q1_failed_attempts = models.IntegerField()
     q2_failed_attempts = models.IntegerField()
@@ -91,6 +98,22 @@ def generate_k_sequence():
     sequence = necessary_values + random.sample(optional_values, 6)
     random.shuffle(sequence)
     return sequence
+
+def random_payment(player: Player):
+    """
+    This function selects one round among all with equal probability.
+    It records the value of each variable on this round as new random_variable fields
+    """
+    randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
+    me = player.in_round(randomly_selected_round)
+    player.randomly_selected_round = randomly_selected_round
+    #player.participant.randomly_selected_round = randomly_selected_round
+
+    attributes = ['k_value', 'ratings']
+    for attr in attributes:
+        value = getattr(me, attr)
+        setattr(player, f'randomly_selected_{attr}', value)
+        #setattr(player.participant, f'randomly_selected_{attr}', value)
 
 
 ########## PAGES #########
@@ -136,13 +159,47 @@ class CooperativenessRatings(Page):
             ratings=player.ratings,
         )
 
-class Results(Page):
+
+class RandomSelection(Page):
+    form_model = 'player'
+    form_fields = ['random_selection']
 
     @staticmethod
     def is_displayed(player: Player):
         if player.round_number == C.NUM_ROUNDS:
             return True
         return None
+
+    def vars_for_template(player: Player):
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            round_number=player.round_number,
+            k_value=player.k_value,
+            ratings=player.ratings,
+
+            call_payment=random_payment(player),
+        )
+
+
+class End(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+        return None
+
+    def vars_for_template(player: Player):
+        return dict(
+            player_in_all_rounds=player.in_all_rounds(),
+            round_number=player.round_number,
+            k_value=player.k_value,
+            ratings=player.ratings,
+
+            random_round=player.randomly_selected_round,
+            random_k_value=player.randomly_selected_k_value,
+            random_ratings=player.randomly_selected_ratings,
+        )
 
 
 class Payment(Page):
@@ -177,8 +234,8 @@ class ProlificLink(Page):
 
 page_sequence = [Instructions,
                  CooperativenessRatings,
-                 # Results,
-                 # RandomSelection,
+                 RandomSelection,
+                 End,
                  Payment,
                  ProlificLink,
                  ]
