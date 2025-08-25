@@ -84,6 +84,14 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    comment_box = models.LongStringField(
+        verbose_name=''
+    )
+
+    strategy_box = models.LongStringField(
+        verbose_name=''
+    )
+
 ######## FUNCTIONS ##########
 
 def generate_k_sequence():
@@ -202,6 +210,17 @@ class End(Page):
         )
 
 
+class CommentBox(Page):
+    form_model = 'player'
+    form_fields = ['comment_box', 'strategy_box']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == C.NUM_ROUNDS:
+            return True
+        return None
+
+
 class Payment(Page):
 
     @staticmethod
@@ -236,6 +255,7 @@ page_sequence = [Instructions,
                  CooperativenessRatings,
                  RandomSelection,
                  End,
+                 CommentBox,
                  Payment,
                  ProlificLink,
                  ]

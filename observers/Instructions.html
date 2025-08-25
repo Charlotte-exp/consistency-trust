@@ -1,6 +1,6 @@
 {{ block title }}
 
-2nd stage
+    2nd task
 
 {{ endblock }}
 
@@ -15,31 +15,35 @@
 
 {{ block content }}
 
-<div>
-    <p>
-        Now, you will observe the outcome of other participants' choices.
-        You will see the number of times another participant chose the cooperative option out of the 20 trials.
-    </p>
-    <p>
-        For example, if a participant chose to the cooperative option for half the trials, you will see 10/20.
-        If they cooperated on all trials, you will see 20/20.
-        And if they cooperated on all trials but one, you will see 19/20.
-    </p>
-    <p>
-        You will this proportion of cooperative choices for 10 different participants, one per page.
-        Based on each proportion, we will ask you how cooperative you think the participant was overall.
-        So on each page, you will see the number of times a person chose the cooperative option,
-        and use a slider to rate out of 100 how cooperative you think they are.
-    </p>
-    <p>
-        If your rating is within {{ C.percent_accurate }}%
-        of the average ratings others in this study gave to that person,
-        you will earn a bonus of {{ C.bonus }}
-    </p>
-</div>
+<div style="font-size: 14px">
 
-<div>
-    {{ formfields }}
+    <div>
+        <p>
+            Now, you will observe the outcome of other participants' choices.
+            You will see the number of times another participant chose the cooperative option out of the 20 trials.
+        </p>
+        <p>
+            For example, if a participant chose to the cooperative option for half the trials, you will see 10/20.
+            If they cooperated on all trials, you will see 20/20.
+            And if they cooperated on all trials but one, you will see 19/20.
+        </p>
+        <p>
+            You will this proportion of cooperative choices for 10 different participants, one per page.
+            Based on each proportion, we will ask you how cooperative you think the participant was overall.
+            So on each page, you will see the number of times a person chose the cooperative option,
+            and use a slider to rate out of 100 how cooperative you think they are.
+        </p>
+        <p>
+            If your rating is within {{ C.percent_accurate }}%
+            of the average ratings others in this study gave to that person,
+            you will earn a bonus of {{ C.bonus }}
+        </p>
+    </div>
+
+    <div>
+        {{ formfields }}
+    </div>
+
 </div>
 
     <div style="display: flex; justify-content: flex-end">

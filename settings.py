@@ -4,8 +4,16 @@ from os import popen
 
 SESSION_CONFIGS = [
     dict(
+        name='threshold_dictator_with_observers',
+        display_name="With observers",
+        app_sequence=['threshold_dictator', 'observers'],
+        num_demo_participants=6,
+        use_browser_bots=False,
+        oTree_version_used=popen('otree --version').read().strip()
+    ),
+    dict(
         name='observers',
-        display_name="Observer stage ",
+        display_name="Observers Only",
         app_sequence=['observers'],
         num_demo_participants=6,
         use_browser_bots=False,
