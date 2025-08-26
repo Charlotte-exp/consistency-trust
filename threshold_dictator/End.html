@@ -1,18 +1,12 @@
 {{ block title }}
 
-Summary of the parts
+    End of the first part
 
 {{ endblock }}
 
 {{ block content }}
 
 <div style="font-size: 14px">
-
-{{ if treatment_in_first_half == 'treatment'}}
-
-    <p>
-        First part:
-    </p>
 
 <div id="first-treat" style="overflow:auto; height:200px;">
     <table class="table">
@@ -22,101 +16,9 @@ Summary of the parts
             <th>Your bonus</th>
             <th>The previous participant's bonus</th>
         </tr>
-        {{ for p in player_in_first_half }}
+        {{ for p in player_in_all_rounds }}
         <tr>
-            <td>{{ p.part_round_number }}</td>
-            <td>{{ p.get_decision_display }}</td>
-            {{ if p.decision == 1}}
-            <td>{{ p.cost }}</td>
-            <td>{{ p.benefit }}</td>
-            {{ else }}
-            <td>{{ C.endowment }}</td>
-            <td>{{ C.zero }}</td>
-            {{ endif }}
-        </tr>
-        {{ endfor }}
-    </table>
-</div>
-<br>
-
-    <p>
-        Second part:
-    </p>
-
-<div id="second-treat" style="overflow:auto; height:200px;">
-    <table class="table">
-        <tr>
-            <th>Round</th>
-            <th>Choice</th>
-            <th>Bonus</th>
-            <th>Probability</th>
-        </tr>
-        {{ for p in player_in_second_half }}
-        <tr>
-            <td>{{ p.part_round_number }}</td>
-            <td>{{ p.get_decision_control_display }}</td>
-            {{ if p.decision_control == 1}}
-            <td>{{ p.benefit }}</td>
-            <td>{{ p.proba_gamble }}%</td>
-            {{ else }}
-            <td>{{ C.safe_option }}</td>
-            <td>100% (for sure)</td>
-            {{ endif }}
-        </tr>
-        {{ endfor }}
-    </table>
-</div>
-
-{{ endif }}
-
-
-{{ if treatment_in_first_half == 'control' }}
-
-    <p>
-        First part:
-    </p>
-
-<div id="first-cont" style="overflow:auto; height:200px;">
-    <table class="table">
-        <tr>
-            <th>Round</th>
-            <th>Choice</th>
-            <th>Bonus</th>
-            <th>Probability</th>
-        </tr>
-        {{ for p in player_in_first_half }}
-        <tr>
-            <td>{{ p.part_round_number }}</td>
-            <td>{{ p.get_decision_control_display }}</td>
-            {{ if p.decision_control == 1}}
-            <td>{{ p.benefit }}</td>
-            <td>{{ p.proba_gamble }}%</td>
-            {{ else }}
-            <td>{{ C.safe_option }}</td>
-            <td>100% (for sure)</td>
-            {{ endif }}
-        </tr>
-        {{ endfor }}
-    </table>
-</div>
-
-<p> </p>
-
-    <p>
-        Second part:
-    </p>
-
-<div id="second-cont" style="overflow:auto; height:200px;">
-    <table class="table">
-        <tr>
-            <th>Round</th>
-            <th>Choice</th>
-            <th>Your bonus</th>
-            <th>The previous participant's bonus</th>
-        </tr>
-        {{ for p in player_in_second_half }}
-        <tr>
-            <td>{{ p.part_round_number }}</td>
+            <td>{{ p.round_number }}</td>
             <td>{{ p.get_decision_display }}</td>
             {{ if p.decision == 1}}
             <td>{{ p.cost }}</td>
@@ -130,19 +32,12 @@ Summary of the parts
     </table>
 </div>
 
-{{ endif }}
-
-<br>
+<p style="color:white; font-size: 2px">so same white space</p>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
         <p>
-            The round randomly selected for payment is <b>round {{ random_part_round }}</b>
-            {{ if random_round < C.half_rounds}}
-            of the first part.
-            {{ else }}
-            of the second part.
-            {{ endif }}
+            The round randomly selected for payment is <b>round {{ random_round }}</b>
             Your choice on that round was:
         </p>
             {{ if random_decision == 0 }}
@@ -163,28 +58,13 @@ Summary of the parts
                 and the previous participant will receive <b>{{ previous_pp_payoff }}</b> points as their bonus.
             </p>
             {{ endif }}
-            {{ if random_decision_control == 1 }}
-            <div class="card-body">
-                <b>Risky option</b>
-            </div>
-            <p>
-                Since you chose the risky gamble,
-                the randomiser button also selected an outcome for that. <br>
-                The result of that gamble gives you: <b>{{ payoff }}</b>.
-            </p>
-            {{ endif }}
-            {{ if random_decision_control == 0 }}
-            <div class="card-body">
-                <b>Safe option</b>
-            </div>
-            <p>
-                This means that you will receive <b>{{ payoff }}</b> points as a bonus.
-            </p>
-            {{ endif }}
     </div>
 </div>
 
-<br>
+    <br>
+    <p>
+        When you press next, you will start the second part
+    </p>
 
     <div style="display: flex; justify-content: flex-end">
         {% next_button %}
