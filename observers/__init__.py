@@ -127,8 +127,8 @@ def random_payment(player: Player):
 ########## PAGES #########
 
 class Instructions(Page):
-    form_model = 'player'
-    form_fields = ['q1', 'q2']
+    # form_model = 'player'
+    # form_fields = ['q1', 'q2']
 
     # @staticmethod
     # def error_message(player: Player, values):

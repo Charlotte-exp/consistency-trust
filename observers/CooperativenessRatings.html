@@ -1,6 +1,6 @@
 {{ block title }}
 
-    Rating n˚{{ player.round_number }}
+    Proportion n˚{{ player.round_number }}
 
 {{ endblock }}
 
@@ -279,18 +279,16 @@
 
 <div>
     <p>
-        Here is the number of times, out of a possible {{ C.number_of_trials }},
+        Here is the number of times, out of {{ C.number_of_trials }},
         that another participant chose the cooperative option:
     </p>
     <div class="container my-5">
-        <div class="container my-5">
-            <div class="mx-auto p-4 bg-light text-center shadow" style="max-width: 250px; border-radius: 10px;">
-              <div class="fraction-square">
-                <div class="diagonal-line"></div>
-                <div class="k-value">{{ k_value }}</div>
-                <div class="denominator">{{ C.number_of_trials }}</div>
-              </div>
-            </div>
+        <div class="mx-auto p-4 bg-light text-center shadow" style="max-width: 250px; border-radius: 10px;">
+          <div class="fraction-square">
+            <div class="diagonal-line"></div>
+            <div class="k-value">{{ k_value }}</div>
+            <div class="denominator">{{ C.number_of_trials }}</div>
+          </div>
         </div>
     </div>
 </div>
