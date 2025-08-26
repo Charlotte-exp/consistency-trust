@@ -1,0 +1,48 @@
+{{ block title }}
+
+    End of the task
+
+{{ endblock }}
+
+{{ block content }}
+
+<div style="font-size: 14px">
+
+    <div>
+        This task is now over!
+        Below is the summary of your ratings
+    </div>
+
+    <div id="first-treat" style="overflow:auto; height:250px;">
+        <table class="table">
+            <tr>
+                <th>Round</th>
+                <th>Proportion</th>
+                <th>Your rating</th>
+            </tr>
+            {{ for p in player_in_all_rounds }}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>{{ p.k_value }}</td>
+                <td>{{ p.ratings }}</td>
+            </tr>
+            {{ endfor }}
+        </table>
+    </div>
+
+<p style="color:white; font-size: 2px">{{ call_payment }}</p>
+
+    <p>
+        When you press the randomiser button, one round out of the {{ C.NUM_ROUNDS }} above will be randomly selected.
+        The rating you gave on that round is that one that will be used to assess
+        if it lies within {{ C.percent_accurate }}% of the average ratings for that value.
+    </p>
+
+</div>
+
+<p>
+    <button name="random_selection" value="randomise" class="btn btn-primary btn-large">Randomise</button>
+</p>
+
+
+{{ endblock }}

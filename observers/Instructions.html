@@ -1,0 +1,100 @@
+{{ block title }}
+
+    2nd task
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <style>
+
+    .fraction-inline {
+    display: inline-block;
+    position: relative;
+    width: 1.4em;   /* smaller square */
+    height: 1.4em;
+    font-size: 14px;
+    margin-left: 8px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
+  .fraction-inline .diagonal-line {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 140%;
+    height: 1px;
+    background: black;
+    transform: translate(-50%, -50%) rotate(-45deg);
+  }
+  .fraction-inline .k-value {
+    position: absolute;
+    top: 0;
+    left: -6px;
+    font-size: 0.9em;
+    line-height: 1;
+  }
+  .fraction-inline .denominator {
+    position: absolute;
+    bottom: 0;
+    right: -6px;
+    font-size: 0.8em;
+    line-height: 1;
+  }
+
+    </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<div style="font-size: 14px">
+
+    <div>
+        <p>
+            In this second stage, <b>you will observe the outcome of other participants' choices</b> in the previous task.
+            For each other participant, you will be shown the number of times they chose the cooperative option out of the 20 rounds.
+            The options they faced were drawn from the same distribution as yours in stage 1.
+        </p>
+        <p>
+            For instance, if a participant chose to the cooperative option for half the rounds, you will see
+            <span class="fraction-inline">
+              <span class="diagonal-line"></span>
+              <span class="k-value">10</span>
+              <span class="denominator">20</span>
+            </span>.
+            If they chose the cooperative option on all rounds, you will see
+            <span class="fraction-inline">
+              <span class="diagonal-line"></span>
+              <span class="k-value">20</span>
+              <span class="denominator">20</span>
+            </span>.
+            And if they chose the cooperative option on all rounds but one, you will see
+            <span class="fraction-inline">
+              <span class="diagonal-line"></span>
+              <span class="k-value">19</span>
+              <span class="denominator">20</span>
+            </span>.
+        </p>
+        <p>
+            You will see this proportion of cooperative choices <b>for 10 different participants, one per page</b>.
+            Based on each proportion, we will ask you <b>how cooperative you think the participant was</b> overall.
+            So, on each page, you will see the number of times a person chose the cooperative option,
+            and use a slider to rate, out of 100, how cooperative you think they are.
+        </p>
+        <p>
+            To motivate you to think carefully about your ratings, <b>you will earn a <u>bonus of {{ C.bonus }}</u>
+            if your rating is within {{ C.percent_accurate }}%
+            of the average ratings</b> others in this study gave to that person.
+            Only one of the 10 rating will be randomly selected for that,
+            so you should think carefully about each individual rating.
+        </p>
+    </div>
+
+</div>
+
+    <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+    </div>
+
+{{ endblock }}

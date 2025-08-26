@@ -1,0 +1,56 @@
+{{ block title }}
+
+    End of the task
+
+{{ endblock }}
+
+{{ block content }}
+
+<div style="font-size: 14px">
+
+    <div>
+        This task is now over!
+        Below is the summary of your ratings
+    </div>
+
+    <div id="first-treat" style="overflow:auto; height:250px;">
+        <table class="table">
+            <tr>
+                <th>Round</th>
+                <th>Proportion</th>
+                <th>Your rating</th>
+            </tr>
+            {{ for p in player_in_all_rounds }}
+            <tr>
+                <td>{{ p.round_number }}</td>
+                <td>{{ p.k_value }}</td>
+                <td>{{ p.ratings }}</td>
+            </tr>
+            {{ endfor }}
+        </table>
+    </div>
+
+<p style="color:white; font-size: 2px">so it's the same white space</p>
+
+    <div class="card bg-light instructions">
+        <div  class="card-body">
+            <p>
+                The trial randomly selected for payment is <b>trial {{ random_round }}</b>
+            </p>
+            <p>
+                This means that if your rating of <b>{{ random_ratings }}</b>
+                is within {{ C.percent_accurate }}% of the average rating of all study participant
+                for the proportion of {{ random_k_value }}/{{ C.number_of_trials }} cooperative choices,
+                you will receive a bonus payment of {{ C.bonus }} in addition to your participation compensation.
+            </p>
+        </div>
+    </div>
+
+</div>
+
+    <br>
+    <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+    </div>
+
+{{ endblock }}
