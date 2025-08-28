@@ -16,7 +16,7 @@ class C(BaseConstants):
 
     number_of_trials = 20 # from the actor task
     percent_accurate = 10
-    bonus = cu(1)
+    bonus = cu(2)
 
 
 class Subsession(BaseSubsession):
@@ -62,25 +62,31 @@ class Player(BasePlayer):
     randomly_selected_k_value = models.IntegerField(initial=0)
     randomly_selected_ratings = models.IntegerField(initial=0)
 
-    q1_failed_attempts = models.IntegerField()
-    q2_failed_attempts = models.IntegerField()
+    q1_failed_attempts = models.IntegerField(initial=0)
+    q2_failed_attempts = models.IntegerField(initial=0)
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'the number or cooperative choices out of {C.number_of_trials} of one participant'],
-            [2, f'the number of cooperative choices out of {C.number_of_trials} of {C.NUM_ROUNDS} participants'],
-            [3, f'the number of cooperative choices out of {C.NUM_ROUNDS} of {C.number_of_trials} participants'],
+            [1, f'Only how many times they chose the cooperative option, out of {C.number_of_trials}.'],
+            [2, f'How many times they chose the cooperative option, out of {C.number_of_trials}, '
+                f'as well as the payoff to themselves and the other player for each of these choices.'],
+            [3, f'Only one random choice they made.'],
         ],
-        verbose_name='What will you rate?',
+        verbose_name='What will you know about other participants when you rate them?',
         widget=widgets.RadioSelect
     )
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'If your rating is within 5% of the average rating of all study participants'],
-            [2, f'If your rating is within {C.percent_accurate}% of the average rating of all study participants'],
+            [1, f'You will receive {C.bonus} bonus, if your assessment is within {C.percent_accurate}% of the average assessment '
+                f'from other participants who were given the same information, '
+                f'for one randomly selected round of this task.'],
+            [2, f'You will receive {C.bonus} bonus, if your assessment is within 20% of the average assessment '
+                f'from other participants who were given the same information, '
+                f'for one randomly selected round of this task.'],
+            [3, f'You will receive {C.bonus} bonus, no matter what you write'],
         ],
-        verbose_name='On what is your bonus based?',
+        verbose_name='How will your bonus for this part be determined?',
         widget=widgets.RadioSelect
     )
 
@@ -127,28 +133,28 @@ def random_payment(player: Player):
 ########## PAGES #########
 
 class Instructions(Page):
-    # form_model = 'player'
-    # form_fields = ['q1', 'q2']
+    form_model = 'player'
+    form_fields = ['q1', 'q2']
 
-    # @staticmethod
-    # def error_message(player: Player, values):
-    #     """
-    #     records the number of time the page was submitted with an error. which specific error is not recorded.
-    #     """
-    #     solutions = dict(q1=2, q2=2)
-    #
-    #     # error_message can return a dict whose keys are field names and whose values are error messages
-    #     errors = {}
-    #     for question, correct_answer in solutions.items():
-    #         if values[question] != correct_answer:
-    #             errors[question] = 'This answer is wrong'
-    #             # Increment the specific failed attempt counter for the incorrect question
-    #             failed_attempt_field = f"{question}_failed_attempts"
-    #             if hasattr(player, failed_attempt_field):  # Ensure the field exists
-    #                 setattr(player, failed_attempt_field, getattr(player, failed_attempt_field) + 1)
-    #     if errors:
-    #         return errors
-    #     return None
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        records the number of time the page was submitted with an error. which specific error is not recorded.
+        """
+        solutions = dict(q1=2, q2=1)
+
+        # error_message can return a dict whose keys are field names and whose values are error messages
+        errors = {}
+        for question, correct_answer in solutions.items():
+            if values[question] != correct_answer:
+                errors[question] = 'This answer is wrong'
+                # Increment the specific failed attempt counter for the incorrect question
+                failed_attempt_field = f"{question}_failed_attempts"
+                if hasattr(player, failed_attempt_field):  # Ensure the field exists
+                    setattr(player, failed_attempt_field, getattr(player, failed_attempt_field) + 1)
+        if errors:
+            return errors
+        return None
 
     @staticmethod
     def is_displayed(player: Player):
