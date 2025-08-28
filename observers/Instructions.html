@@ -53,46 +53,62 @@
     <div>
         <p>
             In this second part, <b>you will observe the outcome of other participants' choices</b> in the previous task.
-            For each other participant, you will be shown the number of times they chose the cooperative option out of the 20 rounds.
             The options they faced were drawn from the same distribution as yours in the first part.
+            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,
+            across the {{ C.number_of_trials }} rounds.
+            Just knowing how many times they chose to cooperate,
+            we want to know how cooperative you think that participant is.
         </p>
         <p>
+            Thus, you will be shown the number of times one of our participants chose the cooperative option,
+            out of the {{ C.number_of_trials }} rounds, and asked to evaluate how cooperative they are.
             For instance, if a participant chose to the cooperative option for half the rounds, you will see
             <span class="fraction-inline">
               <span class="diagonal-line"></span>
               <span class="k-value">10</span>
-              <span class="denominator">20</span>
+              <span class="denominator">{{ C.number_of_trials }}</span>
             </span>.
             If they chose the cooperative option on all rounds, you will see
             <span class="fraction-inline">
               <span class="diagonal-line"></span>
               <span class="k-value">20</span>
-              <span class="denominator">20</span>
+              <span class="denominator">{{ C.number_of_trials }}</span>
             </span>.
             And if they chose the cooperative option on all rounds but one, you will see
             <span class="fraction-inline">
               <span class="diagonal-line"></span>
               <span class="k-value">19</span>
-              <span class="denominator">20</span>
+              <span class="denominator">{{ C.number_of_trials }}</span>
             </span>.
         </p>
         <p>
-            You will see this proportion of cooperative choices <b>for 10 different participants, one per page</b>.
-            Based on each proportion, we will ask you <b>how cooperative you think the participant was</b> overall.
+            You will see this proportion of cooperative choices <b>for {{ C.NUM_ROUNDS }} different participants,
+            one per page</b>.
             So, on each page, you will see the number of times a person chose the cooperative option,
             and use a slider to rate, out of 100, how cooperative you think they are.
         </p>
         <p>
-            To motivate you to think carefully about your ratings, <b>you will earn a <u>bonus of {{ C.bonus }}</u>
-            if your rating is within {{ C.percent_accurate }}%
-            of the average ratings</b> others in this study gave to that person.
-            Only one of the 10 rating will be randomly selected for that,
+            To motivate you to think carefully about your ratings,
+            <b>You will earn a <u>bonus of {{ C.bonus }}</u>
+            if your rating is the same as the most common rating others in this study
+            gave to that person</b> (within {{ C.percent_accurate}}%.)
+            Only one of the {{ C.NUM_ROUNDS }} ratings will be randomly selected for that,
             so you should think carefully about each individual rating.
         </p>
     </div>
 
 </div>
 
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <h5>Please reply to these questions before continuing:</h5>
+        {% for field in form %}
+            {% formfield field %}
+        {% endfor %}
+    </div>
+</div>
+
+    <br>
     <div style="display: flex; justify-content: flex-end">
         {{ next_button }}
     </div>
