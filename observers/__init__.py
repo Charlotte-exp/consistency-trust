@@ -82,7 +82,11 @@ class Player(BasePlayer):
                 f'if your rating is the same as the average rating other participants in this study '
                 f'who were given the same information gave to that person (±2 units), '
                 f'for one randomly selected round of this task.'],
-            [2, f'You will receive {C.bonus} bonus, no matter what you write'],
+            [2, f'You will receive a {C.bonus} bonus, '
+                f'if your rating is the same as the average rating other participants in this study '
+                f'who were given the same information gave to that person (±5 units), '
+                f'for one randomly selected round of this task.'],
+            [3, f'You will receive {C.bonus} bonus, no matter what you write'],
         ],
         verbose_name='How will your bonus for this part be determined?',
         widget=widgets.RadioSelect
