@@ -141,10 +141,25 @@ class Player(BasePlayer):
         while True:
             benefit_y = random.choice(numbers)
             if C.endowment-cost_x > benefit_y > cost_x: # ensure the numbers satisfy the conditions 2-x>y and y>x
-                player.cost = cost_x
-                player.benefit = benefit_y
-                print(player.benefit, 2-player.cost, player.cost)
+                player.cost = cost_x + 1
+                player.benefit = benefit_y + 1
+                print(player.benefit, C.endowment-player.cost, player.cost)
                 return player.cost, player.benefit
+
+
+    # def get_cost_benefit(player):
+    #     """
+    #     For licensing!!
+    #     """
+    #     numbers = [x / 10 for x in range(1, int(C.endowment * 10))]  # list from 0.1 to 1.9
+    #     feasible_costs = [c for c in numbers if c < C.endowment / 2] # list from 0.1 to 0.9, anything higher will violate the condition below
+    #     cost_x = random.choice(feasible_costs)
+    #     benefit_y = random.choice(numbers)
+    #     player.cost = cost_x  - 1 # subtract 1$ to the cost
+    #     player.benefit = benefit_y  - 1 # subtract 1$ to the cost
+    #     print(player.benefit, 2-player.cost, player.cost)
+    #     return player.cost, player.benefit
+
 
     def get_gambles(player):
         """
