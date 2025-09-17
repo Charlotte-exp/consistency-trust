@@ -67,10 +67,10 @@ class Player(BasePlayer):
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'Only how many times they chose the cooperative option, out of {C.number_of_trials}.'],
-            [2, f'How many times they chose the cooperative option, out of {C.number_of_trials}, '
+            [1, f'Only one random choice they made.'],
+            [2, f'Only how many times they chose the cooperative option, out of {C.number_of_trials}.'],
+            [3, f'How many times they chose the cooperative option, out of {C.number_of_trials}, '
                 f'as well as the payoff to themselves and the other player for each of these choices.'],
-            [3, f'Only one random choice they made.'],
         ],
         verbose_name='What will you know about other participants when you rate them?',
         widget=widgets.RadioSelect
@@ -78,11 +78,13 @@ class Player(BasePlayer):
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'You will receive {C.bonus} bonus, if your assessment is within {C.percent_accurate}% of the average assessment '
-                f'from other participants who were given the same information, '
+            [1, f'You will receive a {C.bonus} bonus, '
+                f'if your rating is the same as the average rating other participants in this study '
+                f'who were given the same information gave to that person (±2 units), '
                 f'for one randomly selected round of this task.'],
-            [2, f'You will receive {C.bonus} bonus, if your assessment is within 20% of the average assessment '
-                f'from other participants who were given the same information, '
+            [2, f'You will receive a {C.bonus} bonus, '
+                f'if your rating is the same as the average rating other participants in this study '
+                f'who were given the same information gave to that person (±5 units), '
                 f'for one randomly selected round of this task.'],
             [3, f'You will receive {C.bonus} bonus, no matter what you write'],
         ],
