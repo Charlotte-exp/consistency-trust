@@ -12,10 +12,10 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'observers'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 11
 
     NUMBER_WORDS = [
-        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
         "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
         "eighteen", "nineteen", "twenty"
     ]
@@ -43,8 +43,10 @@ def creating_session(subsession):
             p.k_value = sequence[0]
     else:
         for p in subsession.get_players():
-            # for rounds >1, just pick from participant.vars
-            p.k_value = p.participant.vars['sequence'][p.round_number - 1]
+            # for rounds >1, just pick from participant.vars BUT not last round because fantom page
+            last_index = len(p.participant.vars['sequence']) - 1
+            idx = min(p.round_number - 1, last_index)
+            p.k_value = p.participant.vars['sequence'][idx]
 
 class Group(BaseGroup):
     pass
@@ -56,6 +58,11 @@ class Player(BasePlayer):
     ratings = models.IntegerField(
         initial=999,
         verbose_name='How cooperative is this person?',
+        min=0, max=100,
+    )
+
+    zero_20 = models.IntegerField(
+        label='',
         min=0, max=100,
     )
 
@@ -271,23 +278,20 @@ class Instructions(Page):
         return False
 
 
-class CooperativenessRatings(Page):
-    form_model = 'player'
-    form_fields = ['ratings']
-
-    def vars_for_template(player: Player):
-        return dict(
-            k_value=player.k_value,
-            ratings=player.ratings,
-        )
-
-
 class FractionOfCooperators(Page):
     form_model = 'player'
 
     @staticmethod
     def get_form_fields(player: Player):
         return [f"{w}_20" for w in C.NUMBER_WORDS]
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return player.id_in_group % 2 == 1
+        if player.round_number == C.NUM_ROUNDS:
+            return player.id_in_group % 2 == 0
+        return False
 
     @staticmethod
     def vars_for_template(player: Player):
@@ -298,7 +302,7 @@ class FractionOfCooperators(Page):
     def error_message(player, values):
         # list of all field names you want to sum
         field_names = [
-            'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
+            'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
             'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
             'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
             'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
@@ -309,6 +313,23 @@ class FractionOfCooperators(Page):
         return None
 
 
+class CooperativenessRatings(Page):
+    form_model = 'player'
+    form_fields = ['ratings']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number < C.NUM_ROUNDS:
+            return True
+        return False
+
+    def vars_for_template(player: Player):
+        return dict(
+            k_value=player.k_value,
+            ratings=player.ratings,
+        )
+
+
 class RandomSelection(Page):
     form_model = 'player'
     form_fields = ['random_selection']
@@ -317,12 +338,14 @@ class RandomSelection(Page):
     def is_displayed(player: Player):
         if player.round_number == C.NUM_ROUNDS:
             return True
-        return None
+        return False
 
     def vars_for_template(player: Player):
+        almost_all_rounds = player.in_rounds(1, C.NUM_ROUNDS-1)
         return dict(
-            player_in_all_rounds=player.in_all_rounds(),
+            player_in_all_rounds= almost_all_rounds,
             round_number=player.round_number,
+            played_rounds=C.NUM_ROUNDS-1,
             k_value=player.k_value,
             ratings=player.ratings,
 
@@ -339,8 +362,9 @@ class End(Page):
         return None
 
     def vars_for_template(player: Player):
+        almost_all_rounds = player.in_rounds(1, C.NUM_ROUNDS - 1)
         return dict(
-            player_in_all_rounds=player.in_all_rounds(),
+            player_in_all_rounds=almost_all_rounds,
             round_number=player.round_number,
             k_value=player.k_value,
             ratings=player.ratings,

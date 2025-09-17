@@ -4,6 +4,49 @@
 
 {{ endblock }}
 
+{{ block styles }}
+    <style>
+
+    .fraction-inline {
+        display: inline-block;
+        position: relative;
+        width: 1.4em;   /* smaller square */
+        height: 1.4em;
+        font-size: 14px;
+        margin-left: 8px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+    .fraction-inline .diagonal-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 140%;
+        height: 1px;
+        background: black;
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .fraction-inline .k-value {
+        position: absolute;
+        top: -3px;
+        left: -5px;
+        font-size: 0.9em;
+        line-height: 1;
+    }
+
+    .fraction-inline .denominator {
+        position: absolute;
+        bottom: 0;
+        right: -8px;
+        font-size: 0.8em;
+        line-height: 1;
+    }
+    </style>
+
+{{ endblock }}
+
 {{ block content }}
 
 <div style="font-size: 14px">
@@ -23,7 +66,13 @@
             {{ for p in player_in_all_rounds }}
             <tr>
                 <td>{{ p.round_number }}</td>
-                <td>{{ p.k_value }}</td>
+                <td>
+                    <span class="fraction-inline">
+                        <span class="diagonal-line"></span>
+                        <span class="k-value">{{ p.k_value }}</span>
+                        <span class="denominator">{{ C.number_of_trials }}</span>
+                    </span>
+                </td>
                 <td>{{ p.ratings }}</td>
             </tr>
             {{ endfor }}
@@ -33,9 +82,8 @@
 <p style="color:white; font-size: 2px">{{ call_payment }}</p>
 
     <p>
-        When you press the randomiser button, one round out of the {{ C.NUM_ROUNDS }} above will be randomly selected.
-        The rating you gave on that round is that one that will be used to assess
-        if it lies within {{ C.percent_accurate }}% of the average ratings for that value.
+        When you press the randomiser button,
+        one round out of the {{ played_rounds }} you just finished will be randomly selected for the bonus.
     </p>
 
 </div>

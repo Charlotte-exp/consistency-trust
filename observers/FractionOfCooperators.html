@@ -119,7 +119,7 @@
   <script>
       document.addEventListener('DOMContentLoaded', function() {
           const fieldNames = [
-              'one_20','two_20','three_20','four_20','five_20',
+              'zero_20', 'one_20','two_20','three_20','four_20','five_20',
               'six_20','seven_20','eight_20','nine_20','ten_20',
               'eleven_20','twelve_20','thirteen_20','fourteen_20','fifteen_20',
               'sixteen_20','seventeen_20','eighteen_20','nineteen_20','twenty_20'
@@ -164,15 +164,36 @@
 
 <div  class="card-body">
 
-
-  <div>
-    <p>
-        Tell us how many participants out of 100 cooperated X out of {{ C.number_of_trials }}.
-        Your answers must sum to 100.
-    </p>
-  </div>
+  {{ if player.round_number == 1 }}
+  <p>
+      First, we want you to estimate the fraction of participants who cooperated.
+      For each possible proportion of cooperative choices in the first part,
+      how many participants out of 100 do you think choose the cooperative option that amount of times?
+      Please give us your estimate for each proportion.
+      <b>The total must sum up to 100.</b>
+  </p>
+  {{ endif }}
+  {{ if player.round_number == C.NUM_ROUNDS }}
+  <p>
+      Lastly, we want you to estimate the fraction of participants who cooperated.
+      For each possible proportion of cooperative choices in the first part,
+      how many participants out of 100 do you think choose the cooperative option that amount of times?
+      Please give us your estimate for each proportion.
+      <b>The total must sum up to 100.</b>
+  </p>
+  {{ endif }}
 
     <table>
+      <tr>
+        <th>
+          <span class="fraction-inline">
+            <span class="diagonal-line"></span>
+            <span class="k-value">0</span>
+            <span class="denominator">{{ C.number_of_trials }}</span>
+          </span>
+        </th>
+        <td>{% formfield 'zero_20' %}</td>
+      </tr>
       <tr>
         <th>
           <span class="fraction-inline">
