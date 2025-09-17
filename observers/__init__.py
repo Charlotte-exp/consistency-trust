@@ -14,6 +14,12 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 10
 
+    NUMBER_WORDS = [
+        "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+        "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+        "eighteen", "nineteen", "twenty"
+    ]
+
     number_of_trials = 20 # from the actor task
     percent_accurate = 10
     bonus = cu(2)
@@ -50,6 +56,106 @@ class Player(BasePlayer):
     ratings = models.IntegerField(
         initial=999,
         verbose_name='How cooperative is this person?',
+        min=0, max=100,
+    )
+
+    one_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    two_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    three_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    four_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    five_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    six_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    seven_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eight_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    nine_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    ten_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eleven_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    twelve_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    thirteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    fourteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    fifteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    sixteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    seventeen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eighteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    nineteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    twenty_20 = models.IntegerField(
+        label='',
         min=0, max=100,
     )
 
@@ -176,6 +282,33 @@ class CooperativenessRatings(Page):
         )
 
 
+class FractionOfCooperators(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        return [f"{w}_20" for w in C.NUMBER_WORDS]
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+        )
+
+    @staticmethod
+    def error_message(player, values):
+        # list of all field names you want to sum
+        field_names = [
+            'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
+            'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
+            'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
+            'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
+        ]
+        total = sum(values[name] for name in field_names)
+        if total != 100:
+            return 'The numbers must add up to 100'
+        return None
+
+
 class RandomSelection(Page):
     form_model = 'player'
     form_fields = ['random_selection']
@@ -260,6 +393,7 @@ class ProlificLink(Page):
 
 
 page_sequence = [Instructions,
+                 FractionOfCooperators,
                  CooperativenessRatings,
                  RandomSelection,
                  End,
