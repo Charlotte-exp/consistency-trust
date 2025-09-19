@@ -22,7 +22,8 @@ class C(BaseConstants):
 
     number_of_trials = 20 # from the actor task
     percent_accurate = 10
-    bonus = cu(2)
+    bonus_ratings = cu(2)
+    bonus_fraction = cu(0.1)
 
 
 class Subsession(BaseSubsession):
@@ -191,15 +192,15 @@ class Player(BasePlayer):
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'You will receive a {C.bonus} bonus, '
+            [1, f'You will receive a {C.bonus_ratings} bonus, '
                 f'if your rating is the same as the average rating other participants in this study '
                 f'who were given the same information gave to that person (±2 units), '
                 f'for one randomly selected round of this task.'],
-            [2, f'You will receive a {C.bonus} bonus, '
+            [2, f'You will receive a {C.bonus_ratings} bonus, '
                 f'if your rating is the same as the average rating other participants in this study '
                 f'who were given the same information gave to that person (±5 units), '
                 f'for one randomly selected round of this task.'],
-            [3, f'You will receive {C.bonus} bonus, no matter what you write'],
+            [3, f'You will receive {C.bonus_ratings} bonus, no matter what you write'],
         ],
         verbose_name='How will your bonus for this part be determined?',
         widget=widgets.RadioSelect
@@ -252,6 +253,22 @@ class Instructions(Page):
     form_fields = ['q1', 'q2']
 
     @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        return False
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.id_in_group % 2 == 1:
+            player_is = 'odd'
+        else:
+            player_is = 'even'
+        return dict(
+            player_id=player_is,
+        )
+
+    @staticmethod
     def error_message(player: Player, values):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
@@ -270,12 +287,6 @@ class Instructions(Page):
         if errors:
             return errors
         return None
-
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == 1:
-            return True
-        return False
 
 
 class FractionOfCooperators(Page):
@@ -398,7 +409,7 @@ class Payment(Page):
         participant = player.participant
         session = player.session
         return dict(
-            bonus=player.payoff.to_real_world_currency(session),
+            final_bonus=player.payoff.to_real_world_currency(session),
             participation_fee=session.config['participation_fee'],
             final_payment=player.payoff.to_real_world_currency(session) + session.config['participation_fee'],
         )
