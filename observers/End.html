@@ -87,15 +87,15 @@
                 The round randomly selected for payment is <b>round {{ random_round }}</b>
             </p>
             <p>
-                If your rating is close to the average rating of all other study participant
-                for the proportion of
+                If your rating is closer than the average rating of {{ C.percent_accurate }}
+                all other study participant for the proportion of
                     <span class="fraction-inline">
                         <span class="diagonal-line"></span>
                         <span class="k-value">{{ random_k_value }}</span>
                         <span class="denominator">{{ C.number_of_trials }}</span>
                     </span>
-                cooperative choices,
-                you will receive a bonus payment of {{ C.bonus }} in addition to your participation compensation.
+                cooperative choices, you will receive a bonus payment of {{ C.bonus_ratings }}
+                in addition to your participation compensation.
             </p>
         </div>
     </div>
