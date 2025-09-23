@@ -193,10 +193,10 @@ class Player(BasePlayer):
     q2 = models.IntegerField(
         choices=[
             [1, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than <b>{C.percent_accurate}%</b> of all the other participants '
+                f'if you are closer than {C.percent_accurate}% of all the other participants '
                 f'for one randomly selected round of this task.'],
             [2, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than <b>80%</b> of all the other participants '
+                f'if you are closer than 80% of all the other participants '
                 f'for one randomly selected round of this task.'],
             [3, f'You will receive {C.bonus_ratings} bonus, no matter what you write'],
         ],
@@ -264,6 +264,7 @@ class Instructions(Page):
             player_is = 'even'
         return dict(
             player_id=player_is,
+            played_rounds=C.NUM_ROUNDS-1,
         )
 
     @staticmethod

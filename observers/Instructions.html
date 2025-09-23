@@ -85,7 +85,7 @@
             </span>.
         </p>
         <p>
-            You will see this proportion of cooperative choices <b>for {{ C.NUM_ROUNDS }} different participants,
+            You will see this proportion of cooperative choices <b>for {{ played_rounds }} different participants,
             one per page</b>.
             So, on each page, you will see the number of times a person chose the cooperative option,
             and use a slider to rate, out of 100, how cooperative you think they are.
@@ -96,7 +96,7 @@
             depending on how far your guess is from the average guess of other participants.</b>
             If you are closer than <b>{{ C.percent_accurate }}%</b> of all the other participants,
             you will receive the bonus.
-            Only one of the {{ C.NUM_ROUNDS }} ratings will be randomly selected for that,
+            Only one of the {{ played_rounds }} ratings will be randomly selected for that,
             so you should think carefully about each individual rating.
         </p>
         <p> {{ if player_id == 'odd' }}
