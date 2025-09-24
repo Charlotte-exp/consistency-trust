@@ -232,7 +232,7 @@ def random_payment(player: Player):
     This function selects one round among all with equal probability.
     It records the value of each variable on this round as new random_variable fields
     """
-    randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
+    randomly_selected_round = random.randint(1, (C.NUM_ROUNDS-1)) ## only round 1-10 since I added one
     me = player.in_round(randomly_selected_round)
     player.randomly_selected_round = randomly_selected_round
     #player.participant.randomly_selected_round = randomly_selected_round

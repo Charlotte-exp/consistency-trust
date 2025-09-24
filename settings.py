@@ -16,7 +16,7 @@ SESSION_CONFIGS = [
         display_name="Observers Only",
         app_sequence=['observers'],
         num_demo_participants=6,
-        use_browser_bots=False,
+        use_browser_bots=True,
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
