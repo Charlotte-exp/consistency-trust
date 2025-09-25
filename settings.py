@@ -8,7 +8,7 @@ SESSION_CONFIGS = [
         display_name="With observers",
         app_sequence=['threshold_dictator', 'observers'],
         num_demo_participants=6,
-        use_browser_bots=True,
+        use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(
@@ -16,7 +16,7 @@ SESSION_CONFIGS = [
         display_name="Observers Only",
         app_sequence=['observers'],
         num_demo_participants=6,
-        use_browser_bots=True,
+        use_browser_bots=False,
         oTree_version_used=popen('otree --version').read().strip()
     ),
     dict(

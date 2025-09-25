@@ -166,22 +166,42 @@
 
   {{ if player.round_number == 1 }}
   <p>
-      First, we want you to estimate the fraction of participants who cooperated.
-      For each possible proportion of cooperative choices in the first part,
-      how many participants out of 100 do you think choose the cooperative option that amount of times?
-      Please give us your estimate for each proportion.
-      <b>The total must sum up to 100.</b>
+      First, we want you to estimate, for each possible proportion of cooperative choices in the first part,
+      <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
+      For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
+      we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
   </p>
   {{ endif }}
   {{ if player.round_number == C.NUM_ROUNDS }}
   <p>
-      Lastly, we want you to estimate the fraction of participants who cooperated.
-      For each possible proportion of cooperative choices in the first part,
-      how many participants out of 100 do you think choose the cooperative option that amount of times?
+      Lastly, we want you to estimate, for each possible proportion of cooperative choices in the first part,
+      <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
+      For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
+      we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
+  </p>
+  {{ endif }}
+  <p>
+      For example, if you believe half of the participants never chose the cooperative option,
+      write but 50 next to
+        <span class="fraction-inline">
+            <span class="diagonal-line"></span>
+            <span class="k-value">0</span>
+            <span class="denominator">{{ C.number_of_trials }}</span>
+        </span>.
+      If you believe only 10 out of 100 people chose the cooperative option for half of the 20 rounds,
+      then write 10 next to
+        <span class="fraction-inline">
+            <span class="diagonal-line"></span>
+            <span class="k-value">10</span>
+            <span class="denominator">{{ C.number_of_trials }}</span>
+        </span>.
+  </p>
+  <p>
+<!--      For each possible proportion of cooperative choices in the first part,-->
+<!--      how many participants out of 100 do you think choose the cooperative option that amount of times?-->
       Please give us your estimate for each proportion.
       <b>The total must sum up to 100.</b>
   </p>
-  {{ endif }}
 
     <table>
       <tr>
