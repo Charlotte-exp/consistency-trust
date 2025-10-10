@@ -59,22 +59,17 @@
     </div>
     {{ endif }}
     <div>
-          {{ if player.round_number == 1 }}
         <p>
-            First, we want you to estimate, for each possible proportion of cooperative choices in the first part,
+            In this section, we want you to estimate, for each possible proportion of cooperative choices in the first part,
             <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
+<!--            The options they faced were drawn from the same distribution as yours in the first part.-->
+<!--            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,-->
+<!--            across the {{ C.number_of_trials }} rounds.-->
             For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
             we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
+            You will get a {{ C.bonus_fraction}} bonus for each of your guesses that is within 1% of the correct number.
         </p>
-        {{ endif }}
-        {{ if player.round_number == C.NUM_ROUNDS }}
-        <p>
-            Lastly, we want you to estimate, for each possible proportion of cooperative choices in the first part,
-            <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
-            For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
-            we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
-        </p>
-        {{ endif }}
+
         <p>
             For example, if you believe half of the participants never chose the cooperative option,
             write but 50 next to
@@ -93,15 +88,16 @@
         </p>
     </div>
 
-</div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
-        <h5>Please reply to these questions before continuing:</h5>
+        <h6>Please reply to these questions before continuing:</h6>
         {% for field in form %}
             {% formfield field %}
         {% endfor %}
     </div>
+</div>
+
 </div>
 
     <br>

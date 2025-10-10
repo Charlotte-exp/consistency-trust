@@ -60,10 +60,10 @@
     {{ endif }}
     <div>
         <p>
-            In this second section, <b>you will observe the outcome of other participants' choices</b> in the previous task.
-            The options they faced were drawn from the same distribution as yours in the first part.
-            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,
-            across the {{ C.number_of_trials }} rounds.
+            In this section, <b>you will observe the outcome of other participants' choices</b> in the first part.
+<!--            The options they faced were drawn from the same distribution as yours in the first part.-->
+<!--            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,-->
+<!--            across the {{ C.number_of_trials }} rounds.-->
             Just knowing how many times they chose to cooperate,
             we want to know how cooperative you think that participant is.
         </p>
@@ -104,27 +104,19 @@
             Only one of the {{ played_rounds }} ratings will be randomly selected for that,
             so you should think carefully about each individual rating.
         </p>
-        <p> {{ if player_id == 'odd' }}
-            But first,
-            {{ endif }}
-            {{ if player_id == 'even' }}
-            After that,
-            {{ endif }}
-            we will also ask you, for each possible proportion of cooperative choices in the first part,
-            how many participants out of 100 do you think choose the cooperative option that amount of times?
-            You will get a {{ C.bonus_fraction}} bonus for each of your guesses that is within 1% of the correct number.
-        </p>
     </div>
 
-</div>
 
 <div class="card bg-light instructions">
     <div  class="card-body">
-        <h5>Please reply to these questions before continuing:</h5>
+        <h6>Please reply to these questions before continuing:</h6>
         {% for field in form %}
             {% formfield field %}
         {% endfor %}
     </div>
+</div>
+
+
 </div>
 
     <br>
