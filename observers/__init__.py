@@ -14,6 +14,8 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 11
 
+    intro_template = 'observers/IntroInstructions.html'
+
     NUMBER_WORDS = [
         "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
         "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
@@ -246,14 +248,16 @@ def random_payment(player: Player):
 
 ########## PAGES #########
 
-class Instructions(Page):
+class InstructionsFraction(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2']
 
     @staticmethod
     def is_displayed(player: Player):
         if player.round_number == 1:
-            return True
+            return player.id_in_group % 2 == 1
+        if player.round_number == C.NUM_ROUNDS:
+            return player.id_in_group % 2 == 0
         return False
 
     @staticmethod
@@ -320,6 +324,48 @@ class FractionOfCooperators(Page):
         total = sum(values[name] for name in field_names)
         if total != 100:
             return 'The numbers must add up to 100'
+        return None
+
+
+class InstructionsCooperativeness(Page):
+    form_model = 'player'
+    form_fields = ['q1', 'q2']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        return False
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.id_in_group % 2 == 1:
+            player_is = 'odd'
+        else:
+            player_is = 'even'
+        return dict(
+            player_id=player_is,
+            played_rounds=C.NUM_ROUNDS-1,
+        )
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        records the number of time the page was submitted with an error. which specific error is not recorded.
+        """
+        solutions = dict(q1=2, q2=1)
+
+        # error_message can return a dict whose keys are field names and whose values are error messages
+        errors = {}
+        for question, correct_answer in solutions.items():
+            if values[question] != correct_answer:
+                errors[question] = 'This answer is wrong'
+                # Increment the specific failed attempt counter for the incorrect question
+                failed_attempt_field = f"{question}_failed_attempts"
+                if hasattr(player, failed_attempt_field):  # Ensure the field exists
+                    setattr(player, failed_attempt_field, getattr(player, failed_attempt_field) + 1)
+        if errors:
+            return errors
         return None
 
 
@@ -426,8 +472,9 @@ class ProlificLink(Page):
         return None
 
 
-page_sequence = [Instructions,
+page_sequence = [InstructionsFraction,
                  FractionOfCooperators,
+                 InstructionsCooperativeness,
                  CooperativenessRatings,
                  RandomSelection,
                  End,

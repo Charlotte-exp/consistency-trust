@@ -53,9 +53,14 @@
 
 <div style="font-size: 14px">
 
+    {{ if player_id == 'even' }}
+    <div>
+        {{ include C.intro_template }}
+    </div>
+    {{ endif }}
     <div>
         <p>
-            In this second part, <b>you will observe the outcome of other participants' choices</b> in the previous task.
+            In this second section, <b>you will observe the outcome of other participants' choices</b> in the previous task.
             The options they faced were drawn from the same distribution as yours in the first part.
             Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,
             across the {{ C.number_of_trials }} rounds.
