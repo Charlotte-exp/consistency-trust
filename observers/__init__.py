@@ -12,11 +12,20 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'observers'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 10
+    NUM_ROUNDS = 11
+
+    intro_template = 'observers/IntroInstructions.html'
+
+    NUMBER_WORDS = [
+        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+        "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+        "eighteen", "nineteen", "twenty"
+    ]
 
     number_of_trials = 20 # from the actor task
-    percent_accurate = 10
-    bonus = cu(2)
+    percent_accurate = 90
+    bonus_ratings = cu(2)
+    bonus_fraction = cu(0.1)
 
 
 class Subsession(BaseSubsession):
@@ -37,8 +46,10 @@ def creating_session(subsession):
             p.k_value = sequence[0]
     else:
         for p in subsession.get_players():
-            # for rounds >1, just pick from participant.vars
-            p.k_value = p.participant.vars['sequence'][p.round_number - 1]
+            # for rounds >1, just pick from participant.vars BUT not last round because fantom page
+            last_index = len(p.participant.vars['sequence']) - 1
+            idx = min(p.round_number - 1, last_index)
+            p.k_value = p.participant.vars['sequence'][idx]
 
 class Group(BaseGroup):
     pass
@@ -53,6 +64,111 @@ class Player(BasePlayer):
         min=0, max=100,
     )
 
+    zero_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    one_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    two_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    three_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    four_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    five_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    six_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    seven_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eight_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    nine_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    ten_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eleven_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    twelve_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    thirteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    fourteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    fifteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    sixteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    seventeen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    eighteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    nineteen_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
+    twenty_20 = models.IntegerField(
+        label='',
+        min=0, max=100,
+    )
+
     random_selection = models.StringField(
         initial='',
         choices=['randomise', 'whatever'],
@@ -64,6 +180,8 @@ class Player(BasePlayer):
 
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
+    q3_failed_attempts = models.IntegerField(initial=0)
+    q4_failed_attempts = models.IntegerField(initial=0)
 
     q1 = models.IntegerField(
         choices=[
@@ -78,15 +196,38 @@ class Player(BasePlayer):
 
     q2 = models.IntegerField(
         choices=[
-            [1, f'You will receive a {C.bonus} bonus, '
-                f'if your rating is the same as the average rating other participants in this study '
-                f'who were given the same information gave to that person (±2 units), '
+            [1, f'You will receive a {C.bonus_ratings} bonus, '
+                f'if you are closer than {C.percent_accurate}% of all the other participants '
                 f'for one randomly selected round of this task.'],
-            [2, f'You will receive a {C.bonus} bonus, '
-                f'if your rating is the same as the average rating other participants in this study '
-                f'who were given the same information gave to that person (±5 units), '
+            [2, f'You will receive a {C.bonus_ratings} bonus, '
+                f'if you are closer than 80% of all the other participants '
                 f'for one randomly selected round of this task.'],
-            [3, f'You will receive {C.bonus} bonus, no matter what you write'],
+            [3, f'You will receive {C.bonus_ratings} bonus, no matter what you write'],
+        ],
+        verbose_name='How will your bonus for this part be determined?',
+        widget=widgets.RadioSelect
+    )
+
+    q3 = models.IntegerField(
+        choices=[
+            [1, f'I should write 100 next to 20/{C.number_of_trials}.'],
+            [2, f'I should write 0 next to 0/{C.number_of_trials}.'],
+            [3, f'I should write 100 next to 0/{C.number_of_trials}.'],
+        ],
+        verbose_name='What should you write if you believe that every participant never chose the cooperative option?',
+        widget=widgets.RadioSelect
+    )
+
+    q4 = models.IntegerField(
+        choices=[
+            [1, f'You will receive one {C.bonus_fraction} if all your guesses are'
+                f' within 1% of the correct number'],
+            [2, f'You will receive a {C.bonus_fraction} bonus per guess '
+                f'that is within 10% of the correct number'
+                f'for one randomly selected round of this task.'],
+            [3, f'You will receive a {C.bonus_fraction} bonus per guess '
+                f'that is within 1% of the correct number'
+                f'for one randomly selected round of this task.'],
         ],
         verbose_name='How will your bonus for this part be determined?',
         widget=widgets.RadioSelect
@@ -120,7 +261,7 @@ def random_payment(player: Player):
     This function selects one round among all with equal probability.
     It records the value of each variable on this round as new random_variable fields
     """
-    randomly_selected_round = random.randint(1, C.NUM_ROUNDS)
+    randomly_selected_round = random.randint(1, (C.NUM_ROUNDS-1)) ## only round 1-10 since I added one
     me = player.in_round(randomly_selected_round)
     player.randomly_selected_round = randomly_selected_round
     #player.participant.randomly_selected_round = randomly_selected_round
@@ -134,9 +275,105 @@ def random_payment(player: Player):
 
 ########## PAGES #########
 
-class Instructions(Page):
+class InstructionsFraction(Page):
+    form_model = 'player'
+    form_fields = ['q3', 'q4']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return player.id_in_group % 2 == 1
+        if player.round_number == C.NUM_ROUNDS:
+            return player.id_in_group % 2 == 0
+        return False
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.id_in_group % 2 == 1:
+            player_is = 'odd'
+        else:
+            player_is = 'even'
+        return dict(
+            player_id=player_is,
+            played_rounds=C.NUM_ROUNDS-1,
+        )
+
+    @staticmethod
+    def error_message(player: Player, values):
+        """
+        records the number of time the page was submitted with an error. which specific error is not recorded.
+        """
+        solutions = dict(q3=3, q4=3)
+
+        # error_message can return a dict whose keys are field names and whose values are error messages
+        errors = {}
+        for question, correct_answer in solutions.items():
+            if values[question] != correct_answer:
+                errors[question] = 'This answer is wrong'
+                # Increment the specific failed attempt counter for the incorrect question
+                failed_attempt_field = f"{question}_failed_attempts"
+                if hasattr(player, failed_attempt_field):  # Ensure the field exists
+                    setattr(player, failed_attempt_field, getattr(player, failed_attempt_field) + 1)
+        if errors:
+            return errors
+        return None
+
+
+class FractionOfCooperators(Page):
+    form_model = 'player'
+
+    @staticmethod
+    def get_form_fields(player: Player):
+        return [f"{w}_20" for w in C.NUMBER_WORDS]
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return player.id_in_group % 2 == 1
+        if player.round_number == C.NUM_ROUNDS:
+            return player.id_in_group % 2 == 0
+        return False
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        return dict(
+        )
+
+    @staticmethod
+    def error_message(player, values):
+        # list of all field names you want to sum
+        field_names = [
+            'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
+            'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
+            'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
+            'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
+        ]
+        total = sum(values[name] for name in field_names)
+        if total != 100:
+            return 'The numbers must add up to 100'
+        return None
+
+
+class InstructionsCooperativeness(Page):
     form_model = 'player'
     form_fields = ['q1', 'q2']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number == 1:
+            return True
+        return False
+
+    @staticmethod
+    def vars_for_template(player: Player):
+        if player.id_in_group % 2 == 1:
+            player_is = 'odd'
+        else:
+            player_is = 'even'
+        return dict(
+            player_id=player_is,
+            played_rounds=C.NUM_ROUNDS-1,
+        )
 
     @staticmethod
     def error_message(player: Player, values):
@@ -158,16 +395,16 @@ class Instructions(Page):
             return errors
         return None
 
-    @staticmethod
-    def is_displayed(player: Player):
-        if player.round_number == 1:
-            return True
-        return False
-
 
 class CooperativenessRatings(Page):
     form_model = 'player'
     form_fields = ['ratings']
+
+    @staticmethod
+    def is_displayed(player: Player):
+        if player.round_number < C.NUM_ROUNDS:
+            return True
+        return False
 
     def vars_for_template(player: Player):
         return dict(
@@ -184,12 +421,14 @@ class RandomSelection(Page):
     def is_displayed(player: Player):
         if player.round_number == C.NUM_ROUNDS:
             return True
-        return None
+        return False
 
     def vars_for_template(player: Player):
+        almost_all_rounds = player.in_rounds(1, C.NUM_ROUNDS-1)
         return dict(
-            player_in_all_rounds=player.in_all_rounds(),
+            player_in_all_rounds= almost_all_rounds,
             round_number=player.round_number,
+            played_rounds=C.NUM_ROUNDS-1,
             k_value=player.k_value,
             ratings=player.ratings,
 
@@ -206,8 +445,9 @@ class End(Page):
         return None
 
     def vars_for_template(player: Player):
+        almost_all_rounds = player.in_rounds(1, C.NUM_ROUNDS - 1)
         return dict(
-            player_in_all_rounds=player.in_all_rounds(),
+            player_in_all_rounds=almost_all_rounds,
             round_number=player.round_number,
             k_value=player.k_value,
             ratings=player.ratings,
@@ -241,7 +481,7 @@ class Payment(Page):
         participant = player.participant
         session = player.session
         return dict(
-            bonus=player.payoff.to_real_world_currency(session),
+            final_bonus=player.payoff.to_real_world_currency(session),
             participation_fee=session.config['participation_fee'],
             final_payment=player.payoff.to_real_world_currency(session) + session.config['participation_fee'],
         )
@@ -259,7 +499,9 @@ class ProlificLink(Page):
         return None
 
 
-page_sequence = [Instructions,
+page_sequence = [InstructionsFraction,
+                 FractionOfCooperators,
+                 InstructionsCooperativeness,
                  CooperativenessRatings,
                  RandomSelection,
                  End,

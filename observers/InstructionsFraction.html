@@ -1,0 +1,108 @@
+{{ block title }}
+
+    2nd part
+
+{{ endblock }}
+
+{{ block styles }}
+
+    <style>
+
+    .fraction-inline {
+        display: inline-block;
+        position: relative;
+        width: 1.4em;   /* smaller square */
+        height: 1.4em;
+        font-size: 14px;
+        margin-left: 8px;
+        margin-right: 10px;
+        vertical-align: middle;
+      }
+
+    .fraction-inline .diagonal-line {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 140%;
+        height: 1px;
+        background: black;
+        transform: translate(-50%, -50%) rotate(-45deg);
+    }
+
+    .fraction-inline .k-value {
+        position: absolute;
+        top: 0;
+        left: -6px;
+        font-size: 0.9em;
+        line-height: 1;
+    }
+
+    .fraction-inline .denominator {
+        position: absolute;
+        bottom: 0;
+        right: -6px;
+        font-size: 0.8em;
+        line-height: 1;
+    }
+
+    </style>
+
+{{ endblock }}
+
+{{ block content }}
+
+<div style="font-size: 14px">
+
+    {{ if player_id == 'odd' }}
+    <div>
+        {{ include C.intro_template }}
+    </div>
+    {{ endif }}
+    <div>
+        <p>
+            In this section, we want you to estimate, for each possible proportion of cooperative choices in the first part,
+            <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
+<!--            The options they faced were drawn from the same distribution as yours in the first part.-->
+<!--            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,-->
+<!--            across the {{ C.number_of_trials }} rounds.-->
+            For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
+            we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
+            You will get a {{ C.bonus_fraction}} bonus for each of your guesses that is within 1% of the correct number.
+        </p>
+
+        <p>
+            For example, if you believe half of the participants never chose the cooperative option,
+            write 50 next to
+              <span class="fraction-inline">
+                  <span class="diagonal-line"></span>
+                  <span class="k-value">0</span>
+                  <span class="denominator">{{ C.number_of_trials }}</span>
+              </span>.
+            If you believe only 10 out of 100 people chose the cooperative option for half of the 20 rounds,
+            then write 10 next to
+              <span class="fraction-inline">
+                  <span class="diagonal-line"></span>
+                  <span class="k-value">10</span>
+                  <span class="denominator">{{ C.number_of_trials }}</span>
+              </span>.
+        </p>
+    </div>
+
+
+<div class="card bg-light instructions">
+    <div  class="card-body">
+        <h6>Please reply to these questions before continuing:</h6>
+        {% for field in form %}
+            {% formfield field %}
+        {% endfor %}
+    </div>
+</div>
+
+</div>
+
+    <br>
+    <div style="display: flex; justify-content: flex-end">
+        {{ next_button }}
+    </div>
+
+{{ endblock }}
