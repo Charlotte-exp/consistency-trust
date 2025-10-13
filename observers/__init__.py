@@ -181,6 +181,7 @@ class Player(BasePlayer):
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
     q3_failed_attempts = models.IntegerField(initial=0)
+    q4_failed_attempts = models.IntegerField(initial=0)
 
     q1 = models.IntegerField(
         choices=[
@@ -214,6 +215,21 @@ class Player(BasePlayer):
             [3, f'I should write 100 next to 0/{C.number_of_trials}.'],
         ],
         verbose_name='What should you write if you believe that every participant never chose the cooperative option?',
+        widget=widgets.RadioSelect
+    )
+
+    q4 = models.IntegerField(
+        choices=[
+            [1, f'You will receive one {C.bonus_fraction} if all your guesses are'
+                f' within 1% of the correct number'],
+            [2, f'You will receive a {C.bonus_fraction} bonus per guess '
+                f'that is within 10% of the correct number'
+                f'for one randomly selected round of this task.'],
+            [3, f'You will receive a {C.bonus_fraction} bonus per guess '
+                f'that is within 1% of the correct number'
+                f'for one randomly selected round of this task.'],
+        ],
+        verbose_name='How will your bonus for this part be determined?',
         widget=widgets.RadioSelect
     )
 
@@ -261,7 +277,7 @@ def random_payment(player: Player):
 
 class InstructionsFraction(Page):
     form_model = 'player'
-    form_fields = ['q3']
+    form_fields = ['q3', 'q4']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -287,7 +303,7 @@ class InstructionsFraction(Page):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
-        solutions = dict(q1=3)
+        solutions = dict(q3=3, q4=3)
 
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {}
