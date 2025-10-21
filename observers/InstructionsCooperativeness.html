@@ -1,6 +1,14 @@
 {{ block title }}
 
-    2nd part
+    {{ if player_id == 'even' }}
+
+        Part 2
+
+    {{ else if player_id == 'odd' }}
+
+    Part 3
+
+    {{ endif }}
 
 {{ endblock }}
 
@@ -60,49 +68,20 @@
     {{ endif }}
     <div>
         <p>
-            In this section, <b>you will observe the outcome of other participants' choices</b> in the first part.
-<!--            The options they faced were drawn from the same distribution as yours in the first part.-->
-<!--            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,-->
-<!--            across the {{ C.number_of_trials }} rounds.-->
-            Just knowing how many times they chose to cooperate,
-            we want to know how cooperative you think that participant is.
-        </p>
-        <p>
-            Thus, you will be shown the number of times one of our participants chose the cooperative option,
-            out of the {{ C.number_of_trials }} rounds, and asked to evaluate how cooperative they are.
-            For instance, if a participant chose to the cooperative option for half the rounds, you will see
-            <span class="fraction-inline">
-              <span class="diagonal-line"></span>
-              <span class="k-value">10</span>
-              <span class="denominator">{{ C.number_of_trials }}</span>
-            </span>.
-            If they chose the cooperative option on all rounds, you will see
-            <span class="fraction-inline">
-              <span class="diagonal-line"></span>
-              <span class="k-value">20</span>
-              <span class="denominator">{{ C.number_of_trials }}</span>
-            </span>.
-            And if they chose the cooperative option on all rounds but one, you will see
-            <span class="fraction-inline">
-              <span class="diagonal-line"></span>
-              <span class="k-value">19</span>
-              <span class="denominator">{{ C.number_of_trials }}</span>
-            </span>.
-        </p>
-        <p>
-            You will see this proportion of cooperative choices <b>for {{ played_rounds }} different participants,
-            one per page</b>.
-            So, on each page, you will see the number of times a person chose the cooperative option,
-            and use a slider to rate, out of 100, how cooperative you think they are.
+            In this part, <b>you will observe the number of times, out of 20,
+            that some other participants chose to cooperate</b> in the first part of this study.
+            We want to know how cooperative you think these participants are.
         </p>
         <p>
             To motivate you to think carefully about your ratings,
             <b>you can earn a <u>bonus of {{ C.bonus_ratings }}</u>,
-            depending on how far your guess is from the average guess of other participants.</b>
+            depending on how far your answer is from the average answer provided by other participants.</b>
             If you are closer than <b>{{ C.percent_accurate }}%</b> of all the other participants,
             you will receive the bonus.
-            Only one of the {{ played_rounds }} ratings will be randomly selected for that,
-            so you should think carefully about each individual rating.
+            In particular, if your answer is closer to the average than {{ C.percent_accurate }}% of the other participants,
+            on the question that we randomly select for bonus payment, you will receive the {{ C.bonus_ratings }} bonus.
+            (As usual, one of your answers from this part will be randomly selected for the bonus payment.)
+
         </p>
     </div>
 

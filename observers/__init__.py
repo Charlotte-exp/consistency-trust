@@ -25,7 +25,7 @@ class C(BaseConstants):
     number_of_trials = 20 # from the actor task
     percent_accurate = 90
     bonus_ratings = cu(2)
-    bonus_fraction = cu(0.1)
+    bonus_fraction = cu(2)
 
 
 class Subsession(BaseSubsession):
