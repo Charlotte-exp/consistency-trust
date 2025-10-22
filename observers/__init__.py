@@ -365,19 +365,19 @@ class FractionOfCooperators(Page):
         return dict(
         )
 
-    @staticmethod
-    def error_message(player, values):
-        # list of all field names you want to sum
-        field_names = [
-            'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
-            'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
-            'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
-            'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
-        ]
-        total = sum(values[name] for name in field_names)
-        if total != 100:
-            return 'The numbers must add up to 100'
-        return None
+    # @staticmethod
+    # def error_message(player, values):
+    #     # list of all field names you want to sum
+    #     field_names = [
+    #         'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
+    #         'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
+    #         'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
+    #         'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
+    #     ]
+    #     total = sum(values[name] for name in field_names)
+    #     if total != 100:
+    #         return 'The numbers must add up to 100'
+    #     return None
 
 
 class InstructionsCooperativeness(Page):
