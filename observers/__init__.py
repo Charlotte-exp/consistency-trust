@@ -182,56 +182,82 @@ class Player(BasePlayer):
     q2_failed_attempts = models.IntegerField(initial=0)
     q3_failed_attempts = models.IntegerField(initial=0)
     q4_failed_attempts = models.IntegerField(initial=0)
+    q5_failed_attempts = models.IntegerField(initial=0)
+    q6_failed_attempts = models.IntegerField(initial=0)
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'Only one random choice they made.'],
-            [2, f'Only how many times they chose the cooperative option, out of {C.number_of_trials}.'],
+            [1, f'One random choice they made.'],
+            [2, f'How many times they chose the cooperative option, out of {C.number_of_trials}.'],
             [3, f'How many times they chose the cooperative option, out of {C.number_of_trials}, '
-                f'as well as the payoff to themselves and the other player for each of these choices.'],
+                f'as well as the exact choices they faced on each occasion.'],
         ],
-        verbose_name='What will you know about other participants when you rate them?',
+        verbose_name='What will you know about the participants you are evaluating?',
         widget=widgets.RadioSelect
     )
 
     q2 = models.IntegerField(
         choices=[
             [1, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than {C.percent_accurate}% of all the other participants '
-                f'for one randomly selected round of this task.'],
+                f'if your answer is closer to the average answer than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
             [2, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than 80% of all the other participants '
-                f'for one randomly selected round of this task.'],
-            [3, f'You will receive {C.bonus_ratings} bonus, no matter what you write'],
+                f'if your answer is higher than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
+            [3, f'You will receive a {C.bonus_ratings} bonus, '
+                f'if your answer is lower than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
         ],
         verbose_name='How will your bonus for this part be determined?',
+        widget=widgets.RadioSelect
+    )
+
+    q5 = models.IntegerField(
+        choices=[
+            [1, f'Other participants who took this study and faced the same kind of choices you made in the first section'],
+            [2, f'Other participants who took this study and faced very different choices. '
+                f'For instance, cooperating was always a lot more costly for them than it was for you.'],
+        ],
+        verbose_name='When answering questions for this part of the study, should you be imagining:',
         widget=widgets.RadioSelect
     )
 
     q3 = models.IntegerField(
         choices=[
-            [1, f'I should write 100 next to 20/{C.number_of_trials}.'],
-            [2, f'I should write 0 next to 0/{C.number_of_trials}.'],
-            [3, f'I should write 100 next to 0/{C.number_of_trials}.'],
+            [1, f'How many other participants cooperated on 5 out of their {C.number_of_trials} choices'],
+            [2, f'Whether you cooperated on 5 out of your {C.number_of_trials}  cooperative choices'],
+            [3, f'Whether you think participants should have cooperated on 5 out of their {C.number_of_trials}  choices']
         ],
-        verbose_name='What should you write if you believe that every participant never chose the cooperative option?',
+        verbose_name='In this part, which of the following questions might you be asked:',
         widget=widgets.RadioSelect
     )
 
     q4 = models.IntegerField(
         choices=[
-            [1, f'You will receive one {C.bonus_fraction} if all your guesses are'
-                f' within 1% of the correct number'],
-            [2, f'You will receive a {C.bonus_fraction} bonus per guess '
-                f'that is within 10% of the correct number'
-                f'for one randomly selected round of this task.'],
-            [3, f'You will receive a {C.bonus_fraction} bonus per guess '
-                f'that is within 1% of the correct number'
-                f'for one randomly selected round of this task.'],
+            [1, f'If you guess that 7% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 8.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
+            [2, f'If you guess that 4% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 8.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
+            [3, f'If you guess that 4% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 3.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
         ],
-        verbose_name='How will your bonus for this part be determined?',
+        verbose_name='In which of the following circumstances might you receive a bonus from this part of the study:',
         widget=widgets.RadioSelect
     )
+
+    q6 = models.IntegerField(
+        choices=[
+            [1, f'Other participants who took this study and faced the same kind of choices you made in the first section'],
+            [2, f'Other participants who took this study and faced very different choices. '
+                f'For instance, cooperating was always a lot more costly for them than it was for you.'],
+        ],
+        verbose_name='When answering questions for this part of the study, should you be imagining:',
+        widget=widgets.RadioSelect
+    )
+
 
     comment_box = models.LongStringField(
         verbose_name=''
@@ -277,7 +303,7 @@ def random_payment(player: Player):
 
 class InstructionsFraction(Page):
     form_model = 'player'
-    form_fields = ['q3', 'q4']
+    form_fields = ['q3', 'q4', 'q6']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -303,7 +329,7 @@ class InstructionsFraction(Page):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
-        solutions = dict(q3=3, q4=3)
+        solutions = dict(q3=1, q4=3, q6=1)
 
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {}
@@ -356,7 +382,7 @@ class FractionOfCooperators(Page):
 
 class InstructionsCooperativeness(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2']
+    form_fields = ['q1', 'q2', 'q5']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -380,7 +406,7 @@ class InstructionsCooperativeness(Page):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
-        solutions = dict(q1=2, q2=1)
+        solutions = dict(q1=2, q2=1, q5=1)
 
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {}
