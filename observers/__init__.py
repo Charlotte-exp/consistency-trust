@@ -16,16 +16,18 @@ class C(BaseConstants):
 
     intro_template = 'observers/IntroInstructions.html'
 
-    NUMBER_WORDS = [
-        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-        "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
-        "eighteen", "nineteen", "twenty"
-    ]
+    # NUMBER_WORDS = [
+    #     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    #     "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+    #     "eighteen", "nineteen", "twenty"
+    # ]
 
     number_of_trials = 20 # from the actor task
     percent_accurate = 90
     bonus_ratings = cu(2)
     bonus_fraction = cu(2)
+
+    number_trials_list = [0, number_of_trials]
 
 
 class Subsession(BaseSubsession):
@@ -64,107 +66,107 @@ class Player(BasePlayer):
         min=0, max=100,
     )
 
-    zero_20 = models.IntegerField(
+    prop_0 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    one_20 = models.IntegerField(
+    prop_1 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    two_20 = models.IntegerField(
+    prop_2 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    three_20 = models.IntegerField(
+    prop_3 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    four_20 = models.IntegerField(
+    prop_4 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    five_20 = models.IntegerField(
+    prop_5 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    six_20 = models.IntegerField(
+    prop_6 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    seven_20 = models.IntegerField(
+    prop_7 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eight_20 = models.IntegerField(
+    prop_8 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    nine_20 = models.IntegerField(
+    prop_9 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    ten_20 = models.IntegerField(
+    prop_10 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eleven_20 = models.IntegerField(
+    prop_11 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    twelve_20 = models.IntegerField(
+    prop_12 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    thirteen_20 = models.IntegerField(
+    prop_13 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    fourteen_20 = models.IntegerField(
+    prop_14 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    fifteen_20 = models.IntegerField(
+    prop_15 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    sixteen_20 = models.IntegerField(
+    prop_16 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    seventeen_20 = models.IntegerField(
+    prop_17 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eighteen_20 = models.IntegerField(
+    prop_18 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    nineteen_20 = models.IntegerField(
+    prop_19 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    twenty_20 = models.IntegerField(
+    prop_20 = models.IntegerField(
         label='',
         min=0, max=100,
     )
@@ -350,7 +352,7 @@ class FractionOfCooperators(Page):
 
     @staticmethod
     def get_form_fields(player: Player):
-        return [f"{w}_20" for w in C.NUMBER_WORDS]
+        return [f"prop_{i}" for i in player.participant.vars['sequence']]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -363,6 +365,8 @@ class FractionOfCooperators(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
+            number_of_trials=C.number_of_trials,
+            sequence=player.participant.vars['sequence'],
         )
 
     # @staticmethod
@@ -525,7 +529,8 @@ class ProlificLink(Page):
         return None
 
 
-page_sequence = [InstructionsFraction,
+page_sequence = [
+    # InstructionsFraction,
                  FractionOfCooperators,
                  InstructionsCooperativeness,
                  CooperativenessRatings,
