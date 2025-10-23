@@ -43,7 +43,9 @@ def creating_session(subsession):
     if subsession.round_number == 1:
         for p in subsession.get_players():
             sequence = generate_k_sequence()
+            prop_sequence = generate_prop_sequence()
             p.participant.vars['sequence'] = sequence
+            p.participant.vars['prop_sequence'] = prop_sequence
             # set first round value directly
             p.k_value = sequence[0]
     else:
@@ -284,6 +286,16 @@ def generate_k_sequence():
     random.shuffle(sequence)
     return sequence
 
+def generate_prop_sequence():
+    """
+    Same as above for proportion sequence.
+    """
+    optional_values = list(range(2, 19))  # 2 to 18
+    necessary_values = [0, 1, 19, 20]
+    prop_sequence = necessary_values + random.sample(optional_values, 6)
+    # random.shuffle(sequence)
+    return prop_sequence
+
 def random_payment(player: Player):
     """
     This function selects one round among all with equal probability.
@@ -352,7 +364,7 @@ class FractionOfCooperators(Page):
 
     @staticmethod
     def get_form_fields(player: Player):
-        return [f"prop_{i}" for i in player.participant.vars['sequence']]
+        return [f"prop_{i}" for i in player.participant.vars['prop_sequence']]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -366,7 +378,7 @@ class FractionOfCooperators(Page):
     def vars_for_template(player: Player):
         return dict(
             number_of_trials=C.number_of_trials,
-            sequence=player.participant.vars['sequence'],
+            sequence=player.participant.vars['prop_sequence'],
         )
 
     # @staticmethod
