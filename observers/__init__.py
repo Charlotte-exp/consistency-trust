@@ -3,6 +3,7 @@ from otree.api import *
 import random
 import itertools
 import numpy as np
+import re
 
 doc = """
 Your app description
@@ -181,6 +182,8 @@ class Player(BasePlayer):
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_k_value = models.IntegerField(initial=0)
     randomly_selected_ratings = models.IntegerField(initial=0)
+    randomly_selected_prop = models.IntegerField(initial=0)
+    randomly_selected_estimate = models.IntegerField(initial=0)
 
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
@@ -381,19 +384,22 @@ class FractionOfCooperators(Page):
             sequence=player.participant.vars['prop_sequence'],
         )
 
-    # @staticmethod
-    # def error_message(player, values):
-    #     # list of all field names you want to sum
-    #     field_names = [
-    #         'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
-    #         'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
-    #         'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
-    #         'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
-    #     ]
-    #     total = sum(values[name] for name in field_names)
-    #     if total != 100:
-    #         return 'The numbers must add up to 100'
-    #     return None
+    def before_next_page(player: Player, timeout_happened):
+        prop_names = [f"prop_{i}" for i in player.participant.vars['prop_sequence']]
+        randomly_selected_prop = random.choice(prop_names)
+
+        # Extract the numeric part (e.g. 5)
+        match = re.search(r'\d+', randomly_selected_prop)
+        if match:
+            selected_i = int(match.group(0))
+        else:
+            selected_i = None  # Fallback if something unexpected happens
+
+        player.randomly_selected_estimate = getattr(player, randomly_selected_prop)  # value of prop_i
+        player.participant.vars['randomly_selected_estimate'] = player.randomly_selected_estimate
+        player.randomly_selected_prop = selected_i  # proportion number only
+        player.participant.vars['randomly_selected_prop'] = player.randomly_selected_prop
+
 
 
 class InstructionsCooperativeness(Page):
@@ -497,6 +503,8 @@ class End(Page):
             random_round=player.randomly_selected_round,
             random_k_value=player.randomly_selected_k_value,
             random_ratings=player.randomly_selected_ratings,
+            random_prop=player.participant.vars['randomly_selected_prop'],
+            random_estimate=player.participant.vars['randomly_selected_estimate'],
         )
 
 

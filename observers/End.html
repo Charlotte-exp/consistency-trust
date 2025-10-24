@@ -1,6 +1,6 @@
 {{ block title }}
 
-    End of the task
+    End of part 2 & 3
 
 {{ endblock }}
 
@@ -51,9 +51,9 @@
 
 <div style="font-size: 14px">
 
-    <div>
+    <div style="margin-bottom: 10px">
         This task is now over!
-        Below is the summary of your ratings
+        Below is the summary of your ratings:
     </div>
 
     <div id="first-treat" style="overflow:auto; height:250px;">
@@ -84,19 +84,34 @@
     <div class="card bg-light instructions">
         <div  class="card-body">
             <p>
-                The round randomly selected for payment is <b>round {{ random_round }}</b>
+                <u>Ratings</u>: The proportion randomly selected for payment is
+                <span class="fraction-inline">
+                    <span class="diagonal-line"></span>
+                    <span class="k-value">{{ random_k_value }}</span>
+                    <span class="denominator">{{ C.number_of_trials }}</span>
+                </span>
             </p>
             <p>
-                If your rating is closer than the average rating of {{ C.percent_accurate }}
-                all other study participant for the proportion of
-                    <span class="fraction-inline">
-                        <span class="diagonal-line"></span>
-                        <span class="k-value">{{ random_k_value }}</span>
-                        <span class="denominator">{{ C.number_of_trials }}</span>
-                    </span>
-                cooperative choices, you will receive a bonus payment of {{ C.bonus_ratings }}
+                If your rating is closer than {{ C.percent_accurate }}% of all other study participants
+                for the proportion of {{ random_k_value }} out of {{ C.number_of_trials }} cooperative choices,
+                you will receive a bonus payment of {{ C.bonus_ratings }}
                 in addition to your participation compensation.
             </p>
+            <p>
+                <u>Estimates</u>: The proportion randomly selected for payment is
+                <span class="fraction-inline">
+                        <span class="diagonal-line"></span>
+                        <span class="k-value">{{ random_prop }}</span>
+                        <span class="denominator">{{ C.number_of_trials }}</span>
+                    </span>
+            </p>
+            <p>
+                If your estimate is within 1% of the correct number of participants who chose to cooperate
+                {{ random_estimate }} out of {{ C.number_of_trials }},
+                you will receive a bonus payment of {{ C.bonus_ratings }}
+                in addition to your participation compensation.
+            </p>
+
         </div>
     </div>
 
