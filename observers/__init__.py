@@ -549,8 +549,7 @@ class ProlificLink(Page):
         return None
 
 
-page_sequence = [
-    # InstructionsFraction,
+page_sequence = [InstructionsFraction,
                  FractionOfCooperators,
                  InstructionsCooperativeness,
                  CooperativenessRatings,
