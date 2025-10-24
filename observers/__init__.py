@@ -271,7 +271,12 @@ class Player(BasePlayer):
     )
 
     strategy_box = models.LongStringField(
-        verbose_name=''
+        verbose_name='In part 1 (when deciding whether to choose the cooperative option or not)'
+    )
+
+    strategy_box_observer = models.LongStringField(
+        verbose_name='In part 2 & 3 (when estimating how other participants may have acted, '
+                     'and when rating the trustworthiness of those participants based on how they may have acted)'
     )
 
 ######## FUNCTIONS ##########
@@ -510,7 +515,7 @@ class End(Page):
 
 class CommentBox(Page):
     form_model = 'player'
-    form_fields = ['comment_box', 'strategy_box']
+    form_fields = ['comment_box', 'strategy_box', 'strategy_box_observer']
 
     @staticmethod
     def is_displayed(player: Player):
