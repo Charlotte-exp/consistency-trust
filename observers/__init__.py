@@ -25,8 +25,8 @@ class C(BaseConstants):
 
     number_of_trials = 20 # from the actor task
     percent_accurate = 90
-    bonus_ratings = cu(2)
-    bonus_fraction = cu(2)
+    bonus_ratings = cu(1)
+    bonus_fraction = cu(1)
 
     number_trials_list = [0, number_of_trials]
 
