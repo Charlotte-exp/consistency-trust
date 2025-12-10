@@ -3,6 +3,7 @@ from otree.api import *
 import random
 import itertools
 import numpy as np
+import re
 
 doc = """
 Your app description
@@ -16,16 +17,18 @@ class C(BaseConstants):
 
     intro_template = 'observers/IntroInstructions.html'
 
-    NUMBER_WORDS = [
-        "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
-        "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
-        "eighteen", "nineteen", "twenty"
-    ]
+    # NUMBER_WORDS = [
+    #     "zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten",
+    #     "eleven", "twelve", "thirteen", "fourteen", "fifteen", "sixteen", "seventeen",
+    #     "eighteen", "nineteen", "twenty"
+    # ]
 
     number_of_trials = 20 # from the actor task
     percent_accurate = 90
-    bonus_ratings = cu(2)
-    bonus_fraction = cu(0.1)
+    bonus_ratings = cu(1)
+    bonus_fraction = cu(1)
+
+    number_trials_list = [0, number_of_trials]
 
 
 class Subsession(BaseSubsession):
@@ -41,7 +44,9 @@ def creating_session(subsession):
     if subsession.round_number == 1:
         for p in subsession.get_players():
             sequence = generate_k_sequence()
+            prop_sequence = generate_prop_sequence()
             p.participant.vars['sequence'] = sequence
+            p.participant.vars['prop_sequence'] = prop_sequence
             # set first round value directly
             p.k_value = sequence[0]
     else:
@@ -64,107 +69,107 @@ class Player(BasePlayer):
         min=0, max=100,
     )
 
-    zero_20 = models.IntegerField(
+    prop_0 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    one_20 = models.IntegerField(
+    prop_1 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    two_20 = models.IntegerField(
+    prop_2 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    three_20 = models.IntegerField(
+    prop_3 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    four_20 = models.IntegerField(
+    prop_4 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    five_20 = models.IntegerField(
+    prop_5 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    six_20 = models.IntegerField(
+    prop_6 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    seven_20 = models.IntegerField(
+    prop_7 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eight_20 = models.IntegerField(
+    prop_8 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    nine_20 = models.IntegerField(
+    prop_9 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    ten_20 = models.IntegerField(
+    prop_10 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eleven_20 = models.IntegerField(
+    prop_11 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    twelve_20 = models.IntegerField(
+    prop_12 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    thirteen_20 = models.IntegerField(
+    prop_13 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    fourteen_20 = models.IntegerField(
+    prop_14 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    fifteen_20 = models.IntegerField(
+    prop_15 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    sixteen_20 = models.IntegerField(
+    prop_16 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    seventeen_20 = models.IntegerField(
+    prop_17 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    eighteen_20 = models.IntegerField(
+    prop_18 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    nineteen_20 = models.IntegerField(
+    prop_19 = models.IntegerField(
         label='',
         min=0, max=100,
     )
 
-    twenty_20 = models.IntegerField(
+    prop_20 = models.IntegerField(
         label='',
         min=0, max=100,
     )
@@ -177,68 +182,101 @@ class Player(BasePlayer):
     randomly_selected_round = models.IntegerField(initial=0)
     randomly_selected_k_value = models.IntegerField(initial=0)
     randomly_selected_ratings = models.IntegerField(initial=0)
+    randomly_selected_prop = models.IntegerField(initial=0)
+    randomly_selected_estimate = models.IntegerField(initial=0)
 
     q1_failed_attempts = models.IntegerField(initial=0)
     q2_failed_attempts = models.IntegerField(initial=0)
     q3_failed_attempts = models.IntegerField(initial=0)
     q4_failed_attempts = models.IntegerField(initial=0)
+    q5_failed_attempts = models.IntegerField(initial=0)
+    q6_failed_attempts = models.IntegerField(initial=0)
 
     q1 = models.IntegerField(
         choices=[
-            [1, f'Only one random choice they made.'],
-            [2, f'Only how many times they chose the cooperative option, out of {C.number_of_trials}.'],
+            [1, f'One random choice they made.'],
+            [2, f'How many times they chose the cooperative option, out of {C.number_of_trials}.'],
             [3, f'How many times they chose the cooperative option, out of {C.number_of_trials}, '
-                f'as well as the payoff to themselves and the other player for each of these choices.'],
+                f'as well as the exact choices they faced on each occasion.'],
         ],
-        verbose_name='What will you know about other participants when you rate them?',
+        verbose_name='What will you know about the participants you are evaluating?',
         widget=widgets.RadioSelect
     )
 
     q2 = models.IntegerField(
         choices=[
             [1, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than {C.percent_accurate}% of all the other participants '
-                f'for one randomly selected round of this task.'],
+                f'if your answer is closer to the average answer than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
             [2, f'You will receive a {C.bonus_ratings} bonus, '
-                f'if you are closer than 80% of all the other participants '
-                f'for one randomly selected round of this task.'],
-            [3, f'You will receive {C.bonus_ratings} bonus, no matter what you write'],
+                f'if your answer is higher than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
+            [3, f'You will receive a {C.bonus_ratings} bonus, '
+                f'if your answer is lower than {C.percent_accurate}% of all the other participants '
+                f'for the question randomly selected for the bonus payment.'],
         ],
         verbose_name='How will your bonus for this part be determined?',
+        widget=widgets.RadioSelect
+    )
+
+    q5 = models.IntegerField(
+        choices=[
+            [1, f'Other participants who took this study and faced the same kind of choices you made in the first section'],
+            [2, f'Other participants who took this study and faced very different choices. '
+                f'For instance, cooperating was always a lot more costly for them than it was for you.'],
+        ],
+        verbose_name='When answering questions for this part of the study, should you be imagining:',
         widget=widgets.RadioSelect
     )
 
     q3 = models.IntegerField(
         choices=[
-            [1, f'I should write 100 next to 20/{C.number_of_trials}.'],
-            [2, f'I should write 0 next to 0/{C.number_of_trials}.'],
-            [3, f'I should write 100 next to 0/{C.number_of_trials}.'],
+            [1, f'How many other participants cooperated on 5 out of their {C.number_of_trials} choices'],
+            [2, f'Whether you cooperated on 5 out of your {C.number_of_trials}  cooperative choices'],
+            [3, f'Whether you think participants should have cooperated on 5 out of their {C.number_of_trials}  choices']
         ],
-        verbose_name='What should you write if you believe that every participant never chose the cooperative option?',
+        verbose_name='In this part, which of the following questions might you be asked:',
         widget=widgets.RadioSelect
     )
 
     q4 = models.IntegerField(
         choices=[
-            [1, f'You will receive one {C.bonus_fraction} if all your guesses are'
-                f' within 1% of the correct number'],
-            [2, f'You will receive a {C.bonus_fraction} bonus per guess '
-                f'that is within 10% of the correct number'
-                f'for one randomly selected round of this task.'],
-            [3, f'You will receive a {C.bonus_fraction} bonus per guess '
-                f'that is within 1% of the correct number'
-                f'for one randomly selected round of this task.'],
+            [1, f'If you guess that 7% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 8.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
+            [2, f'If you guess that 4% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 8.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
+            [3, f'If you guess that 4% of participants cooperated 9 out of {C.number_of_trials} times, '
+                f'when the correct answer was 3.5%, '
+                f'and that question is randomly selected for the bonus payment.'],
         ],
-        verbose_name='How will your bonus for this part be determined?',
+        verbose_name='In which of the following circumstances might you receive a bonus from this part of the study:',
         widget=widgets.RadioSelect
     )
+
+    q6 = models.IntegerField(
+        choices=[
+            [1, f'Other participants who took this study and faced the same kind of choices you made in the first section'],
+            [2, f'Other participants who took this study and faced very different choices. '
+                f'For instance, cooperating was always a lot more costly for them than it was for you.'],
+        ],
+        verbose_name='When answering questions for this part of the study, should you be imagining:',
+        widget=widgets.RadioSelect
+    )
+
 
     comment_box = models.LongStringField(
         verbose_name=''
     )
 
     strategy_box = models.LongStringField(
-        verbose_name=''
+        verbose_name='In part 1 (when deciding whether to choose the cooperative option or not)'
+    )
+
+    strategy_box_observer = models.LongStringField(
+        verbose_name='In part 2 & 3 (when estimating how other participants may have acted, '
+                     'and when rating the trustworthiness of those participants based on how they may have acted)'
     )
 
 ######## FUNCTIONS ##########
@@ -255,6 +293,16 @@ def generate_k_sequence():
     sequence = necessary_values + random.sample(optional_values, 6)
     random.shuffle(sequence)
     return sequence
+
+def generate_prop_sequence():
+    """
+    Same as above for proportion sequence.
+    """
+    optional_values = list(range(2, 19))  # 2 to 18
+    necessary_values = [0, 1, 19, 20]
+    prop_sequence = necessary_values + random.sample(optional_values, 6)
+    # random.shuffle(sequence)
+    return prop_sequence
 
 def random_payment(player: Player):
     """
@@ -277,7 +325,7 @@ def random_payment(player: Player):
 
 class InstructionsFraction(Page):
     form_model = 'player'
-    form_fields = ['q3', 'q4']
+    form_fields = ['q3', 'q4', 'q6']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -303,7 +351,7 @@ class InstructionsFraction(Page):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
-        solutions = dict(q3=3, q4=3)
+        solutions = dict(q3=1, q4=3, q6=1)
 
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {}
@@ -324,7 +372,7 @@ class FractionOfCooperators(Page):
 
     @staticmethod
     def get_form_fields(player: Player):
-        return [f"{w}_20" for w in C.NUMBER_WORDS]
+        return [f"prop_{i}" for i in player.participant.vars['prop_sequence']]
 
     @staticmethod
     def is_displayed(player: Player):
@@ -337,26 +385,31 @@ class FractionOfCooperators(Page):
     @staticmethod
     def vars_for_template(player: Player):
         return dict(
+            number_of_trials=C.number_of_trials,
+            sequence=player.participant.vars['prop_sequence'],
         )
 
-    @staticmethod
-    def error_message(player, values):
-        # list of all field names you want to sum
-        field_names = [
-            'zero_20', 'one_20', 'two_20', 'three_20', 'four_20', 'five_20',
-            'six_20', 'seven_20', 'eight_20', 'nine_20', 'ten_20',
-            'eleven_20', 'twelve_20', 'thirteen_20', 'fourteen_20', 'fifteen_20',
-            'sixteen_20', 'seventeen_20', 'eighteen_20', 'nineteen_20', 'twenty_20'
-        ]
-        total = sum(values[name] for name in field_names)
-        if total != 100:
-            return 'The numbers must add up to 100'
-        return None
+    def before_next_page(player: Player, timeout_happened):
+        prop_names = [f"prop_{i}" for i in player.participant.vars['prop_sequence']]
+        randomly_selected_prop = random.choice(prop_names)
+
+        # Extract the numeric part (e.g. 5)
+        match = re.search(r'\d+', randomly_selected_prop)
+        if match:
+            selected_i = int(match.group(0))
+        else:
+            selected_i = None  # Fallback if something unexpected happens
+
+        player.randomly_selected_estimate = getattr(player, randomly_selected_prop)  # value of prop_i
+        player.participant.vars['randomly_selected_estimate'] = player.randomly_selected_estimate
+        player.randomly_selected_prop = selected_i  # proportion number only
+        player.participant.vars['randomly_selected_prop'] = player.randomly_selected_prop
+
 
 
 class InstructionsCooperativeness(Page):
     form_model = 'player'
-    form_fields = ['q1', 'q2']
+    form_fields = ['q1', 'q2', 'q5']
 
     @staticmethod
     def is_displayed(player: Player):
@@ -380,7 +433,7 @@ class InstructionsCooperativeness(Page):
         """
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
-        solutions = dict(q1=2, q2=1)
+        solutions = dict(q1=2, q2=1, q5=1)
 
         # error_message can return a dict whose keys are field names and whose values are error messages
         errors = {}
@@ -455,12 +508,14 @@ class End(Page):
             random_round=player.randomly_selected_round,
             random_k_value=player.randomly_selected_k_value,
             random_ratings=player.randomly_selected_ratings,
+            random_prop=player.participant.vars['randomly_selected_prop'],
+            random_estimate=player.participant.vars['randomly_selected_estimate'],
         )
 
 
 class CommentBox(Page):
     form_model = 'player'
-    form_fields = ['comment_box', 'strategy_box']
+    form_fields = ['comment_box', 'strategy_box', 'strategy_box_observer']
 
     @staticmethod
     def is_displayed(player: Player):

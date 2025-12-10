@@ -66,7 +66,8 @@ SESSION_FIELDS = []
 PARTICIPANT_FIELDS = ['balanced_order', 'treatment', 'role', 'is_dropout',
                       'randomly_selected_round', 'randomly_selected_decision', 'randomly_selected_decision_control',
                       'randomly_selected_cost', 'randomly_selected_benefit', 'randomly_selected_proba_gamble',
-                      'randomly_selected_proba_implementation', 'randomly_selected_conversion_rate'
+                      'randomly_selected_proba_implementation', 'randomly_selected_conversion_rate',
+                      'randomly_selected_prop',
                       ]
 
 

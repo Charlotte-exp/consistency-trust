@@ -1,6 +1,6 @@
 {{ block title }}
 
-    Proportion {{ player.round_number }}
+    Proportion estimates
 
 {{ endblock }}
 
@@ -14,17 +14,22 @@
     }
 
     table {
-    margin: 20px auto; /* centers the table horizontally */
+      margin: 20px auto; /* centers the table horizontally */
       border-collapse: collapse;
       text-align: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
+
     th, td {
       border: 1px solid #ccc;
-      padding: 0px 10px;
+      padding: 10px 16px;         /* more breathing room */
+      min-width: 80px;            /* makes columns more even */
+      height: 48px;               /* taller cells */
     }
+
     th {
       background: #f5f5f5;
+      font-weight: 600;
     }
 
     .total-row th,
@@ -117,44 +122,53 @@
 
 
   <script>
-      document.addEventListener('DOMContentLoaded', function() {
-          const fieldNames = [
-              'zero_20', 'one_20','two_20','three_20','four_20','five_20',
-              'six_20','seven_20','eight_20','nine_20','ten_20',
-              'eleven_20','twelve_20','thirteen_20','fourteen_20','fifteen_20',
-              'sixteen_20','seventeen_20','eighteen_20','nineteen_20','twenty_20'
-          ];
+      document.addEventListener("DOMContentLoaded", function () {
+          // Parse backend list
+          let sequence = JSON.parse('{{ sequence|json }}');
+          if (!Array.isArray(sequence)) sequence = [];
+          sequence.sort((a, b) => a - b);
 
-          const totalCell = document.getElementById('total');
+          const tbody = document.getElementById('probability-table');
+          const template = document.getElementById('prob-row-template');
+          tbody.innerHTML = ''; // clear initial row
 
-          function updateTotal() {
-              let sum = 0;
-              fieldNames.forEach(name => {
-                  const input = document.getElementsByName(name)[0];
-                  if (input && !isNaN(input.value) && input.value !== '') {
-                      sum += parseFloat(input.value);
-                  }
-              });
-
-              totalCell.textContent = sum;
-
-              // turn red if sum > 100
-              if (sum > 100) {
-                  totalCell.classList.add('total-over');
-              } else {
-                  totalCell.classList.remove('total-over');
-              }
-          }
-
-          // attach input listener to each field
-          fieldNames.forEach(name => {
-              const input = document.getElementsByName(name)[0];
-              if (input) {
-                  input.addEventListener('input', updateTotal);
-              }
+          // --- Build the input rows ---
+          sequence.forEach(k => {
+              const clone = template.cloneNode(true);
+              clone.querySelector('.k-value').textContent = k;
+              const input = clone.querySelector('input');
+              input.name = `prop_${k}`;
+              input.id = `prop_${k}`;
+              tbody.appendChild(clone);
           });
 
-          updateTotal();
+          const inputs = Array.from(document.querySelectorAll('#probability-table input[type="number"]'));
+
+          // --- Helpers ---
+          function showError() {
+              document.getElementById("error-message").style.display = "block";
+          }
+
+          function hideError() {
+              document.getElementById("error-message").style.display = "none";
+          }
+
+          // --- Hide error when user starts filling ---
+          inputs.forEach(input => {
+              input.addEventListener('input', hideError);
+          });
+
+          // --- On submit ---
+          $('#submit-button').on('click', function (e) {
+              const allFilled = inputs.every(input => input.value.trim() !== "");
+
+              if (!allFilled) {
+                  e.preventDefault();
+                  showError();
+              } else {
+                  $('form').submit();
+              }
+          });
       });
   </script>
 
@@ -165,14 +179,14 @@
 <div  class="card-body">
 
   <p>
-      For each possible proportion of cooperative choices in the first part,
-      how many participants out of 100 do you think choose the cooperative option that amount of times?
-      Please give us your estimate for each proportion.
-      <b>The total must sum up to 100.</b>
+      Please state how many participants out of 100 (“the fraction”)
+      you think chose to cooperate x times out of their 20 choices,
+      for each number x below.
   </p>
 
     <table>
-      <tr>
+      <tbody id="probability-table">
+      <tr id="prob-row-template">
         <th>
           <span class="fraction-inline">
             <span class="diagonal-line"></span>
@@ -180,218 +194,30 @@
             <span class="denominator">{{ C.number_of_trials }}</span>
           </span>
         </th>
-        <td>{% formfield 'zero_20' %}</td>
+        <td><input
+          type="number"
+          name="prop_0"
+          id="prop_0"
+          min="0"
+          max="999"
+          step="1"
+          class="form-control form-control-sm text-center"
+          style="max-width: 80px; margin: auto;"></td>
       </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">1</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'one_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">2</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'two_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">3</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'three_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">4</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'four_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">5</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'five_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">6</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'six_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">7</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'seven_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">8</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'eight_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">9</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'nine_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">10</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'ten_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">11</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'eleven_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">12</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'twelve_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">13</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'thirteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">14</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'fourteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">15</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'fifteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">16</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'sixteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">17</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'seventeen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">18</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'eighteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">19</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'nineteen_20' %}</td>
-      </tr>
-      <tr>
-        <th>
-          <span class="fraction-inline">
-            <span class="diagonal-line"></span>
-            <span class="k-value">20</span>
-            <span class="denominator">{{ C.number_of_trials }}</span>
-          </span>
-        </th>
-        <td>{% formfield 'twenty_20' %}</td>
-      </tr>
-      <tr class="total-row">
-        <th>Total</th>
-        <td id="total" colspan="3">0</td>
-      </tr>
-
+      </tbody>
     </table>
+
+    <!-- Error message -->
+    <div id="error-message" style="display: none; color: red; text-align: center;">
+        Please make all decisions to continue.
+    </div>
+
 </div>
 
-    <div style="display: flex; justify-content: flex-end">
-        {% next_button %}
+    <div class="button-container">
+        <button type="submit" id="submit-button" class="submit-button">
+            NEXT
+        </button>
     </div>
 
 

@@ -1,6 +1,14 @@
 {{ block title }}
 
-    2nd part
+    {{ if player_id == 'odd' }}
+
+        Part 2
+
+    {{ else }}
+
+        Part 3
+
+    {{ endif }}
 
 {{ endblock }}
 
@@ -60,31 +68,18 @@
     {{ endif }}
     <div>
         <p>
-            In this section, we want you to estimate, for each possible proportion of cooperative choices in the first part,
-            <b>the fraction of participants who chose the cooperative option that number of times out of 20</b>.
-<!--            The options they faced were drawn from the same distribution as yours in the first part.-->
-<!--            Just like you, these participants could have cooperated between 0 and {{ C.number_of_trials }} times,-->
-<!--            across the {{ C.number_of_trials }} rounds.-->
-            For each possible number of cooperative choices (0/20, 1/20, …, 20/20),
-            we ask you to estimate how many participants out of 100 chose the cooperative option that number of times.
+            In this part, we want you to estimate,
+            <b>the fraction of participants who chose the cooperative option 0 times out of their 20 choices,
+            1 time out of their 20 choices, 2 times out of their 20 choices, etc.</b>.
             You will get a {{ C.bonus_fraction}} bonus for each of your guesses that is within 1% of the correct number.
+            (As usual, one of your answers from this part will be randomly selected for the bonus payment.).
         </p>
 
         <p>
-            For example, if you believe half of the participants never chose the cooperative option,
-            write 50 next to
-              <span class="fraction-inline">
-                  <span class="diagonal-line"></span>
-                  <span class="k-value">0</span>
-                  <span class="denominator">{{ C.number_of_trials }}</span>
-              </span>.
-            If you believe only 10 out of 100 people chose the cooperative option for half of the 20 rounds,
-            then write 10 next to
-              <span class="fraction-inline">
-                  <span class="diagonal-line"></span>
-                  <span class="k-value">10</span>
-                  <span class="denominator">{{ C.number_of_trials }}</span>
-              </span>.
+            For example, if you are asked to estimate the fraction of participants who chose to cooperate on  9 out of their 20 choices,
+            and you say 10%, when the correct fraction is 5.7%, you will not be eligible for a bonus from this question.
+            However, if the correct answer is 9.2%, you will be eligible for a bonus of {{ C.bonus_fraction }} from this question,
+            which you will receive if this question is the one that is randomly selected for bonus payment.
         </p>
     </div>
 
