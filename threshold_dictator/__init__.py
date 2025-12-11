@@ -94,6 +94,17 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
+    q3 = models.IntegerField(
+        choices=[
+            [1, f'No. In fact, participants cooperate only about 1 in every 4 rounds, on average. '
+                f'And nearly half never cooperate at all.'],
+            [2, f'No. But most participants cooperate most of the time.'],
+            [3, f'Yes.']
+        ],
+        verbose_name='Is cooperation obligatory?',
+        widget=widgets.RadioSelect
+    )
+
     q5 = models.IntegerField(
         choices=[
             [1, f'If that round is selected, { C.endowment } will be added to your bonus.'],
@@ -279,7 +290,7 @@ class Instructions(Page):
 
     def get_form_fields(player:Player):
         if player.treatment == 'treatment':
-            return ['q1', 'q2']
+            return ['q1', 'q2', 'q3']
         else:
             return ['q5', 'q6']
 
@@ -289,7 +300,7 @@ class Instructions(Page):
         records the number of time the page was submitted with an error. which specific error is not recorded.
         """
         if player.treatment == 'treatment':
-            solutions = dict(q1=1, q2=2)
+            solutions = dict(q1=1, q2=2, q3=2)
         else:
             solutions = dict(q5=1, q6=2)
 
